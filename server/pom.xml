@@ -178,7 +178,42 @@
                             </resources>
                         </configuration>
                     </execution>
+                    <execution>
+                        <id>add-functional-test-sources</id>
+                        <phase>generate-test-sources</phase>
+                        <goals>
+                            <goal>add-test-source</goal>
+                        </goals>
+                        <configuration>
+                            <sources>
+                                <source>src/functional/kotlin</source>
+                            </sources>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>add-functional-test-resources</id>
+                        <phase>generate-test-resources</phase>
+                        <goals>
+                            <goal>add-test-resource</goal>
+                        </goals>
+                        <configuration>
+                            <resources>
+                                <resource>
+                                    <filtering>true</filtering>
+                                    <directory>src/functional/resources</directory>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
                 </executions>
+            </plugin>
+            <plugin>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>2.18.1</version>
+                <configuration>
+                    <excludedGroups>com.toptal.ggurgul.timezones.integration.IntegrationTest</excludedGroups>
+                    <excludedGroups>com.toptal.ggurgul.timezones.functional.FunctionalTest</excludedGroups>
+                </configuration>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -186,10 +221,24 @@
                 <version>2.20</version>
                 <executions>
                     <execution>
+                        <id>integration-tests</id>
                         <goals>
                             <goal>integration-test</goal>
-                            <goal>verify</goal>
                         </goals>
+                        <configuration>
+                            <groups>com.toptal.ggurgul.timezones.integration.IntegrationTest</groups>
+                            <summaryFile>target/failsafe-reports/integration-tests.xml</summaryFile>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>functional-tests</id>
+                        <goals>
+                            <goal>integration-test</goal>
+                        </goals>
+                        <configuration>
+                            <groups>com.toptal.ggurgul.timezones.functional.FunctionalTest</groups>
+                            <summaryFile>target/failsafe-reports/functional-tests.xml</summaryFile>
+                        </configuration>
                     </execution>
                 </executions>
             </plugin>
@@ -207,7 +256,7 @@
                         <configuration>
                             <executable>sh</executable>
                             <arguments>
-                                <argument>${basedir}/start.env.sh</argument>
+                                <argument>${basedir}/start.sh</argument>
                             </arguments>
                         </configuration>
                     </execution>
@@ -220,7 +269,7 @@
                         <configuration>
                             <executable>sh</executable>
                             <arguments>
-                                <argument>${basedir}/stop.env.sh</argument>
+                                <argument>${basedir}/stop.sh</argument>
                             </arguments>
                         </configuration>
                     </execution>
