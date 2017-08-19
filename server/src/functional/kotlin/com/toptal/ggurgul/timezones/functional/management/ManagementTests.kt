@@ -12,7 +12,7 @@ class ManagementTests : AbstractFunctionalTest() {
         get("/heartbeat")
                 .then()
                 .statusCode(200)
-                .body(equalTo("hello"))
+                .body(equalTo("ping"))
     }
 
 }
