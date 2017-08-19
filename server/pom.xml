@@ -214,22 +214,29 @@
                     <excludedGroups>com.toptal.ggurgul.timezones.integration.IntegrationTest</excludedGroups>
                     <excludedGroups>com.toptal.ggurgul.timezones.functional.FunctionalTest</excludedGroups>
                 </configuration>
+                <executions>
+                    <execution>
+                        <id>unit-tests</id>
+                        <goals>
+                            <goal>test</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>integration-tests</id>
+                        <goals>
+                            <goal>test</goal>
+                        </goals>
+                        <configuration>
+                            <groups>com.toptal.ggurgul.timezones.integration.IntegrationTest</groups>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-failsafe-plugin</artifactId>
                 <version>2.20</version>
                 <executions>
-                    <execution>
-                        <id>integration-tests</id>
-                        <goals>
-                            <goal>integration-test</goal>
-                        </goals>
-                        <configuration>
-                            <groups>com.toptal.ggurgul.timezones.integration.IntegrationTest</groups>
-                            <summaryFile>target/failsafe-reports/integration-tests.xml</summaryFile>
-                        </configuration>
-                    </execution>
                     <execution>
                         <id>functional-tests</id>
                         <goals>
