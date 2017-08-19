@@ -1,23 +1,50 @@
 package com.toptal.ggurgul.timezones.functional.authentication
 
 import com.toptal.ggurgul.timezones.functional.AbstractFunctionalTest
-import io.restassured.RestAssured.*
-import io.restassured.matcher.RestAssuredMatchers.*
-import org.hamcrest.Matchers.*
-import io.restassured.RestAssured
-import io.restassured.module.jsv.JsonSchemaValidator.*
-import org.junit.BeforeClass
+import io.restassured.RestAssured.given
+import io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClasspath
+import org.hamcrest.Matchers.isA
 import org.junit.Test
 
-class AuthenticationTests : AbstractFunctionalTest() {
+internal class AuthenticationTests : AbstractFunctionalTest() {
+
+    @Test
+    fun userCannotObtainTokenIfInvalidUsername() {
+        given()
+                .body("""
+                    {
+                        "username": "invalid",
+                        "password": "qwerty1"
+                    }
+                """.trim())
+                .post("/auth")
+                .then()
+                .statusCode(401)
+    }
+
+    @Test
+    fun userCannotObtainTokenIfInvalidPassword() {
+        given()
+                .body("""
+                    {
+                        "username": "greg",
+                        "password": "invalid"
+                    }
+                """.trim())
+                .post("/auth")
+                .then()
+                .statusCode(401)
+    }
 
     @Test
     fun userCanObtainUserToken() {
         given()
                 .body("""
-                   "user": "greg",
-                   "password": "qwerty1"
-                """)
+                    {
+                        "username": "greg",
+                        "password": "qwerty1"
+                    }
+                """.trim())
                 .post("/auth")
                 .then()
                 .statusCode(200)

@@ -5,10 +5,6 @@ jwt:
   header: Authorization
   secret: s3cret
   expiration: 604800
-  route:
-    authentication:
-      path: auth
-      refresh: refresh
 
 logging:
   level:
