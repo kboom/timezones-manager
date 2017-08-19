@@ -1,0 +1,13 @@
+version: "3"
+
+services:
+
+  server:
+    image: kbhit/project:1.0-SNAPSHOT
+    ports:
+      - 8080:8080
+
+  swaggerui:
+    image: swaggerapi/swagger-ui:v3.0.5
+    ports:
+      - 9999:8080

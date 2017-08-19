@@ -1,0 +1,16 @@
+server:
+  contextPath:
+
+jwt:
+  header: Authorization
+  secret: s3cret
+  expiration: 604800
+  route:
+    authentication:
+      path: auth
+      refresh: refresh
+
+logging:
+  level:
+    org.springframework:
+      security: DEBUG
