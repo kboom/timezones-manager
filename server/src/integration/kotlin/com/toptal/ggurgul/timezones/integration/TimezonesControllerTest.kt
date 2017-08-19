@@ -2,6 +2,7 @@ package com.toptal.ggurgul.timezones.integration
 
 import com.toptal.ggurgul.timezones.TimezonesApplication
 import org.assertj.core.api.Assertions.assertThat
+import org.junit.Ignore
 import org.junit.Test
 import org.junit.experimental.categories.Category
 import org.junit.runner.RunWith
@@ -11,6 +12,7 @@ import org.springframework.boot.test.web.client.TestRestTemplate
 import org.springframework.http.HttpStatus
 import org.springframework.test.context.junit4.SpringRunner
 
+@Ignore
 @RunWith(SpringRunner::class)
 @Category(IntegrationTest::class)
 @SpringBootTest(classes = arrayOf(TimezonesApplication::class),
