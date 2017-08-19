@@ -1,0 +1,86 @@
+package com.toptal.ggurgul.timezones.security
+
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.context.annotation.Bean
+import org.springframework.context.annotation.Configuration
+import org.springframework.http.HttpMethod
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity
+import org.springframework.security.config.annotation.web.builders.HttpSecurity
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
+import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter
+import org.springframework.security.config.http.SessionCreationPolicy
+import org.springframework.security.core.userdetails.UserDetailsService
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
+import org.springframework.security.crypto.password.PasswordEncoder
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter
+
+import com.toptal.ggurgul.timezones.security.AuthenticationRoles.ADMIN_ROLE
+import com.toptal.ggurgul.timezones.security.AuthenticationRoles.MANAGER_ROLE
+
+@Configuration
+@EnableWebSecurity
+@EnableGlobalMethodSecurity(prePostEnabled = true)
+open class WebSecurityConfig : WebSecurityConfigurerAdapter() {
+
+    @Autowired
+    private val unauthorizedHandler: JwtAuthenticationEntryPoint? = null
+
+    @Autowired
+    private val userDetailsService: UserDetailsService? = null
+
+    @Autowired
+    @Throws(Exception::class)
+    fun configureGlobal(authenticationManagerBuilder: AuthenticationManagerBuilder) {
+        authenticationManagerBuilder
+                .inMemoryAuthentication()
+                .withUser("admin").password("admin").roles("USER", ADMIN_ROLE.toString())
+                .and()
+                .withUser("manager").password("manager").roles("USER", MANAGER_ROLE.toString())
+        authenticationManagerBuilder
+                .userDetailsService<UserDetailsService>(userDetailsService)
+                .passwordEncoder(passwordEncoder())
+    }
+
+    @Bean
+    open fun passwordEncoder(): PasswordEncoder {
+        return BCryptPasswordEncoder()
+    }
+
+    @Bean
+    @Throws(Exception::class)
+    open fun authenticationTokenFilterBean(): JwtAuthenticationTokenFilter {
+        return JwtAuthenticationTokenFilter()
+    }
+
+    @Throws(Exception::class)
+    override fun configure(httpSecurity: HttpSecurity) {
+        httpSecurity
+                .csrf().disable()
+                .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and()
+                .authorizeRequests()
+                .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+                .antMatchers("/h2-console/**").permitAll()
+                .antMatchers(
+                        HttpMethod.GET,
+                        "/",
+                        "/heartbeat",
+                        "/*.html",
+                        "/favicon.ico",
+                        "/**/*.html",
+                        "/**/*.css",
+                        "/**/*.js"
+                ).permitAll()
+                .antMatchers("/auth/**")
+                .permitAll()
+                .anyRequest()
+                .authenticated()
+
+        httpSecurity.addFilterBefore(authenticationTokenFilterBean(), UsernamePasswordAuthenticationFilter::class.java)
+        httpSecurity.headers().cacheControl()
+        httpSecurity.headers().frameOptions().disable() // to allow h2-console to work
+    }
+
+}

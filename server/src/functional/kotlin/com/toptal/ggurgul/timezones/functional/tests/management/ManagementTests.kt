@@ -1,6 +1,6 @@
-package com.toptal.ggurgul.timezones.functional.management
+package com.toptal.ggurgul.timezones.functional.tests.management
 
-import com.toptal.ggurgul.timezones.functional.AbstractFunctionalTest
+import com.toptal.ggurgul.timezones.functional.tests.AbstractFunctionalTest
 import io.restassured.RestAssured.get
 import org.hamcrest.Matchers.equalTo
 import org.junit.Test

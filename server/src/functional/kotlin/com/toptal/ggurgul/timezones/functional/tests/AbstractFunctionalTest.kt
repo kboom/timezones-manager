@@ -1,4 +1,4 @@
-package com.toptal.ggurgul.timezones.functional
+package com.toptal.ggurgul.timezones.functional.tests
 
 import io.restassured.RestAssured
 import io.restassured.builder.RequestSpecBuilder

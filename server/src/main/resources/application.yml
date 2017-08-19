@@ -6,6 +6,11 @@ jwt:
   secret: s3cret
   expiration: 604800
 
+spring:
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+
 logging:
   level:
     org.springframework:

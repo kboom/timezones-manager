@@ -98,6 +98,11 @@ public class JwtTokenUtil implements Serializable {
         return doGenerateToken(claims, userDetails.getUsername(), generateAudience(device));
     }
 
+    public String generateAdminToken(Device device) {
+        Map<String, Object> claims = new HashMap<>();
+        return doGenerateToken(claims, "admin", generateAudience(device));
+    }
+
     private String doGenerateToken(Map<String, Object> claims, String subject, String audience) {
         final Date createdDate = timeService.now();
         final Date expirationDate = new Date(createdDate.getTime() + expiration * 1000);
@@ -143,4 +148,5 @@ public class JwtTokenUtil implements Serializable {
                         && !isTokenExpired(token)
                         && !isCreatedBeforeLastPasswordReset(created, user.getLastPasswordResetDate()));
     }
+
 }
