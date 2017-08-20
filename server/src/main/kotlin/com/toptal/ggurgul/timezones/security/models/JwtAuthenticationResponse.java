@@ -1,4 +1,4 @@
-package com.toptal.ggurgul.timezones.security.service;
+package com.toptal.ggurgul.timezones.security.models;
 
 import java.io.Serializable;
 

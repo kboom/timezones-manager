@@ -15,6 +15,9 @@ import org.springframework.security.core.userdetails.UserDetailsService
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter
+import org.springframework.security.config.annotation.authentication.configurers.GlobalAuthenticationConfigurerAdapter
+
+
 
 @Configuration
 @EnableWebSecurity
@@ -50,9 +53,7 @@ open class WebSecurityConfig : WebSecurityConfigurerAdapter() {
 
     @Bean
     @Throws(Exception::class)
-    open fun authenticationTokenFilterBean(): JwtAuthenticationTokenFilter {
-        return JwtAuthenticationTokenFilter()
-    }
+    open fun authenticationTokenFilterBean() = JwtAuthenticationTokenFilter()
 
     @Throws(Exception::class)
     override fun configure(httpSecurity: HttpSecurity) {
@@ -84,7 +85,6 @@ open class WebSecurityConfig : WebSecurityConfigurerAdapter() {
 
         httpSecurity.addFilterBefore(authenticationTokenFilterBean(), UsernamePasswordAuthenticationFilter::class.java)
         httpSecurity.headers().cacheControl()
-        httpSecurity.headers().frameOptions().disable() // to allow h2-console to work
     }
 
 }

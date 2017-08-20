@@ -1,9 +1,9 @@
 package com.toptal.ggurgul.timezones.controllers
 
-import com.toptal.ggurgul.timezones.security.JwtAuthenticationRequest
+import com.toptal.ggurgul.timezones.security.models.JwtAuthenticationRequest
 import com.toptal.ggurgul.timezones.security.JwtTokenUtil
 import com.toptal.ggurgul.timezones.security.JwtUser
-import com.toptal.ggurgul.timezones.security.service.JwtAuthenticationResponse
+import com.toptal.ggurgul.timezones.security.models.JwtAuthenticationResponse
 import io.swagger.annotations.Api
 import io.swagger.annotations.ApiOperation
 import io.swagger.annotations.ApiResponse
@@ -25,7 +25,7 @@ import org.springframework.web.bind.annotation.RestController
 import javax.servlet.http.HttpServletRequest
 
 @RestController
-@Api(value = "auth", description = "Authentication operations")
+@Api(value = "auth", description = "Authentication operations", tags = arrayOf("authentication"))
 @RequestMapping(value = "/auth")
 class AuthenticationRestController
 @Autowired
@@ -37,9 +37,9 @@ constructor(
         private val userDetailsService: UserDetailsService
 ) {
 
-    @ApiOperation(value = "Authenticate", response = JwtAuthenticationResponse::class)
+    @ApiOperation(value = "Obtain token", response = JwtAuthenticationResponse::class)
     @ApiResponses(
-            ApiResponse(code = 200, message = "Successfully authenticated"),
+            ApiResponse(code = 200, message = "Obtained token"),
             ApiResponse(code = 401, message = "Authentication failure")
     )
     @RequestMapping(method = arrayOf(RequestMethod.POST))
@@ -51,16 +51,16 @@ constructor(
 
         SecurityContextHolder.getContext().authentication = authentication
 
-        if (authenticationRequest.username != "admin") {
-            val userDetails = userDetailsService.loadUserByUsername(authenticationRequest.username)
-            val token = jwtTokenUtil.generateToken(userDetails, device)
-            return ResponseEntity.ok(JwtAuthenticationResponse(token))
-        } else {
-            val token = jwtTokenUtil.generateAdminToken(device)
-            return ResponseEntity.ok(JwtAuthenticationResponse(token))
-        }
+        val userDetails = userDetailsService.loadUserByUsername(authenticationRequest.username)
+        val token = jwtTokenUtil.generateToken(userDetails, device)
+        return ResponseEntity.ok(JwtAuthenticationResponse(token))
     }
 
+    @ApiOperation(value = "Refresh token", response = JwtAuthenticationResponse::class)
+    @ApiResponses(
+            ApiResponse(code = 200, message = "Refreshed token"),
+            ApiResponse(code = 401, message = "Authentication failure")
+    )
     @RequestMapping(method = arrayOf(RequestMethod.GET))
     fun refreshAndGetAuthenticationToken(request: HttpServletRequest): ResponseEntity<*> {
         val token = request.getHeader(tokenHeader)

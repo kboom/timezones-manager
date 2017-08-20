@@ -2,16 +2,13 @@ package com.toptal.ggurgul.timezones.security.service;
 
 import com.toptal.ggurgul.timezones.domain.models.security.User;
 import com.toptal.ggurgul.timezones.security.JwtUserFactory;
-import com.toptal.ggurgul.timezones.security.repository.UserRepository;
+import com.toptal.ggurgul.timezones.domain.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-/**
- * Created by stephan on 20.03.16.
- */
 @Service
 public class JwtUserDetailsServiceImpl implements UserDetailsService {
 
