@@ -21,7 +21,7 @@ open class UserCreationTests {
 
     @Test
     fun encodesPassword() {
-        assertThat(passwordEncoder.encode("qwerty123")).isNotNull()
+        assertThat(passwordEncoder.encode("qwerty321")).isNotNull()
     }
 
 }

@@ -1,8 +1,6 @@
 package com.toptal.ggurgul.timezones.functional.tests.authentication
 
-import com.ninja_squad.dbsetup.generator.ValueGenerators
-import com.toptal.ggurgul.timezones.functional.database.insertGregUser
-import com.toptal.ggurgul.timezones.functional.database.prepareDatabase
+import com.toptal.ggurgul.timezones.functional.database.*
 import com.toptal.ggurgul.timezones.functional.tests.AbstractFunctionalTest
 import io.restassured.RestAssured.given
 import io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClasspath
@@ -20,6 +18,11 @@ internal class AuthenticationTests : AbstractFunctionalTest() {
             prepareDatabase {
                 insertInto("USERS") {
                     insertGregUser(this)
+                    insertAgathaUser(this)
+                }
+                insertInto("USER_AUTHORITIES") {
+                    assignUserAuthority(this, 100L)
+                    assignManagerAuthority(this, 200L)
                 }
             }
         }
@@ -32,7 +35,7 @@ internal class AuthenticationTests : AbstractFunctionalTest() {
                 .body("""
                     {
                         "username": "invalid",
-                        "password": "qwerty1"
+                        "password": "qwerty123"
                     }
                 """.trim())
                 .post("/auth")
@@ -45,7 +48,7 @@ internal class AuthenticationTests : AbstractFunctionalTest() {
         given()
                 .body("""
                     {
-                        "username": "greguser",
+                        "username": "greg",
                         "password": "invalid"
                     }
                 """.trim())
@@ -59,7 +62,7 @@ internal class AuthenticationTests : AbstractFunctionalTest() {
         given()
                 .body("""
                     {
-                        "username": "greguser",
+                        "username": "greg",
                         "password": "qwerty123"
                     }
                 """.trim())
@@ -76,8 +79,8 @@ internal class AuthenticationTests : AbstractFunctionalTest() {
         given()
                 .body("""
                     {
-                        "username": "manager",
-                        "password": "manager"
+                        "username": "agatha",
+                        "password": "qwerty321"
                     }
                 """.trim())
                 .post("/auth")

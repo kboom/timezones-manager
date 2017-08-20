@@ -1,5 +1,6 @@
 package com.toptal.ggurgul.timezones.security
 
+import com.toptal.ggurgul.timezones.domain.models.security.AuthorityName
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -14,9 +15,6 @@ import org.springframework.security.core.userdetails.UserDetailsService
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter
-
-import com.toptal.ggurgul.timezones.security.AuthenticationRoles.ADMIN_ROLE
-import com.toptal.ggurgul.timezones.security.AuthenticationRoles.MANAGER_ROLE
 
 @Configuration
 @EnableWebSecurity
@@ -34,9 +32,12 @@ open class WebSecurityConfig : WebSecurityConfigurerAdapter() {
     fun configureGlobal(authenticationManagerBuilder: AuthenticationManagerBuilder) {
         authenticationManagerBuilder
                 .inMemoryAuthentication()
-                .withUser("admin").password("admin").roles("USER", ADMIN_ROLE.toString())
-                .and()
-                .withUser("manager").password("manager").roles("USER", MANAGER_ROLE.toString())
+                .withUser("admin").password("admin")
+                .roles(
+                        AuthorityName.USER.toString(),
+                        AuthorityName.MANAGER.toString(),
+                        AuthorityName.ADMIN.toString()
+                )
         authenticationManagerBuilder
                 .userDetailsService<UserDetailsService>(userDetailsService)
                 .passwordEncoder(passwordEncoder())
