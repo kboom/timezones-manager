@@ -5,6 +5,7 @@ import com.google.common.base.Predicates.or
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.context.annotation.Import
+import org.springframework.context.annotation.Profile
 import springfox.bean.validators.configuration.BeanValidatorPluginsConfiguration
 import springfox.documentation.builders.PathSelectors
 import springfox.documentation.builders.PathSelectors.regex
@@ -20,7 +21,7 @@ import springfox.documentation.swagger.web.ApiKeyVehicle
 import springfox.documentation.swagger.web.SecurityConfiguration
 import springfox.documentation.swagger2.annotations.EnableSwagger2
 
-
+@Profile("docs")
 @Configuration
 @EnableSwagger2
 @Import(SpringDataRestConfiguration::class, BeanValidatorPluginsConfiguration::class)

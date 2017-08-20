@@ -14,7 +14,7 @@ open class UserCreationTests : AbstractIntegrationTest() {
 
     @Test
     fun encodesPassword() {
-        assertThat(passwordEncoder.encode("qwerty321")).isNotNull()
+        assertThat(passwordEncoder.encode("qwerty")).isNotNull()
     }
 
 }
