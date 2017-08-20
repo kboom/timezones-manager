@@ -6,6 +6,8 @@ services:
     image: kbhit/project:1.0-SNAPSHOT
     ports:
       - 8080:8080
+    depends_on:
+      - database
 
   database:
     image: postgres:9.4

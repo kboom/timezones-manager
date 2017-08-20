@@ -9,10 +9,11 @@ jwt:
 spring:
   jpa:
     database-platform: org.hibernate.dialect.PostgreSQL94Dialect
+    show-sql: true
     hibernate:
       ddl-auto: create-drop
   datasource:
-      url: jdbc:postgresql://localhost:5432/test
+      url: jdbc:postgresql://0.0.0.0:5432/test
       username: test
       password: test
       driver-class-name: org.postgresql.Driver

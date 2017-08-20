@@ -20,6 +20,7 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <kotlin.version>1.1.4</kotlin.version>
+        <skip.tests.unit>false</skip.tests.unit>
     </properties>
 
     <dependencies>
@@ -240,6 +241,7 @@
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>2.18.1</version>
                 <configuration>
+                    <skipTests>${skip.tests.unit}</skipTests>
                     <excludedGroups>com.toptal.ggurgul.timezones.integration.IntegrationTest</excludedGroups>
                     <excludedGroups>com.toptal.ggurgul.timezones.functional.FunctionalTest</excludedGroups>
                 </configuration>
@@ -272,7 +274,10 @@
                             <goal>integration-test</goal>
                         </goals>
                         <configuration>
-                            <groups>com.toptal.ggurgul.timezones.functional.FunctionalTest</groups>
+                            <includes>
+                                <include>com.toptal.ggurgul.timezones.functional.**</include>
+                            </includes>
+                            <!--<groups>com.toptal.ggurgul.timezones.functional.FunctionalTest</groups>-->
                             <summaryFile>target/failsafe-reports/functional-tests.xml</summaryFile>
                         </configuration>
                     </execution>
