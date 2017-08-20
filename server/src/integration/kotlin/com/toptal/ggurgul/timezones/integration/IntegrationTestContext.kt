@@ -9,6 +9,10 @@ import javax.sql.DataSource
 @Configuration
 open class IntegrationTestContext {
 
+    /**
+     * Note that this makes sense only for simple usage of PostgreSQL database.
+     * If the needs become more complex real database has to be started just like for functional tests.
+     */
     @Bean
     open fun dataSource(): DataSource {
         val dataSource = DriverManagerDataSource()
