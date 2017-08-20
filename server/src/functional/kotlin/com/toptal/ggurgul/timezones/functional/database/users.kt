@@ -2,30 +2,43 @@ package com.toptal.ggurgul.timezones.functional.database
 
 import com.ninja_squad.dbsetup.operation.Insert
 import com.ninja_squad.dbsetup_kotlin.mappedValues
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import java.util.*
 
-fun insertGregUser(insertBuilder: Insert.Builder) {
-    insertBuilder.mappedValues(
-            "ID" to 100L,
-            "USERNAME" to "greg",
-            "EMAIL" to "greg@test.com",
-            "ENABLED" to true,
-            "FIRSTNAME" to "Grzegorz",
-            "LASTNAME" to "Gurgul",
-            "PASSWORD" to "$2a$10$5XijhRl32k3/tBA1qJLao.GtH1j.EPM6/UnUsrq9R4wiOTXPLhnIW",
-            "LAST_PWD_RST_DT" to Date()
+
+enum class User(
+        val id: Long,
+        val username: String,
+        val email: String,
+        val enabled: Boolean = true,
+        val password: String,
+        val lastPasswordResetDate: Date = Date()
+) {
+
+    GREG(
+            id = 100L,
+            username = "greg",
+            password = "qwerty123",
+            email = "greg@test.com"
+    ),
+    AGATHA(
+            id = 101L,
+            username = "agatha",
+            password = "qwerty321",
+            email = "agatha@test.com"
     )
+
 }
 
-fun insertAgathaUser(insertBuilder: Insert.Builder) {
+private val passwordEncoder = BCryptPasswordEncoder()
+
+fun insertUser(insertBuilder: Insert.Builder, user: User) {
     insertBuilder.mappedValues(
-            "ID" to 200L,
-            "USERNAME" to "agatha",
-            "EMAIL" to "agatha@test.com",
-            "ENABLED" to true,
-            "FIRSTNAME" to "Agata",
-            "LASTNAME" to "Nowakiewicz",
-            "PASSWORD" to "$2a$10$/rbADSpS0.wZ4nHAYXfmDOM.y4SqQMFHtTLDteyDsqo5ps9PWWM9u",
-            "LAST_PWD_RST_DT" to Date()
+            "ID" to user.id,
+            "USERNAME" to user.username,
+            "EMAIL" to user.password,
+            "ENABLED" to user.enabled,
+            "PASSWORD" to passwordEncoder.encode(user.password),
+            "LAST_PWD_RST_DT" to user.lastPasswordResetDate
     )
 }

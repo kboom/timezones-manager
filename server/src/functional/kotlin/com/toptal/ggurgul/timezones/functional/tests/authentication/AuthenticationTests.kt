@@ -17,12 +17,12 @@ internal class AuthenticationTests : AbstractFunctionalTest() {
         fun setUpDatabase() {
             prepareDatabase {
                 insertInto("USERS") {
-                    insertGregUser(this)
-                    insertAgathaUser(this)
+                    insertUser(this, User.GREG)
+                    insertUser(this, User.AGATHA)
                 }
                 insertInto("USER_AUTHORITIES") {
-                    assignUserAuthority(this, 100L)
-                    assignManagerAuthority(this, 200L)
+                    assignUserAuthority(this, User.GREG.id)
+                    assignManagerAuthority(this, User.AGATHA.id)
                 }
             }
         }
