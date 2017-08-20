@@ -72,7 +72,10 @@ open class WebSecurityConfig : WebSecurityConfigurerAdapter() {
                         "/favicon.ico",
                         "/**/*.html",
                         "/**/*.css",
-                        "/**/*.js"
+                        "/**/*.js",
+                        "/swagger*/**",
+                        "/webjars/**",
+                        "/v2/api-docs/**"
                 ).permitAll()
                 .antMatchers("/auth/**")
                 .permitAll()

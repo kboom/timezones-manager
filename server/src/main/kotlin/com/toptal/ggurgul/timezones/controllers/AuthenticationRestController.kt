@@ -1,9 +1,13 @@
-package com.toptal.ggurgul.timezones.security.controller
+package com.toptal.ggurgul.timezones.controllers
 
 import com.toptal.ggurgul.timezones.security.JwtAuthenticationRequest
 import com.toptal.ggurgul.timezones.security.JwtTokenUtil
 import com.toptal.ggurgul.timezones.security.JwtUser
 import com.toptal.ggurgul.timezones.security.service.JwtAuthenticationResponse
+import io.swagger.annotations.Api
+import io.swagger.annotations.ApiOperation
+import io.swagger.annotations.ApiResponse
+import io.swagger.annotations.ApiResponses
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.http.ResponseEntity
@@ -21,6 +25,7 @@ import org.springframework.web.bind.annotation.RestController
 import javax.servlet.http.HttpServletRequest
 
 @RestController
+@Api(value = "auth", description = "Authentication operations")
 @RequestMapping(value = "/auth")
 class AuthenticationRestController
 @Autowired
@@ -32,6 +37,11 @@ constructor(
         private val userDetailsService: UserDetailsService
 ) {
 
+    @ApiOperation(value = "Authenticate", response = JwtAuthenticationResponse::class)
+    @ApiResponses(
+            ApiResponse(code = 200, message = "Successfully authenticated"),
+            ApiResponse(code = 401, message = "Authentication failure")
+    )
     @RequestMapping(method = arrayOf(RequestMethod.POST))
     @Throws(AuthenticationException::class)
     fun createAuthenticationToken(

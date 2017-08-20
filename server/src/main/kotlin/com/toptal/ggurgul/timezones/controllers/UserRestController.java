@@ -1,4 +1,4 @@
-package com.toptal.ggurgul.timezones.security.controller;
+package com.toptal.ggurgul.timezones.controllers;
 
 import com.toptal.ggurgul.timezones.security.JwtTokenUtil;
 import com.toptal.ggurgul.timezones.security.JwtUser;
