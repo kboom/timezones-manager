@@ -1,12 +1,30 @@
 package com.toptal.ggurgul.timezones.functional.tests.authentication
 
+import com.ninja_squad.dbsetup.generator.ValueGenerators
+import com.toptal.ggurgul.timezones.functional.database.insertGregUser
+import com.toptal.ggurgul.timezones.functional.database.prepareDatabase
 import com.toptal.ggurgul.timezones.functional.tests.AbstractFunctionalTest
 import io.restassured.RestAssured.given
 import io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClasspath
 import org.hamcrest.Matchers.isA
+import org.junit.BeforeClass
 import org.junit.Test
 
 internal class AuthenticationTests : AbstractFunctionalTest() {
+
+    companion object {
+
+        @JvmStatic
+        @BeforeClass
+        fun setUpDatabase() {
+            prepareDatabase {
+                insertInto("USERS") {
+                    insertGregUser(this)
+                }
+            }
+        }
+
+    }
 
     @Test
     fun userCannotObtainTokenIfInvalidUsername() {
@@ -27,7 +45,7 @@ internal class AuthenticationTests : AbstractFunctionalTest() {
         given()
                 .body("""
                     {
-                        "username": "greg",
+                        "username": "greguser",
                         "password": "invalid"
                     }
                 """.trim())
@@ -41,8 +59,8 @@ internal class AuthenticationTests : AbstractFunctionalTest() {
         given()
                 .body("""
                     {
-                        "username": "greg",
-                        "password": "qwerty1"
+                        "username": "greguser",
+                        "password": "qwerty123"
                     }
                 """.trim())
                 .post("/auth")

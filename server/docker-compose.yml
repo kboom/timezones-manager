@@ -7,6 +7,15 @@ services:
     ports:
       - 8080:8080
 
+  database:
+    image: postgres:9.4
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_DB: test
+      POSTGRES_USER: test
+      POSTGRES_PASSWORD: test
+
   swaggerui:
     image: swaggerapi/swagger-ui:v3.0.5
     ports:
