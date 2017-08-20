@@ -33,7 +33,7 @@ open class SwaggerConfig {
                 .select()
                 .apis(RequestHandlerSelectors.any())
                 .paths(or(
-                        regex("/user*"),
+                        regex("/profile*"),
                         regex("/auth*"),
                         regex("/timezones*")
                 ))
@@ -62,15 +62,19 @@ open class SwaggerConfig {
     private fun securityContext(): SecurityContext {
         return SecurityContext.builder()
                 .securityReferences(defaultAuth())
-                .forPaths(not(PathSelectors.regex("/auth*")))
+                .forPaths(or(
+                        PathSelectors.regex("/profile*"),
+                        PathSelectors.regex("/timezones*")
+                ))
                 .build()
     }
 
     private fun defaultAuth(): List<SecurityReference> {
-        val authorizationScope = AuthorizationScope("global", "accessEverything")
-        val authorizationScopes = arrayOfNulls<AuthorizationScope>(1)
-        authorizationScopes[0] = authorizationScope
-        return arrayListOf(SecurityReference("mykey", authorizationScopes))
+        return arrayListOf(
+                SecurityReference("Bearer", arrayOf(
+                        AuthorizationScope("global", "accessEverything"))
+                )
+        )
     }
 
 }
