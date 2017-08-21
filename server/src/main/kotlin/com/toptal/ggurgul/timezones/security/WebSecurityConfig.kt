@@ -16,7 +16,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter
 import org.springframework.security.config.annotation.authentication.configurers.GlobalAuthenticationConfigurerAdapter
-
+import org.springframework.security.web.authentication.AnonymousAuthenticationFilter
 
 
 @Configuration
@@ -78,12 +78,14 @@ open class WebSecurityConfig : WebSecurityConfigurerAdapter() {
                         "/webjars/**",
                         "/v2/api-docs/**"
                 ).permitAll()
+                .and()
+                .authorizeRequests()
                 .antMatchers("/auth/**")
-                .permitAll()
+                .anonymous()
                 .anyRequest()
                 .authenticated()
 
-        httpSecurity.addFilterBefore(authenticationTokenFilterBean(), UsernamePasswordAuthenticationFilter::class.java)
+        httpSecurity.addFilterAfter(authenticationTokenFilterBean(), AnonymousAuthenticationFilter::class.java)
         httpSecurity.headers().cacheControl()
     }
 

@@ -9,6 +9,7 @@ import org.springframework.security.access.prepost.PreAuthorize
 @PreAuthorize("hasRole('MANAGER_ROLE') or hasRole('ADMIN_ROLE')")
 interface UserRepository : JpaRepository<User, Long> {
 
+    @PreAuthorize("permitAll")
     fun findByUsername(username: String): User
 
 }
