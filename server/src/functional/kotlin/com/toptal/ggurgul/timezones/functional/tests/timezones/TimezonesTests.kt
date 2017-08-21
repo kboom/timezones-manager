@@ -1,7 +1,9 @@
 package com.toptal.ggurgul.timezones.functional.tests.timezones
 
 import com.toptal.ggurgul.timezones.functional.database.*
-import com.toptal.ggurgul.timezones.functional.rules.AuthenticatedAs
+import com.toptal.ggurgul.timezones.functional.database.User.AGATHA
+import com.toptal.ggurgul.timezones.functional.database.User.GREG
+import com.toptal.ggurgul.timezones.functional.rules.AuthenticatedAsUser
 import com.toptal.ggurgul.timezones.functional.tests.AbstractFunctionalTest
 import io.restassured.RestAssured.given
 import org.hamcrest.Matchers.*
@@ -17,17 +19,17 @@ class TimezonesTests : AbstractFunctionalTest() {
         fun setUpDatabase() {
             prepareDatabase {
                 insertInto("USERS") {
-                    insertUser(this, User.GREG)
-                    insertUser(this, User.AGATHA)
+                    insertUser(this, GREG)
+                    insertUser(this, AGATHA)
                 }
                 insertInto("USER_AUTHORITIES") {
-                    assignUserAuthority(this, User.GREG.id)
-                    assignManagerAuthority(this, User.AGATHA.id)
+                    assignAuthorityToUser(this, Authority.USER, GREG)
+                    assignAuthorityToUser(this, Authority.MANAGER, AGATHA)
                 }
                 insertInto("TIMEZONES") {
-                    insertTimezone(this, Timezone.KRAKOW, User.GREG)
-                    insertTimezone(this, Timezone.TOKYO, User.GREG)
-                    insertTimezone(this, Timezone.WARSAW, User.AGATHA)
+                    insertTimezone(this, Timezone.KRAKOW, GREG)
+                    insertTimezone(this, Timezone.TOKYO, GREG)
+                    insertTimezone(this, Timezone.WARSAW, AGATHA)
                 }
             }
         }
@@ -35,7 +37,7 @@ class TimezonesTests : AbstractFunctionalTest() {
     }
 
     @Test
-    @AuthenticatedAs("greg", "qwerty123")
+    @AuthenticatedAsUser(GREG)
     fun userCanListHisOwnTimezones() {
         given()
                 .header("Authorization", authenticationRule.token)

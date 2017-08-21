@@ -19,15 +19,16 @@ class AuthenticationRule(
     override fun apply(base: Statement, description: Description) = object : Statement() {
         @Throws(Throwable::class)
         override fun evaluate() {
-            val authenticatedAsOptional = Optional.ofNullable(description.getAnnotation(AuthenticatedAs::class.java))
-            if (authenticatedAsOptional.isPresent) {
-                val authenticatedAs = authenticatedAsOptional.get()
+            val authenticatedAsUserOptional = Optional.ofNullable(description.getAnnotation(AuthenticatedAsUser::class.java))
+
+            if (authenticatedAsUserOptional.isPresent) {
+                val authenticatedAsUser = authenticatedAsUserOptional.get()
                 val postRequest = HttpPost("http://localhost:8080/auth")
                 postRequest.setHeader("Accept", "application/json");
                 postRequest.setHeader("Content-type", "application/json");
                 postRequest.entity = StringEntity("""{
-                        "username": "${authenticatedAs.username}",
-                        "password": "${authenticatedAs.password}"
+                        "username": "${authenticatedAsUser.user.username}",
+                        "password": "${authenticatedAsUser.user.password}"
                     }""".trimIndent())
                 val response = httpClient.execute(postRequest)
                 val responseString = EntityUtils.toString(response.entity)
@@ -36,6 +37,7 @@ class AuthenticationRule(
                         .replace("\"}", "")
             }
             base.evaluate()
+            token = null
         }
     }
 

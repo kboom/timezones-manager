@@ -21,8 +21,8 @@ internal class AuthenticationTests : AbstractFunctionalTest() {
                     insertUser(this, User.AGATHA)
                 }
                 insertInto("USER_AUTHORITIES") {
-                    assignUserAuthority(this, User.GREG.id)
-                    assignManagerAuthority(this, User.AGATHA.id)
+                    assignAuthorityToUser(this, Authority.USER, User.GREG)
+                    assignAuthorityToUser(this, Authority.USER, User.AGATHA)
                 }
             }
         }
