@@ -42,7 +42,7 @@ fun insertUser(insertBuilder: Insert.Builder, user: User) {
     insertBuilder.mappedValues(
             "ID" to user.id,
             "USERNAME" to user.username,
-            "EMAIL" to user.password,
+            "EMAIL" to user.email,
             "ENABLED" to user.enabled,
             "PASSWORD" to passwordEncoder.encode(user.password),
             "LAST_PWD_RST_DT" to user.lastPasswordResetDate
