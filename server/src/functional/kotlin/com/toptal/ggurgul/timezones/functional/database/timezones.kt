@@ -27,6 +27,12 @@ enum class Timezone(
             customName = "My Tokyo",
             locationName = "Tokyo",
             diffToGMT = 9
+    ),
+    SYDNEY(
+            id = 103L,
+            customName = "My Sydney",
+            locationName = "Sydney",
+            diffToGMT = 10
     )
 
 }
