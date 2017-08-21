@@ -4,6 +4,7 @@ import com.toptal.ggurgul.timezones.functional.database.*
 import com.toptal.ggurgul.timezones.functional.rules.AuthenticatedAs
 import com.toptal.ggurgul.timezones.functional.tests.AbstractFunctionalTest
 import io.restassured.RestAssured.given
+import org.hamcrest.Matchers.*
 import org.junit.BeforeClass
 import org.junit.Test
 
@@ -41,6 +42,7 @@ class TimezonesTests : AbstractFunctionalTest() {
                 .get("/timezones")
                 .then()
                 .statusCode(200)
+                .body("_embedded.timezones", hasSize<String>(equalTo(2)))
 //                .body(JsonSchemaValidator.matchesJsonSchemaInClasspath("schema/timezones.json"))
     }
 
