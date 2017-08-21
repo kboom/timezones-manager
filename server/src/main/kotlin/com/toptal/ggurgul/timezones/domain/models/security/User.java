@@ -21,9 +21,8 @@ public class User {
     @Size(min = 4, max = 50)
     private String username;
 
-    @Column(name = "PASSWORD", length = 100)
+    @Column(name = "PASSWORD")
     @NotNull
-    @Size(min = 4, max = 100)
     private String password;
 
     @Column(name = "EMAIL", length = 50)

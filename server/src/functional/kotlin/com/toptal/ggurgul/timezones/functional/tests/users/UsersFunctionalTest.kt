@@ -10,31 +10,26 @@ import com.toptal.ggurgul.timezones.functional.tests.AbstractFunctionalTest
 import io.restassured.RestAssured
 import org.hamcrest.Matchers.equalTo
 import org.hamcrest.Matchers.hasSize
-import org.junit.BeforeClass
+import org.junit.Before
 import org.junit.Test
 
 
 class UsersFunctionalTest : AbstractFunctionalTest() {
 
-    companion object {
-
-        @JvmStatic
-        @BeforeClass
-        fun setUpDatabase() {
-            prepareDatabase {
-                insertInto("USERS") {
-                    insertUser(this, GREG)
-                    insertUser(this, AGATHA)
-                    insertUser(this, ALICE)
-                }
-                insertInto("USER_AUTHORITIES") {
-                    assignAuthorityToUser(this, Authority.ADMIN, GREG)
-                    assignAuthorityToUser(this, Authority.MANAGER, AGATHA)
-                    assignAuthorityToUser(this, Authority.USER, ALICE)
-                }
+    @Before
+    fun setUpDatabase() {
+        prepareDatabase {
+            insertInto("USERS") {
+                insertUser(this, GREG)
+                insertUser(this, AGATHA)
+                insertUser(this, ALICE)
+            }
+            insertInto("USER_AUTHORITIES") {
+                assignAuthorityToUser(this, Authority.ADMIN, GREG)
+                assignAuthorityToUser(this, Authority.MANAGER, AGATHA)
+                assignAuthorityToUser(this, Authority.USER, ALICE)
             }
         }
-
     }
 
     @Test
@@ -68,6 +63,35 @@ class UsersFunctionalTest : AbstractFunctionalTest() {
                 .then()
                 .statusCode(200)
                 .body("_embedded.users", hasSize<String>(equalTo(3)))
+//                .body(JsonSchemaValidator.matchesJsonSchemaInClasspath("schema/timezones.json"))
+    }
+
+    @Test
+    @AuthenticatedAsUser(AGATHA)
+    fun managerCanDeleteUser() {
+        RestAssured.given()
+                .header("Authorization", authenticationRule.token)
+                .delete("/users/${ALICE.id}")
+                .then()
+                .statusCode(204)
+//                .body(JsonSchemaValidator.matchesJsonSchemaInClasspath("schema/timezones.json"))
+    }
+
+    @Test
+    @AuthenticatedAsUser(AGATHA)
+    fun managerCanUpdateUser() {
+        RestAssured.given()
+                .header("Authorization", authenticationRule.token)
+                .body("""{
+                    "username": "alice2",
+                    "password": "abc",
+                    "email": "qwerty666",
+                    "enabled": true,
+                    "lastPasswordResetDate": "2017-08-21T19:47:30.844+0000"
+                }""".trimIndent())
+                .put("/users/${ALICE.id}")
+                .then()
+                .statusCode(200)
 //                .body(JsonSchemaValidator.matchesJsonSchemaInClasspath("schema/timezones.json"))
     }
 

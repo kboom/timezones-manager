@@ -26,11 +26,6 @@ abstract class AbstractFunctionalTest {
             RestAssured.port = 8080;
             RestAssured.requestSpecification = RequestSpecBuilder()
                     .setContentType("application/json")
-                    .addFilter {
-                        requestSpec, responseSpec, context ->
-                            requestSpec.header("Authorization", "Bearer abc");
-                            context.next(requestSpec, responseSpec)
-                    }
                     .build()
             RestAssured.enableLoggingOfRequestAndResponseIfValidationFails()
         }
