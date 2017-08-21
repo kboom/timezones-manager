@@ -18,7 +18,7 @@ abstract class AbstractFunctionalTest {
 
     companion object {
 
-        internal val httpClient = HttpClients.createDefault()
+        internal var httpClient = HttpClients.createDefault()
 
         @BeforeClass
         @JvmStatic
@@ -28,6 +28,7 @@ abstract class AbstractFunctionalTest {
                     .setContentType("application/json")
                     .build()
             RestAssured.enableLoggingOfRequestAndResponseIfValidationFails()
+            httpClient = HttpClients.createDefault()
         }
 
         @AfterClass

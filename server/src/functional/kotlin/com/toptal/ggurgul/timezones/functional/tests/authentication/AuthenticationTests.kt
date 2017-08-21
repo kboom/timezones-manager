@@ -1,6 +1,7 @@
 package com.toptal.ggurgul.timezones.functional.tests.authentication
 
 import com.toptal.ggurgul.timezones.functional.database.*
+import com.toptal.ggurgul.timezones.functional.database.User.*
 import com.toptal.ggurgul.timezones.functional.tests.AbstractFunctionalTest
 import io.restassured.RestAssured.given
 import io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClasspath
@@ -17,12 +18,14 @@ internal class AuthenticationTests : AbstractFunctionalTest() {
         fun setUpDatabase() {
             prepareDatabase {
                 insertInto("USERS") {
-                    insertUser(this, User.GREG)
-                    insertUser(this, User.AGATHA)
+                    insertUser(this, GREG)
+                    insertUser(this, AGATHA)
+                    insertUser(this, ALICE)
                 }
                 insertInto("USER_AUTHORITIES") {
-                    assignAuthorityToUser(this, Authority.USER, User.GREG)
-                    assignAuthorityToUser(this, Authority.USER, User.AGATHA)
+                    assignAuthorityToUser(this, Authority.ADMIN, GREG)
+                    assignAuthorityToUser(this, Authority.MANAGER, AGATHA)
+                    assignAuthorityToUser(this, Authority.USER, ALICE)
                 }
             }
         }
@@ -62,14 +65,13 @@ internal class AuthenticationTests : AbstractFunctionalTest() {
         given()
                 .body("""
                     {
-                        "username": "greg",
-                        "password": "qwerty123"
+                        "username": "${ALICE.username}",
+                        "password": "${ALICE.password}"
                     }
                 """.trim())
                 .post("/auth")
                 .then()
                 .statusCode(200)
-                .body(matchesJsonSchemaInClasspath("schema/authPost.json"))
                 .and()
                 .body("token", isA(String::class.java))
     }
@@ -79,14 +81,13 @@ internal class AuthenticationTests : AbstractFunctionalTest() {
         given()
                 .body("""
                     {
-                        "username": "agatha",
-                        "password": "qwerty321"
+                        "username": "${AGATHA.username}",
+                        "password": "${AGATHA.password}"
                     }
                 """.trim())
                 .post("/auth")
                 .then()
                 .statusCode(200)
-                .body(matchesJsonSchemaInClasspath("schema/authPost.json"))
                 .and()
                 .body("token", isA(String::class.java))
     }
@@ -96,14 +97,13 @@ internal class AuthenticationTests : AbstractFunctionalTest() {
         given()
                 .body("""
                     {
-                        "username": "admin",
-                        "password": "admin"
+                        "username": "${GREG.username}",
+                        "password": "${GREG.password}"
                     }
                 """.trim())
                 .post("/auth")
                 .then()
                 .statusCode(200)
-                .body(matchesJsonSchemaInClasspath("schema/authPost.json"))
                 .and()
                 .body("token", isA(String::class.java))
     }
