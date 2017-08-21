@@ -9,7 +9,7 @@ class ManagementTests : AbstractFunctionalTest() {
 
     @Test
     fun canGetHeartbeat() {
-        get("/heartbeat")
+        get("/health/heartbeat")
                 .then()
                 .statusCode(200)
                 .body(equalTo("ping"))

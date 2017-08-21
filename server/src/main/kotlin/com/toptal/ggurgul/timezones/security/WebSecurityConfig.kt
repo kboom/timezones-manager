@@ -68,7 +68,7 @@ open class WebSecurityConfig : WebSecurityConfigurerAdapter() {
                 .antMatchers(
                         HttpMethod.GET,
                         "/",
-                        "/heartbeat",
+                        "/health/**",
                         "/*.html",
                         "/favicon.ico",
                         "/**/*.html",
