@@ -11,7 +11,7 @@ interface TimezoneProjection {
 
     val locationName: String
 
-    @get:Value("#{target.user.username}")
+    @get:Value("#{target.owner.username}")
     val ownerName: String
 
 }

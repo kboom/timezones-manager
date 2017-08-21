@@ -10,7 +10,7 @@ import org.springframework.security.access.prepost.PreAuthorize
 @Api(value = "timezone", description = "Timezone operations", tags = arrayOf("timezone"))
 @PreAuthorize("hasRole('ROLE_ADMIN')")
 @RepositoryRestResource(
-        excerptProjection = TimezoneProjection::class
+//        excerptProjection = TimezoneProjection::class
 )
 interface TimezoneRepository : CrudRepository<Timezone, Long> {
 
