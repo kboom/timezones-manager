@@ -30,13 +30,13 @@ class ProfileRestController {
     @Autowired
     private val userDetailsService: UserDetailsService? = null
 
-    @ApiOperation(nickname = "getProfile", value = "Get profile", response = JwtUser::class)
+    @ApiOperation(value = "Get profile", response = JwtUser::class)
     @ApiResponses(
             ApiResponse(code = 200, message = "Got profile"),
             ApiResponse(code = 401, message = "Authentication failure")
     )
     @RequestMapping(method = arrayOf(RequestMethod.GET))
-    fun getAuthenticatedUser(request: HttpServletRequest): JwtUser {
+    fun getProfile(request: HttpServletRequest): JwtUser {
         val token = request.getHeader(tokenHeader)
         val username = jwtTokenUtil!!.getUsernameFromToken(token)
         return userDetailsService!!.loadUserByUsername(username) as JwtUser

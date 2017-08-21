@@ -33,9 +33,10 @@ open class SwaggerConfig {
                 .select()
                 .apis(RequestHandlerSelectors.any())
                 .paths(or(
-                        regex("/profile*"),
-                        regex("/auth*"),
-                        regex("/timezones*")
+                        regex("/profile(.*)"),
+                        regex("/user(.*)"),
+                        regex("/auth(.*)"),
+                        regex("/timezones(.*)")
                 ))
                 .build()
                 .securitySchemes(arrayListOf(apiKey()))

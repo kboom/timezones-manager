@@ -8,6 +8,7 @@ import javax.validation.constraints.Size
 @Entity
 @Table(name = "TIMEZONES")
 data class Timezone(
+
         @Id
         @Column(name = "ID")
         @SequenceGenerator(name = "timezone_seq", sequenceName = "timezone_seq", allocationSize = 1)
@@ -19,7 +20,18 @@ data class Timezone(
         @Size(min = 4, max = 50)
         private var name: String? = null,
 
+        @Column(name = "LOCATION_NAME", length = 50)
+        @NotNull
+        @Size(min = 4, max = 50)
+        private var locationName: String? = null,
+
+        @Column(name = "DIFF_TO_GMT")
+        @NotNull
+        @Size(min = 0, max = 23)
+        private var differenceToGMT: Int? = null,
+
         @ManyToOne
         @NotNull
         private var owner: User? = null
+
 )
