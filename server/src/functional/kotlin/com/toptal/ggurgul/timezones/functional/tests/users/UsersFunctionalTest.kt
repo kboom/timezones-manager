@@ -68,6 +68,23 @@ class UsersFunctionalTest : AbstractFunctionalTest() {
 
     @Test
     @AuthenticatedAsUser(AGATHA)
+    fun managerCanCreateUser() {
+        RestAssured.given()
+                .header("Authorization", authenticationRule.token)
+                .body("""{
+                    "username": "alice2",
+                    "password": "abc",
+                    "email": "qwerty666",
+                    "enabled": true
+                }""".trimIndent())
+                .post("/users")
+                .then()
+                .statusCode(201)
+//                .body(JsonSchemaValidator.matchesJsonSchemaInClasspath("schema/timezones.json"))
+    }
+
+    @Test
+    @AuthenticatedAsUser(AGATHA)
     fun managerCanDeleteUser() {
         RestAssured.given()
                 .header("Authorization", authenticationRule.token)

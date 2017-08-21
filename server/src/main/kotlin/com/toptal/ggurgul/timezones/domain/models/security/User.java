@@ -36,7 +36,6 @@ public class User {
 
     @Column(name = "LAST_PWD_RST_DT")
     @Temporal(TemporalType.TIMESTAMP)
-    @NotNull
     private Date lastPasswordResetDate;
 
     @ManyToMany(fetch = FetchType.EAGER)
