@@ -2,6 +2,6 @@ package com.toptal.ggurgul.timezones.domain.models.security;
 
 public enum AuthorityName {
 
-    USER, MANAGER, ADMIN;
+    ROLE_USER, ROLE_MANAGER, ROLE_ADMIN;
 
 }

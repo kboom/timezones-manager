@@ -33,14 +33,14 @@ open class WebSecurityConfig : WebSecurityConfigurerAdapter() {
     @Autowired
     @Throws(Exception::class)
     fun configureGlobal(authenticationManagerBuilder: AuthenticationManagerBuilder) {
-        authenticationManagerBuilder
-                .inMemoryAuthentication()
-                .withUser("admin").password("admin")
-                .roles(
-                        AuthorityName.USER.toString(),
-                        AuthorityName.MANAGER.toString(),
-                        AuthorityName.ADMIN.toString()
-                )
+//        authenticationManagerBuilder
+//                .inMemoryAuthentication()
+//                .withUser("admin").password("admin")
+//                .roles(
+//                        AuthorityName.USER.toString(),
+//                        AuthorityName.MANAGER.toString(),
+//                        AuthorityName.ADMIN.toString()
+//                )
         authenticationManagerBuilder
                 .userDetailsService<UserDetailsService>(userDetailsService)
                 .passwordEncoder(passwordEncoder())
@@ -78,14 +78,12 @@ open class WebSecurityConfig : WebSecurityConfigurerAdapter() {
                         "/webjars/**",
                         "/v2/api-docs/**"
                 ).permitAll()
-                .and()
-                .authorizeRequests()
                 .antMatchers("/auth/**")
-                .anonymous()
+                .permitAll()
                 .anyRequest()
                 .authenticated()
 
-        httpSecurity.addFilterAfter(authenticationTokenFilterBean(), AnonymousAuthenticationFilter::class.java)
+        httpSecurity.addFilterBefore(authenticationTokenFilterBean(), AnonymousAuthenticationFilter::class.java)
         httpSecurity.headers().cacheControl()
     }
 

@@ -8,7 +8,7 @@ import org.springframework.data.rest.core.annotation.RepositoryRestResource
 import org.springframework.security.access.prepost.PreAuthorize
 
 @Api(value = "timezone", description = "Timezone operations", tags = arrayOf("timezone"))
-@PreAuthorize("hasRole('USER_ROLE')")
+@PreAuthorize("hasRole('ROLE_ADMIN')")
 @RepositoryRestResource(
         excerptProjection = TimezoneProjection::class
 )
