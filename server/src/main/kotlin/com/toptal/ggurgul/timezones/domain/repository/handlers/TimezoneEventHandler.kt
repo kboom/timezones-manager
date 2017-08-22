@@ -32,7 +32,7 @@ open class TimezoneEventHandler
     @HandleBeforeSave
     fun handleTimezoneUpdate(timezone: Timezone) {
         logger.debug("Updating timezone")
-        val existingTimezone = timezoneRepository.findOne(timezone.id)
+        val existingTimezone = timezoneRepository.findOne(timezone.id!!)
         timezone.owner = existingTimezone.owner
     }
 

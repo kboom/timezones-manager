@@ -10,7 +10,7 @@ import org.hamcrest.Matchers.hasSize
 import org.junit.Before
 import org.junit.Test
 
-class TimezonesTests : AbstractFunctionalTest() {
+internal class TimezonesTests : AbstractFunctionalTest() {
 
     @Before
     fun setUpDatabase() {
@@ -115,6 +115,26 @@ class TimezonesTests : AbstractFunctionalTest() {
         given()
                 .header("Authorization", authenticationRule.token)
                 .delete("/timezones/${Timezone.KRAKOW.id}")
+                .then()
+                .statusCode(403)
+    }
+
+    @Test
+    @AuthenticatedAsUser(AGATHA)
+    fun managerCannotListAnotherUserTimezone() {
+        given()
+                .header("Authorization", authenticationRule.token)
+                .get("/timezones/${Timezone.SYDNEY.id}")
+                .then()
+                .statusCode(403)
+    }
+
+    @Test
+    @AuthenticatedAsUser(AGATHA)
+    fun managerCannotDeleteAnotherUserTimezone() {
+        given()
+                .header("Authorization", authenticationRule.token)
+                .delete("/timezones/${Timezone.SYDNEY.id}")
                 .then()
                 .statusCode(403)
     }

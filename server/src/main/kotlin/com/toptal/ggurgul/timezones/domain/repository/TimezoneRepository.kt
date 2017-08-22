@@ -18,6 +18,9 @@ interface TimezoneRepository : CrudRepository<Timezone, Long> {
     @Query("select t from Timezone t where t.owner.username like ?#{hasRole('ROLE_ADMIN') ? '%' : principal.username}")
     override fun findAll(): MutableIterable<Timezone>
 
+    @PreAuthorize("hasRole('ROLE_ADMIN') or #timezone.owner.id == principal.id")
+    override fun findOne(@Param("timezone") timezoneId: Long): Timezone
+
     @PreAuthorize("#timezone.id == null or hasRole('ROLE_ADMIN') or #timezone.owner.id == principal.id")
     override fun <S : Timezone?> save(@Param("timezone") p0: S): S
 

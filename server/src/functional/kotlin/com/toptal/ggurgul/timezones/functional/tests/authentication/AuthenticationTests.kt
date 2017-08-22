@@ -1,35 +1,32 @@
 package com.toptal.ggurgul.timezones.functional.tests.authentication
 
-import com.toptal.ggurgul.timezones.functional.database.*
+import com.toptal.ggurgul.timezones.functional.database.Authority
 import com.toptal.ggurgul.timezones.functional.database.User.*
+import com.toptal.ggurgul.timezones.functional.database.assignAuthorityToUser
+import com.toptal.ggurgul.timezones.functional.database.insertUser
+import com.toptal.ggurgul.timezones.functional.database.prepareDatabase
 import com.toptal.ggurgul.timezones.functional.tests.AbstractFunctionalTest
 import io.restassured.RestAssured.given
-import io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClasspath
 import org.hamcrest.Matchers.isA
-import org.junit.BeforeClass
+import org.junit.Before
 import org.junit.Test
 
 internal class AuthenticationTests : AbstractFunctionalTest() {
 
-    companion object {
-
-        @JvmStatic
-        @BeforeClass
-        fun setUpDatabase() {
-            prepareDatabase {
-                insertInto("USERS") {
-                    insertUser(this, GREG)
-                    insertUser(this, AGATHA)
-                    insertUser(this, ALICE)
-                }
-                insertInto("USER_AUTHORITIES") {
-                    assignAuthorityToUser(this, Authority.ADMIN, GREG)
-                    assignAuthorityToUser(this, Authority.MANAGER, AGATHA)
-                    assignAuthorityToUser(this, Authority.USER, ALICE)
-                }
+    @Before
+    fun setUpDatabase() {
+        prepareDatabase {
+            insertInto("USERS") {
+                insertUser(this, GREG)
+                insertUser(this, AGATHA)
+                insertUser(this, ALICE)
+            }
+            insertInto("USER_AUTHORITIES") {
+                assignAuthorityToUser(this, Authority.ADMIN, GREG)
+                assignAuthorityToUser(this, Authority.MANAGER, AGATHA)
+                assignAuthorityToUser(this, Authority.USER, ALICE)
             }
         }
-
     }
 
     @Test

@@ -5,7 +5,7 @@ import io.restassured.RestAssured.get
 import org.hamcrest.Matchers.equalTo
 import org.junit.Test
 
-class ManagementTests : AbstractFunctionalTest() {
+internal class ManagementTests : AbstractFunctionalTest() {
 
     @Test
     fun canGetHeartbeat() {
