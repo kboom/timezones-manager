@@ -24,6 +24,7 @@ abstract class AbstractFunctionalTest {
             RestAssured.port = 8080;
             RestAssured.requestSpecification = RequestSpecBuilder()
                     .setContentType("application/json")
+                    .setAccept("application/json")
                     .build()
             RestAssured.enableLoggingOfRequestAndResponseIfValidationFails()
         }

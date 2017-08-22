@@ -15,8 +15,8 @@ import org.springframework.stereotype.Component
 @RepositoryEventHandler(Timezone::class)
 open class TimezoneEventHandler
 @Autowired constructor(
-        val userService: UserService,
-        val timezoneRepository: TimezoneRepository
+        private val userService: UserService,
+        private val timezoneRepository: TimezoneRepository
 ) {
 
     companion object {
