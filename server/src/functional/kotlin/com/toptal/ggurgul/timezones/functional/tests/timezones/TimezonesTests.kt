@@ -42,8 +42,8 @@ class TimezonesTests : AbstractFunctionalTest() {
                 .get("/timezones")
                 .then()
                 .statusCode(200)
-                .body("_embedded.timezones", hasSize<String>(equalTo(2)))
-//                .body(JsonSchemaValidator.matchesJsonSchemaInClasspath("schema/timezones.json"))
+                .body("_embedded.timezones", hasSize<String>(equalTo(1)))
+                .body("_embedded.timezones[0].name", equalTo("My Sydney"))
     }
 
     @Test
@@ -54,8 +54,8 @@ class TimezonesTests : AbstractFunctionalTest() {
                 .get("/timezones")
                 .then()
                 .statusCode(200)
-                .body("_embedded.timezones", hasSize<String>(equalTo(2)))
-//                .body(JsonSchemaValidator.matchesJsonSchemaInClasspath("schema/timezones.json"))
+                .body("_embedded.timezones", hasSize<String>(equalTo(1)))
+                .body("_embedded.timezones[0].name", equalTo("My Warsaw"))
     }
 
     @Test
@@ -67,7 +67,6 @@ class TimezonesTests : AbstractFunctionalTest() {
                 .then()
                 .statusCode(200)
                 .body("_embedded.timezones", hasSize<String>(equalTo(4)))
-//                .body(JsonSchemaValidator.matchesJsonSchemaInClasspath("schema/timezones.json"))
     }
 
     @Test
@@ -82,9 +81,7 @@ class TimezonesTests : AbstractFunctionalTest() {
                 }""".trimIndent())
                 .post("/timezones")
                 .then()
-                .statusCode(200)
-                .body("_embedded.timezones", hasSize<String>(equalTo(2)))
-//                .body(JsonSchemaValidator.matchesJsonSchemaInClasspath("schema/timezones.json"))
+                .statusCode(201)
     }
 
 }
