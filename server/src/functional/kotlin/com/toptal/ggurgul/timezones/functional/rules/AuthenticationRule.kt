@@ -32,10 +32,14 @@ class AuthenticationRule(
                         "password": "${authenticatedAsUser.user.password}"
                     }""".trimIndent())
                 val response = httpClient.execute(postRequest)
-                val responseString = EntityUtils.toString(response.entity)
-                token = responseString
-                        .replace("{\"token\":\"", "")
-                        .replace("\"}", "")
+                if(response.statusLine.statusCode == 200) {
+                    val responseString = EntityUtils.toString(response.entity)
+                    token = responseString
+                            .replace("{\"token\":\"", "")
+                            .replace("\"}", "")
+                } else {
+                    throw IllegalStateException("Could not log-in")
+                }
             }
             base.evaluate()
             token = null
