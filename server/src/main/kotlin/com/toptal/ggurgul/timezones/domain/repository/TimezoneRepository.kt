@@ -21,4 +21,7 @@ interface TimezoneRepository : CrudRepository<Timezone, Long> {
     @PreAuthorize("#timezone.id == null or hasRole('ROLE_ADMIN') or #timezone.owner.id == principal.id")
     override fun <S : Timezone?> save(@Param("timezone") p0: S): S
 
+    @PreAuthorize("hasRole('ROLE_ADMIN') or #timezone.owner.id == principal.id")
+    override fun delete(@Param("timezone") timezone: Timezone)
+
 }

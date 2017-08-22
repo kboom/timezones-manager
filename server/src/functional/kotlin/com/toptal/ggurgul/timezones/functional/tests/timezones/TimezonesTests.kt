@@ -99,4 +99,24 @@ class TimezonesTests : AbstractFunctionalTest() {
                 .statusCode(200)
     }
 
+    @Test
+    @AuthenticatedAsUser(ALICE)
+    fun userCanDeleteTimezone() {
+        given()
+                .header("Authorization", authenticationRule.token)
+                .delete("/timezones/${Timezone.SYDNEY.id}")
+                .then()
+                .statusCode(204)
+    }
+
+    @Test
+    @AuthenticatedAsUser(ALICE)
+    fun userCannotDeleteAnotherUserTimezone() {
+        given()
+                .header("Authorization", authenticationRule.token)
+                .delete("/timezones/${Timezone.KRAKOW.id}")
+                .then()
+                .statusCode(403)
+    }
+
 }
