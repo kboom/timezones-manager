@@ -84,4 +84,19 @@ class TimezonesTests : AbstractFunctionalTest() {
                 .statusCode(201)
     }
 
+    @Test
+    @AuthenticatedAsUser(ALICE)
+    fun userCanUpdateTimezone() {
+        given()
+                .header("Authorization", authenticationRule.token)
+                .body("""{
+                    "name": "Right here",
+                    "locationName": "Here",
+                    "differenceToGMT": 0
+                }""".trimIndent())
+                .put("/timezones/${Timezone.SYDNEY.id}")
+                .then()
+                .statusCode(200)
+    }
+
 }
