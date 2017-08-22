@@ -3,6 +3,7 @@ package com.toptal.ggurgul.timezones.functional.rules
 import org.apache.http.client.HttpClient
 import org.apache.http.client.methods.HttpPost
 import org.apache.http.entity.StringEntity
+import org.apache.http.impl.client.HttpClients
 import org.apache.http.util.EntityUtils
 import org.junit.rules.TestRule
 import org.junit.runner.Description
@@ -11,7 +12,7 @@ import java.util.*
 
 
 class AuthenticationRule(
-        private val httpClient: HttpClient
+        private val httpClient: HttpClient = HttpClients.createDefault()
 ) : TestRule {
 
     var token: String? = null

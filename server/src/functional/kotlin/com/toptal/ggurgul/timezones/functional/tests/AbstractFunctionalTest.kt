@@ -14,11 +14,9 @@ import org.junit.experimental.categories.Category
 abstract class AbstractFunctionalTest {
 
     @get:Rule
-    val authenticationRule = AuthenticationRule(AbstractFunctionalTest.httpClient)
+    val authenticationRule = AuthenticationRule()
 
     companion object {
-
-        internal var httpClient = HttpClients.createDefault()
 
         @BeforeClass
         @JvmStatic
@@ -28,13 +26,6 @@ abstract class AbstractFunctionalTest {
                     .setContentType("application/json")
                     .build()
             RestAssured.enableLoggingOfRequestAndResponseIfValidationFails()
-            httpClient = HttpClients.createDefault()
-        }
-
-        @AfterClass
-        @JvmStatic
-        fun afterClass() {
-            httpClient.close()
         }
 
     }

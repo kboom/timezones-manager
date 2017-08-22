@@ -70,4 +70,21 @@ class TimezonesTests : AbstractFunctionalTest() {
 //                .body(JsonSchemaValidator.matchesJsonSchemaInClasspath("schema/timezones.json"))
     }
 
+    @Test
+    @AuthenticatedAsUser(ALICE)
+    fun userCanCreateTimezone() {
+        given()
+                .header("Authorization", authenticationRule.token)
+                .body("""{
+                    "name": "Middle of nowhere",
+                    "locationName": "Nowhere",
+                    "differenceToGMT": 12
+                }""".trimIndent())
+                .post("/timezones")
+                .then()
+                .statusCode(200)
+                .body("_embedded.timezones", hasSize<String>(equalTo(2)))
+//                .body(JsonSchemaValidator.matchesJsonSchemaInClasspath("schema/timezones.json"))
+    }
+
 }
