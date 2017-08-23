@@ -19,11 +19,11 @@ open class TimezonePermissionChecker
     }
 
     override fun shouldGrantPermissionFor(grantRequest: PermissionGrantRequest): Boolean {
-        if (grantRequest.permissionNeeded == CREATE_TIMEZONE) {
-            return true
+        return if (grantRequest.permissionNeeded == CREATE_TIMEZONE) {
+            true
         } else {
             val timezone = timezoneRepository.findById(getIdFrom(grantRequest))
-            return timezone.owner!!.id == grantRequest.principal.id
+            timezone.owner!!.id == grantRequest.principal.id
         }
     }
 
