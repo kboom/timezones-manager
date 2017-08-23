@@ -7,7 +7,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.Collection;
 import java.util.Date;
 
-public class JwtUser implements UserDetails {
+public class JwtUser implements UserDetails, AuthenticatedUser {
 
     private final Long id;
     private final String username;
@@ -34,6 +34,7 @@ public class JwtUser implements UserDetails {
         this.lastPasswordResetDate = lastPasswordResetDate;
     }
 
+    @Override
     @JsonIgnore
     public Long getId() {
         return id;
@@ -62,6 +63,7 @@ public class JwtUser implements UserDetails {
         return true;
     }
 
+    @Override
     public String getEmail() {
         return email;
     }
@@ -82,6 +84,7 @@ public class JwtUser implements UserDetails {
         return enabled;
     }
 
+    @Override
     @JsonIgnore
     public Date getLastPasswordResetDate() {
         return lastPasswordResetDate;
