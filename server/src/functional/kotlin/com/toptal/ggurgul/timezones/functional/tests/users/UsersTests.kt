@@ -8,8 +8,7 @@ import com.toptal.ggurgul.timezones.functional.database.prepareDatabase
 import com.toptal.ggurgul.timezones.functional.rules.AuthenticatedAsUser
 import com.toptal.ggurgul.timezones.functional.tests.AbstractFunctionalTest
 import io.restassured.RestAssured
-import org.hamcrest.Matchers.equalTo
-import org.hamcrest.Matchers.hasSize
+import org.hamcrest.Matchers.*
 import org.junit.Before
 import org.junit.Test
 
@@ -75,12 +74,18 @@ class UsersTests : AbstractFunctionalTest() {
                     "username": "alice2",
                     "password": "abc",
                     "email": "qwerty666",
-                    "enabled": true
+                    "enabled": true,
+                    "authorities": ["ROLE_USER"]
                 }""".trimIndent())
                 .post("/users")
                 .then()
                 .statusCode(201)
-//                .body(JsonSchemaValidator.matchesJsonSchemaInClasspath("schema/timezones.json"))
+                .body("username", equalTo("alice2"))
+                .body("email", equalTo("qwerty666"))
+                .body("enabled", `is`(true))
+                .body("lastPasswordResetDate", isEmptyOrNullString())
+                .body("authorities", hasSize<Any>(1))
+                .body("authorities[0].name", equalTo("ROLE_USER"))
     }
 
     @Test

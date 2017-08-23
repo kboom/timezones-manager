@@ -5,22 +5,12 @@ import com.ninja_squad.dbsetup_kotlin.mappedValues
 
 
 enum class Authority(
-        val id: Long,
         val roleName: String
 ) {
 
-    ADMIN(
-            id = 1L,
-            roleName = "ROLE_ADMIN"
-    ),
-    MANAGER(
-            id = 2L,
-            roleName = "ROLE_MANAGER"
-    ),
-    USER(
-            id = 3L,
-            roleName = "ROLE_USER"
-    )
+    ADMIN(roleName = "ROLE_ADMIN"),
+    MANAGER(roleName = "ROLE_MANAGER"),
+    USER(roleName = "ROLE_USER")
 
 }
 
@@ -28,7 +18,7 @@ enum class Authority(
 fun assignAuthorityToUser(insertBuilder: Insert.Builder, authority: Authority, user: User) {
     insertBuilder.mappedValues(
             "USER_ID" to user.id,
-            "AUTHORITY_ID" to authority.id
+            "AUTHORITY_NAME" to authority.roleName
     )
 }
 

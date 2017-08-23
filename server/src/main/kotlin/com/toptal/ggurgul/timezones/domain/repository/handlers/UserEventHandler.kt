@@ -1,7 +1,9 @@
 package com.toptal.ggurgul.timezones.domain.repository.handlers
 
+import com.toptal.ggurgul.timezones.domain.models.security.Authority
 import com.toptal.ggurgul.timezones.domain.models.security.User
 import com.toptal.ggurgul.timezones.domain.repository.UserRepository
+import com.toptal.ggurgul.timezones.security.repository.AuthorityRepository
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.rest.core.annotation.HandleBeforeCreate
 import org.springframework.data.rest.core.annotation.HandleBeforeSave
@@ -14,13 +16,16 @@ import org.springframework.stereotype.Component
 @RepositoryEventHandler(User::class)
 open class UserEventHandler
 @Autowired constructor(
-        val passwordEncoder: BCryptPasswordEncoder,
-        val userRepository: UserRepository
+        private val passwordEncoder: BCryptPasswordEncoder,
+        private val userRepository: UserRepository,
+        private val authorityRepository: AuthorityRepository
 ) {
 
     @HandleBeforeCreate
     fun handleUserCreate(user: User) {
         user.password = passwordEncoder.encode(user.password)
+        val userAuthorities = authorityRepository.findAll(user.authorities.map { it.name })
+        user.authorities = userAuthorities
     }
 
     @HandleBeforeSave

@@ -1,5 +1,6 @@
 package com.toptal.ggurgul.timezones
 
+import com.toptal.ggurgul.timezones.domain.models.security.Authority
 import org.springframework.boot.SpringApplication
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.context.annotation.Bean
@@ -44,6 +45,7 @@ open class TimezonesApplication {
 
             override fun configureRepositoryRestConfiguration(config: RepositoryRestConfiguration) {
                 config.repositoryDetectionStrategy = ANNOTATED
+                config.exposeIdsFor(Authority::class.java)
             }
         }
 
