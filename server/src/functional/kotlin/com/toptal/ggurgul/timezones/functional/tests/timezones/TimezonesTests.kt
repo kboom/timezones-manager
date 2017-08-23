@@ -111,6 +111,17 @@ internal class TimezonesTests : AbstractFunctionalTest() {
 
     @Test
     @AuthenticatedAsUser(ALICE)
+    fun userCannotSeeAnotherUserTimezone() {
+        given()
+                .header("Authorization", authenticationRule.token)
+                .get("/timezones/${Timezone.KRAKOW.id}")
+                .then()
+                .statusCode(403)
+    }
+
+
+    @Test
+    @AuthenticatedAsUser(ALICE)
     fun userCannotDeleteAnotherUserTimezone() {
         given()
                 .header("Authorization", authenticationRule.token)
@@ -121,7 +132,7 @@ internal class TimezonesTests : AbstractFunctionalTest() {
 
     @Test
     @AuthenticatedAsUser(AGATHA)
-    fun managerCannotListAnotherUserTimezone() {
+    fun managerCannotSeeAnotherUserTimezone() {
         given()
                 .header("Authorization", authenticationRule.token)
                 .get("/timezones/${Timezone.SYDNEY.id}")

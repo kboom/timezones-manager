@@ -24,7 +24,7 @@ class AuthenticationRule(
 
             if (authenticatedAsUserOptional.isPresent) {
                 val authenticatedAsUser = authenticatedAsUserOptional.get()
-                val postRequest = HttpPost("http://localhost:8080/auth")
+                val postRequest = HttpPost("http://localhost:8080/api/auth")
                 postRequest.setHeader("Accept", "application/json");
                 postRequest.setHeader("Content-type", "application/json");
                 postRequest.entity = StringEntity("""{

@@ -22,6 +22,7 @@ abstract class AbstractFunctionalTest {
         @JvmStatic
         fun beforeClass() {
             RestAssured.port = 8080;
+            RestAssured.basePath = "/api"
             RestAssured.requestSpecification = RequestSpecBuilder()
                     .setContentType("application/json")
                     .setAccept("application/json")

@@ -1,5 +1,5 @@
 server:
-  contextPath:
+  contextPath: /api
 
 jwt:
   header: Authorization
