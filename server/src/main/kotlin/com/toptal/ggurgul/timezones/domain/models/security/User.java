@@ -1,5 +1,7 @@
 package com.toptal.ggurgul.timezones.domain.models.security;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -23,6 +25,7 @@ public class User {
 
     @Column(name = "PASSWORD")
     @NotNull
+    @JsonIgnore
     private String password;
 
     @Column(name = "EMAIL", length = 50)
