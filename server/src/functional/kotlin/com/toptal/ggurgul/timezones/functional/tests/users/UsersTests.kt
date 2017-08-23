@@ -14,7 +14,7 @@ import org.junit.Before
 import org.junit.Test
 
 
-class UsersFunctionalTest : AbstractFunctionalTest() {
+class UsersTests : AbstractFunctionalTest() {
 
     @Before
     fun setUpDatabase() {

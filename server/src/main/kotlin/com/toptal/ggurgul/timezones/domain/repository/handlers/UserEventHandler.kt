@@ -20,7 +20,7 @@ open class UserEventHandler
 
     @HandleBeforeCreate
     fun handleUserCreate(user: User) {
-        user.password = passwordEncoder.encode(user.getPassword())
+        user.password = passwordEncoder.encode(user.password)
     }
 
     @HandleBeforeSave

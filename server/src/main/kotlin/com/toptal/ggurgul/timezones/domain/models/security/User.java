@@ -1,12 +1,15 @@
 package com.toptal.ggurgul.timezones.domain.models.security;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.Date;
 import java.util.List;
+
+import static com.fasterxml.jackson.annotation.JsonProperty.Access.WRITE_ONLY;
 
 @Entity
 @Table(name = "USERS")
@@ -25,7 +28,7 @@ public class User {
 
     @Column(name = "PASSWORD")
     @NotNull
-    @JsonIgnore
+    @JsonProperty(access = WRITE_ONLY)
     private String password;
 
     @Column(name = "EMAIL", length = 50)

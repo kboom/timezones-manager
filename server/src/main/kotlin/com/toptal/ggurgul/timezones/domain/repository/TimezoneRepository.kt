@@ -26,13 +26,13 @@ interface TimezoneRepository : CrudRepository<Timezone, Long> {
     override fun findAll(): MutableIterable<Timezone>
 
     @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_ADMIN') or hasPermission(#timezoneId, 'Timezone', 'timezone:create') or hasPermission(#timezone, 'Timezone', 'timezone:edit')")
-    override fun <S : Timezone?> save(@Param("timezone") timezone: S): S
+    override fun <S : Timezone?> save(@Param("timezone") timezone: S?): S
 
     @PreAuthorize("hasRole('ROLE_ADMIN') or hasPermission(#timezoneId, 'Timezone', 'timezone:view')")
     override fun findOne(@Param("timezoneId") timezoneId: Long?): Timezone
 
     @PreAuthorize("hasRole('ROLE_ADMIN') or hasPermission(#timezone, 'timezone:delete')")
-    override fun delete(@Param("timezone") timezone: Timezone)
+    override fun delete(@Param("timezone") timezone: Timezone?)
 
 
     // Other methods should also be secured but are not used (by default) by Spring-Data-Rest
