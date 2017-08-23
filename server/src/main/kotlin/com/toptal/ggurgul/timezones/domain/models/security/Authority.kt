@@ -5,14 +5,11 @@ import javax.validation.constraints.NotNull
 
 @Entity
 @Table(name = "AUTHORITIES")
-class Authority(
-        roleName: AuthorityName? = null
-) {
+class Authority {
 
     @Id
-    @Column(name = "AUTHORITY_NAME", length = 50)
-    @NotNull
+    @Column(name = "AUTHORITY_NAME")
     @Enumerated(EnumType.STRING)
-    var name: AuthorityName? = roleName
+    var name: AuthorityName? = null
 
 }

@@ -75,7 +75,7 @@ class UsersTests : AbstractFunctionalTest() {
                     "password": "abc",
                     "email": "qwerty666",
                     "enabled": true,
-                    "authorities": ["ROLE_USER"]
+                    "authorities": [{ "name": "ROLE_MANAGER" }]
                 }""".trimIndent())
                 .post("/users")
                 .then()
@@ -85,7 +85,7 @@ class UsersTests : AbstractFunctionalTest() {
                 .body("enabled", `is`(true))
                 .body("lastPasswordResetDate", isEmptyOrNullString())
                 .body("authorities", hasSize<Any>(1))
-                .body("authorities[0].name", equalTo("ROLE_USER"))
+                .body("authorities[0].name", equalTo("ROLE_MANAGER"))
     }
 
     @Test
@@ -96,7 +96,6 @@ class UsersTests : AbstractFunctionalTest() {
                 .delete("/users/${ALICE.id}")
                 .then()
                 .statusCode(204)
-//                .body(JsonSchemaValidator.matchesJsonSchemaInClasspath("schema/timezones.json"))
     }
 
     @Test
@@ -106,15 +105,21 @@ class UsersTests : AbstractFunctionalTest() {
                 .header("Authorization", authenticationRule.token)
                 .body("""{
                     "username": "alice2",
-                    "password": "abc",
-                    "email": "qwerty666",
+                    "password": "abcdef",
+                    "email": "qwerty666@any.com",
                     "enabled": true,
-                    "lastPasswordResetDate": "2017-08-21T19:47:30.844+0000"
+                    "lastPasswordResetDate": "2017-08-21T19:47:30.844+0000",
+                    "authorities": [{ "name": "ROLE_ADMIN" }]
                 }""".trimIndent())
                 .put("/users/${ALICE.id}")
                 .then()
                 .statusCode(200)
-//                .body(JsonSchemaValidator.matchesJsonSchemaInClasspath("schema/timezones.json"))
+                .body("username", equalTo("alice2"))
+                .body("email", equalTo("qwerty666@any.com"))
+                .body("enabled", `is`(true))
+                .body("lastPasswordResetDate", equalTo("2017-08-21T19:47:30.844+0000"))
+                .body("authorities", hasSize<Any>(1))
+                .body("authorities[0].name", equalTo("ROLE_ADMIN"))
     }
 
 }

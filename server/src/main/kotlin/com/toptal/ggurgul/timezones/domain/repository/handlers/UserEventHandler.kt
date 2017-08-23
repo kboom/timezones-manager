@@ -6,6 +6,7 @@ import com.toptal.ggurgul.timezones.domain.repository.UserRepository
 import com.toptal.ggurgul.timezones.security.repository.AuthorityRepository
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.rest.core.annotation.HandleBeforeCreate
+import org.springframework.data.rest.core.annotation.HandleBeforeLinkSave
 import org.springframework.data.rest.core.annotation.HandleBeforeSave
 import org.springframework.data.rest.core.annotation.RepositoryEventHandler
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
@@ -24,8 +25,7 @@ open class UserEventHandler
     @HandleBeforeCreate
     fun handleUserCreate(user: User) {
         user.password = passwordEncoder.encode(user.password)
-        val userAuthorities = authorityRepository.findAll(user.authorities.map { it.name })
-        user.authorities = userAuthorities
+        user.authorities = authorityRepository.findAll(user.authorities.map { it.name })
     }
 
     @HandleBeforeSave
@@ -36,6 +36,12 @@ open class UserEventHandler
         } else {
             user.password = passwordEncoder.encode(user.password)
         }
+        user.authorities = authorityRepository.findAll(user.authorities.map { it.name })
+    }
+
+    @HandleBeforeLinkSave
+    fun handleBeforeLinkSave(authorities: MutableList<Authority>) {
+        System.out.println("abc")
     }
 
 }
