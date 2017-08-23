@@ -20,20 +20,17 @@ interface TimezoneRepository : CrudRepository<Timezone, Long> {
     @RestResource(exported = false)
     fun findById(timezoneId: Long): Timezone
 
-
     @Query("select t from Timezone t where t.owner.username like ?#{hasRole('ROLE_ADMIN') ? '%' : principal.username}")
     override fun findAll(): MutableIterable<Timezone>
 
-    @PreAuthorize("hasRole('ROLE_ADMIN') or #timezone.owner.id == principal.id")
+    @PreAuthorize("hasRole('ROLE_ADMIN') or hasPermission(#timezoneId, 'Timezone', 'timezone:view')")
     override fun findAll(@Param("timezoneIds") timezoneIds: MutableIterable<Long>?): MutableIterable<Timezone>
 
-    @PreAuthorize("hasRole('ROLE_ADMIN') or #timezoneId == principal.id")
+    @PreAuthorize("hasRole('ROLE_ADMIN') or hasPermission(#timezoneId, 'Timezone', 'timezone:view')")
     override fun findOne(@Param("timezoneId") timezoneId: Long): Timezone
 
-    @PreAuthorize("#timezone.id == null or hasRole('ROLE_ADMIN') or #timezone.owner.id == principal.id")
-    override fun <S : Timezone?> save(@Param("timezone") p0: S): S
-
-
+    @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_ADMIN') or hasPermission(#timezoneId, 'Timezone', 'timezone:create') or hasPermission(#timezone, 'Timezone', 'timezone:edit')")
+    override fun <S : Timezone?> save(@Param("timezone") timezone: S): S
 
     @PreAuthorize("hasRole('ROLE_ADMIN') or hasPermission(#timezone, 'timezone:delete')")
     override fun delete(@Param("timezone") timezone: Timezone)
@@ -41,10 +38,7 @@ interface TimezoneRepository : CrudRepository<Timezone, Long> {
     @PreAuthorize("hasRole('ROLE_ADMIN') or hasPermission(#timezoneId, 'Timezone', 'timezone:delete')")
     override fun delete(@Param("timezoneId") timezoneId: Long)
 
-
-
-
-    @PreAuthorize("hasRole('ROLE_ADMIN') or #timezoneIds.owner.id == principal.id")
+    @PreAuthorize("hasRole('ROLE_ADMIN') or hasPermission(#timezoneIds, 'Timezone', 'timezone:delete')")
     override fun delete(@Param("timezoneIds") timezoneIds: MutableIterable<Timezone>)
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")

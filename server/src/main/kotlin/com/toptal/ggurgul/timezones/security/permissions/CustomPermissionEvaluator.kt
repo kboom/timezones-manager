@@ -23,7 +23,7 @@ constructor(
         ))
     }
 
-    override fun hasPermission(authentication: Authentication, targetId: Serializable, targetType: String, permissionText: Any): Boolean {
+    override fun hasPermission(authentication: Authentication, targetId: Serializable?, targetType: String, permissionText: Any): Boolean {
         return checkPermission(PermissionGrantRequest(
                 principal = authentication.principal as AuthenticatedUser,
                 targetId = targetId,

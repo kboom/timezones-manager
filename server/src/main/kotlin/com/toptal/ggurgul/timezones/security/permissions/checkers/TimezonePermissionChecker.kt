@@ -15,12 +15,16 @@ open class TimezonePermissionChecker
 ) : PermissionChecker {
 
     companion object {
-        val handledPermissions = setOf(READ_TIMEZONE, EDIT_TIMEZONE, DELETE_TIMEZONE)
+        val handledPermissions = setOf(CREATE_TIMEZONE, VIEW_TIMEZONE, EDIT_TIMEZONE, DELETE_TIMEZONE)
     }
 
     override fun shouldGrantPermissionFor(grantRequest: PermissionGrantRequest): Boolean {
-        val timezone = timezoneRepository.findById(getIdFrom(grantRequest))
-        return timezone.owner!!.id == grantRequest.principal.id
+        if (grantRequest.permissionNeeded == CREATE_TIMEZONE) {
+            return true
+        } else {
+            val timezone = timezoneRepository.findById(getIdFrom(grantRequest))
+            return timezone.owner!!.id == grantRequest.principal.id
+        }
     }
 
     override fun canHandle(grantRequest: PermissionGrantRequest) =

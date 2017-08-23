@@ -4,7 +4,8 @@ enum class Permission(
         val permissionName: String
 ) {
 
-    READ_TIMEZONE("timezone:read"),
+    CREATE_TIMEZONE("timezone:create"),
+    VIEW_TIMEZONE("timezone:view"),
     EDIT_TIMEZONE("timezone:edit"),
     DELETE_TIMEZONE("timezone:delete");
 
