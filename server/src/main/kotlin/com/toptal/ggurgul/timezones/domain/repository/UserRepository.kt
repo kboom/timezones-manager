@@ -6,13 +6,21 @@ import org.springframework.context.annotation.Primary
 import org.springframework.data.repository.CrudRepository
 import org.springframework.data.repository.query.Param
 import org.springframework.data.rest.core.annotation.RepositoryRestResource
+import org.springframework.data.rest.core.annotation.RestResource
 import org.springframework.security.access.prepost.PreAuthorize
+import java.util.*
 
 @Primary
 @Api(value = "user", description = "User operations", tags = arrayOf("user"))
-@PreAuthorize("hasAnyRole('ROLE_MANAGER', 'ROLE_ADMIN')")
 @RepositoryRestResource
 interface UserRepository : CrudRepository<User, Long> {
+
+    /**
+     * Internal method used by security
+     */
+    @PreAuthorize("permitAll()")
+    @RestResource(exported = false)
+    fun findByUsername(username: String): Optional<User>
 
     @PreAuthorize("hasAnyRole('ROLE_MANAGER', 'ROLE_ADMIN') or #userId == principal.id")
     override fun findOne(@Param("userId") id: Long): User

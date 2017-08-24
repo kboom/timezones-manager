@@ -36,7 +36,7 @@ open class UserEventHandler
         } else {
             user.password = passwordEncoder.encode(user.password)
         }
-        user.authorities = authorityRepository.findAll(user.authorities.map { it.name })
+//        user.authorities = authorityRepository.findAll(user.authorities.map { it.name })
     }
 
     @HandleBeforeLinkSave

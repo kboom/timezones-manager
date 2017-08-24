@@ -108,8 +108,7 @@ class UsersTests : AbstractFunctionalTest() {
                     "password": "abcdef",
                     "email": "qwerty666@any.com",
                     "enabled": true,
-                    "lastPasswordResetDate": "2017-08-21T19:47:30.844+0000",
-                    "authorities": [{ "name": "ROLE_ADMIN" }]
+                    "lastPasswordResetDate": "2017-08-21T19:47:30.844+0000"
                 }""".trimIndent())
                 .put("/users/${ALICE.id}")
                 .then()
@@ -119,7 +118,7 @@ class UsersTests : AbstractFunctionalTest() {
                 .body("enabled", `is`(true))
                 .body("lastPasswordResetDate", equalTo("2017-08-21T19:47:30.844+0000"))
                 .body("authorities", hasSize<Any>(1))
-                .body("authorities[0].name", equalTo("ROLE_ADMIN"))
+                .body("authorities[0].name", equalTo("ROLE_USER"))
     }
 
 }
