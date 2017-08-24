@@ -1,4 +1,5 @@
 import {Component, OnInit} from "@angular/core";
+import {AuthenticationService} from "../../services/authentication.service";
 
 @Component({
     selector: 'userMenu',
@@ -10,8 +11,9 @@ import {Component, OnInit} from "@angular/core";
         </md-menu>
     `,
 })
-
 export class UserMenuComponent implements OnInit {
+
+    constructor(private authenticationService: AuthenticationService) {}
 
     public ngOnInit() {
         console.log('hello `Detail` component');

@@ -37,6 +37,7 @@ import {UsersComponent} from "./pages/users/users.component";
 import {NoContentComponent} from './pages/no-content';
 import {XLargeDirective} from './pages/home/x-large';
 import {UserMenuComponent} from './components/UserMenu'
+import {AuthenticationService} from "./services/authentication.service";
 
 import '../styles/styles.scss';
 import '../styles/headings.css';
@@ -44,7 +45,8 @@ import '../styles/headings.css';
 // Application wide providers
 const APP_PROVIDERS = [
     ...APP_RESOLVER_PROVIDERS,
-    AppState
+    AuthenticationService,
+    AppState,
 ];
 
 type StoreType = {
