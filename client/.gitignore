@@ -1,1 +1,3 @@
-client.iml
+*.iml
+node_modules
+.idea
