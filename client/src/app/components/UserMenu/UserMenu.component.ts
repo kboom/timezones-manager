@@ -1,5 +1,5 @@
 import {Component, OnDestroy, OnInit} from "@angular/core";
-import {AuthenticationService} from "../../services/authentication.service";
+import {SecurityService} from "../../+security/security.service";
 import {Subscription} from "rxjs/Subscription";
 import {MdDialog} from "@angular/material";
 import {SignInDialogComponent} from "../SignInDialog/SignInDialog.component";
@@ -28,7 +28,7 @@ export class UserMenuComponent implements OnInit, OnDestroy {
     authenticationEvents$: Subscription;
 
     constructor(
-        private authService: AuthenticationService,
+        private authService: SecurityService,
         private dialog: MdDialog
     ) {}
 

@@ -1,57 +1,51 @@
-import {BrowserModule} from '@angular/platform-browser';
-import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-import {HttpModule} from '@angular/http';
-import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {BrowserModule} from "@angular/platform-browser";
+import {FormsModule, ReactiveFormsModule} from "@angular/forms";
+import {HttpModule} from "@angular/http";
+import {HttpClientModule} from "@angular/common/http";
+import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
+import {ApplicationRef, NgModule} from "@angular/core";
+import {createInputTransfer, createNewHosts, removeNgStyles} from "@angularclass/hmr";
+import {PreloadAllModules, RouterModule} from "@angular/router";
 import {
-    NgModule,
-    ApplicationRef
-} from '@angular/core';
-import {
-    removeNgStyles,
-    createNewHosts,
-    createInputTransfer
-} from '@angularclass/hmr';
-import {
-    RouterModule,
-    PreloadAllModules
-} from '@angular/router';
-import {
-    MdInputModule,
     MdButtonModule,
     MdCheckboxModule,
+    MdDialogModule,
+    MdInputModule,
     MdMenuModule,
-    MdToolbarModule,
-    MdDialogModule
-} from '@angular/material';
-
+    MdToolbarModule
+} from "@angular/material";
 /*
  * Platform and Environment providers/directives/pipes
  */
-import {ENV_PROVIDERS} from './environment';
-import {ROUTES} from './app.routes';
-// App is our top level component
-import {AppComponent} from './app.component';
-import {APP_RESOLVER_PROVIDERS} from './app.resolver';
-import {AppState, InternalStateType} from './app.service';
-import {HomeComponent} from './pages/home';
-import {AboutComponent} from './pages/about';
-import {UsersComponent} from "./pages/users/users.component";
-import {NoContentComponent} from './pages/no-content';
-import {XLargeDirective} from './pages/home/x-large';
-import {UserMenuComponent} from './components/UserMenu'
-import {SignInDialogComponent} from './components/SignInDialog'
-import {AuthenticationService} from "./services/authentication.service";
-import {ResponseMappingService} from "./services/responseMapping.service";
 
-import '../styles/styles.scss';
-import '../styles/headings.css';
+// modules
+import {SecurityModule} from './+security';
+
+import {ENV_PROVIDERS} from "./environment";
+import {ROUTES} from "./app.routes";
+// App is our top level component
+import {AppComponent} from "./app.component";
+import {APP_RESOLVER_PROVIDERS} from "./app.resolver";
+import {AppState, InternalStateType} from "./app.service";
+import {HomeComponent} from "./pages/home";
+import {AboutComponent} from "./pages/about";
+import {UsersComponent} from "./pages/users/users.component";
+import {NoContentComponent} from "./pages/no-content";
+import {XLargeDirective} from "./pages/home/x-large";
+import {UserMenuComponent} from "./components/UserMenu";
+import {SignInDialogComponent} from "./components/SignInDialog";
+import {SecurityService} from "./+security/security.service";
+import {ResponseMappingService} from "./+security/responseMapping.service";
+
+import "../styles/styles.scss";
+import "../styles/headings.css";
 
 // Application wide providers
 const APP_PROVIDERS = [
     ...APP_RESOLVER_PROVIDERS,
-    AuthenticationService,
+    SecurityService,
     ResponseMappingService,
-    AppState,
+    AppState
 ];
 
 type StoreType = {
@@ -83,6 +77,8 @@ type StoreType = {
         FormsModule,
         ReactiveFormsModule,
         HttpModule,
+        HttpClientModule,
+        SecurityModule,
         BrowserAnimationsModule,
         RouterModule.forRoot(ROUTES, {useHash: true, preloadingStrategy: PreloadAllModules}),
         MdInputModule,

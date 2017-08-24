@@ -13,8 +13,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.data.rest.core.config.RepositoryRestConfiguration
 import org.springframework.data.rest.webmvc.config.RepositoryRestConfigurerAdapter
 import org.springframework.data.rest.webmvc.config.RepositoryRestConfigurer
-
-
+import org.springframework.web.cors.CorsConfiguration
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource
+import org.springframework.web.filter.CorsFilter
 
 
 @SpringBootApplication
@@ -48,6 +49,22 @@ open class TimezonesApplication {
             }
         }
 
+    }
+
+    @Bean
+    open fun corsFilter(): CorsFilter {
+        val source = UrlBasedCorsConfigurationSource()
+        val config = CorsConfiguration()
+        config.allowCredentials = true
+        config.addAllowedOrigin("*")
+        config.addAllowedHeader("*")
+        config.addAllowedMethod("OPTIONS")
+        config.addAllowedMethod("GET")
+        config.addAllowedMethod("POST")
+        config.addAllowedMethod("PUT")
+        config.addAllowedMethod("DELETE")
+        source.registerCorsConfiguration("/**", config)
+        return CorsFilter(source)
     }
 
     internal inner class SecurityEvaluationContextExtension : EvaluationContextExtensionSupport() {

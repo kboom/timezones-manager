@@ -1,6 +1,7 @@
 import {Component} from "@angular/core";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {MdDialogRef} from "@angular/material";
+import {SecurityService} from "../../+security/security.service";
 
 @Component({
     selector: 'signInDialog',
@@ -35,7 +36,11 @@ export class SignInDialogComponent {
 
     loginForm: FormGroup;
 
-    constructor(private fb: FormBuilder, private dialogRef: MdDialogRef<SignInDialogComponent>) {
+    constructor(
+        private fb: FormBuilder,
+        private dialogRef: MdDialogRef<SignInDialogComponent>,
+        private authService: SecurityService
+    ) {
         this.loginForm = this.fb.group({
             username: ["", Validators.required],
             password: ["", Validators.required]
@@ -44,7 +49,8 @@ export class SignInDialogComponent {
 
     doLogin(event): void {
         let formData = this.loginForm.value;
-        this.dialogRef.close(formData);
+        this.authService.authenticate(formData)
+            .subscribe(this.dialogRef.close)
     }
 
 }

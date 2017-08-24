@@ -6,7 +6,7 @@ import {TokenCodesModel} from "../models/Token.model";
 @Injectable()
 export class ResponseMappingService {
 
-    mapIntoTokenCodes(response: typeof Response): TokenCodesModel {
+    mapIntoTokenCodes(object): TokenCodesModel {
 console.log("resonse");
         return new TokenCodesModel("abc")
     }
