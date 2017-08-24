@@ -1,5 +1,5 @@
 import {BrowserModule} from '@angular/platform-browser';
-import {FormsModule} from '@angular/forms';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {HttpModule} from '@angular/http';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {
@@ -16,6 +16,7 @@ import {
     PreloadAllModules
 } from '@angular/router';
 import {
+    MdInputModule,
     MdButtonModule,
     MdCheckboxModule,
     MdMenuModule,
@@ -80,9 +81,11 @@ type StoreType = {
     imports: [
         BrowserModule,
         FormsModule,
+        ReactiveFormsModule,
         HttpModule,
         BrowserAnimationsModule,
         RouterModule.forRoot(ROUTES, {useHash: true, preloadingStrategy: PreloadAllModules}),
+        MdInputModule,
         MdButtonModule,
         MdCheckboxModule,
         MdMenuModule,

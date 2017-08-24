@@ -37,7 +37,10 @@ export class UserMenuComponent implements OnInit, OnDestroy {
     }
 
     openSignInDialog() {
-        this.dialog.open(SignInDialogComponent);
+        const dialog = this.dialog.open(SignInDialogComponent);
+        dialog.afterClosed().subscribe(result => {
+            console.log(`Dialog result: ${result}`);
+        });
     }
 
     public ngOnInit() {
