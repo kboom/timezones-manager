@@ -7,8 +7,7 @@ import {TokenCodesModel} from "../models/Token.model";
 export class ResponseMappingService {
 
     mapIntoTokenCodes(object): TokenCodesModel {
-console.log("resonse");
-        return new TokenCodesModel("abc")
+        return new TokenCodesModel(object.token)
     }
 
 }
