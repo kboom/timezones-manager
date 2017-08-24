@@ -24,14 +24,14 @@ import {ROUTES} from './app.routes';
 import {AppComponent} from './app.component';
 import {APP_RESOLVER_PROVIDERS} from './app.resolver';
 import {AppState, InternalStateType} from './app.service';
-import {HomeComponent} from './home';
-import {AboutComponent} from './about';
-import {NoContentComponent} from './no-content';
-import {XLargeDirective} from './home/x-large';
+import {HomeComponent} from './pages/home';
+import {AboutComponent} from './pages/about';
+import {NoContentComponent} from './pages/no-content';
+import {XLargeDirective} from './pages/home/x-large';
 
 import '../styles/styles.scss';
 import '../styles/headings.css';
-import {UsersComponent} from "./users/users.component";
+import {UsersComponent} from "./pages/users/users.component";
 
 // Application wide providers
 const APP_PROVIDERS = [
