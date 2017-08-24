@@ -6,7 +6,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.context.annotation.Bean
 import org.springframework.data.repository.query.spi.EvaluationContextExtension
 import org.springframework.data.repository.query.spi.EvaluationContextExtensionSupport
-import org.springframework.data.rest.core.mapping.RepositoryDetectionStrategy
 import org.springframework.data.rest.core.mapping.RepositoryDetectionStrategy.RepositoryDetectionStrategies.ANNOTATED
 import org.springframework.security.access.expression.SecurityExpressionRoot
 import org.springframework.security.core.context.SecurityContextHolder

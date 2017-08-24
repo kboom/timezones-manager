@@ -50,7 +50,6 @@ class UsersTests : AbstractFunctionalTest() {
                 .then()
                 .statusCode(200)
                 .body("_embedded.users", hasSize<String>(equalTo(3)))
-//                .body(JsonSchemaValidator.matchesJsonSchemaInClasspath("schema/timezones.json"))
     }
 
     @Test
@@ -62,7 +61,6 @@ class UsersTests : AbstractFunctionalTest() {
                 .then()
                 .statusCode(200)
                 .body("_embedded.users", hasSize<String>(equalTo(3)))
-//                .body(JsonSchemaValidator.matchesJsonSchemaInClasspath("schema/timezones.json"))
     }
 
     @Test
@@ -75,9 +73,9 @@ class UsersTests : AbstractFunctionalTest() {
                     "password": "abc",
                     "email": "qwerty666",
                     "enabled": true,
-                    "authorities": [{ "name": "ROLE_MANAGER" }]
+                    "authorities": ["/authorities/ROLE_MANAGER"]
                 }""".trimIndent())
-                .post("/users")
+                .post("/users?projection=withDetails")
                 .then()
                 .statusCode(201)
                 .body("username", equalTo("alice2"))
@@ -86,6 +84,17 @@ class UsersTests : AbstractFunctionalTest() {
                 .body("lastPasswordResetDate", isEmptyOrNullString())
                 .body("authorities", hasSize<Any>(1))
                 .body("authorities[0].name", equalTo("ROLE_MANAGER"))
+    }
+
+    @Test
+    @AuthenticatedAsUser(AGATHA)
+    fun managerCanGetAnyUser() {
+        RestAssured.given()
+                .header("Authorization", authenticationRule.token)
+                .get("/users/${ALICE.id}")
+                .then()
+                .statusCode(200)
+                .body("username", equalTo("alice"))
     }
 
     @Test
@@ -108,17 +117,16 @@ class UsersTests : AbstractFunctionalTest() {
                     "password": "abcdef",
                     "email": "qwerty666@any.com",
                     "enabled": true,
-                    "lastPasswordResetDate": "2017-08-21T19:47:30.844+0000"
+                    "authorities": ["/authorities/ROLE_ADMIN"]
                 }""".trimIndent())
-                .put("/users/${ALICE.id}")
+                .put("/users/${ALICE.id}?projection=withDetails")
                 .then()
                 .statusCode(200)
                 .body("username", equalTo("alice2"))
                 .body("email", equalTo("qwerty666@any.com"))
                 .body("enabled", `is`(true))
-                .body("lastPasswordResetDate", equalTo("2017-08-21T19:47:30.844+0000"))
                 .body("authorities", hasSize<Any>(1))
-                .body("authorities[0].name", equalTo("ROLE_USER"))
+                .body("authorities[0].name", equalTo("ROLE_ADMIN"))
     }
 
 }
