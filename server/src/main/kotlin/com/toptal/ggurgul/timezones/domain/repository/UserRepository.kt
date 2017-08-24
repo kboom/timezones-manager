@@ -18,7 +18,6 @@ interface UserRepository : CrudRepository<User, Long> {
     /**
      * Internal method used by security
      */
-    @PreAuthorize("permitAll()")
     @RestResource(exported = false)
     fun findByUsername(username: String): Optional<User>
 
@@ -30,5 +29,8 @@ interface UserRepository : CrudRepository<User, Long> {
 
     @PreAuthorize("hasAnyRole('ROLE_MANAGER', 'ROLE_ADMIN') or #user.id == null or  #user.id == principal.id")
     override fun <S : User?> save(@Param("user") user: S): S
+
+    @PreAuthorize("hasAnyRole('ROLE_MANAGER', 'ROLE_ADMIN')")
+    override fun findAll(): MutableIterable<User>
 
 }
