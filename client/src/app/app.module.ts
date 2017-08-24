@@ -38,6 +38,7 @@ import {NoContentComponent} from './pages/no-content';
 import {XLargeDirective} from './pages/home/x-large';
 import {UserMenuComponent} from './components/UserMenu'
 import {AuthenticationService} from "./services/authentication.service";
+import {ResponseMappingService} from "./services/responseMapping.service";
 
 import '../styles/styles.scss';
 import '../styles/headings.css';
@@ -46,6 +47,7 @@ import '../styles/headings.css';
 const APP_PROVIDERS = [
     ...APP_RESOLVER_PROVIDERS,
     AuthenticationService,
+    ResponseMappingService,
     AppState,
 ];
 
