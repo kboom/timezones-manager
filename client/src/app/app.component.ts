@@ -22,8 +22,18 @@ import {AppState} from './app.service';
 
         <nav>
             <md-toolbar>
-                <button md-button>Timezones</button>
-                <button md-button>Users</button>
+                <a [routerLink]=" ['./home'] "
+                   routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+                    Home
+                </a>
+                <a [routerLink]=" ['./timezones'] "
+                   routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+                    Timezones
+                </a>
+                <a [routerLink]=" ['./users'] "
+                   routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+                    Users
+                </a>
                 <span class="fill-remaining-space"></span>
                 <button md-button [mdMenuTriggerFor]="menu">Menu</button>
             </md-toolbar>
@@ -47,34 +57,6 @@ import {AppState} from './app.service';
                 <span> Disable alerts </span>
             </button>
         </md-menu>
-
-
-        <!--<nav>-->
-            <!--<a [routerLink]=" ['./'] "-->
-               <!--routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">-->
-                <!--Index-->
-            <!--</a>-->
-            <!--<a [routerLink]=" ['./home'] "-->
-               <!--routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">-->
-                <!--Home-->
-            <!--</a>-->
-            <!--<a [routerLink]=" ['./users'] "-->
-               <!--routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">-->
-                <!--Users-->
-            <!--</a>-->
-            <!--<a [routerLink]=" ['./detail'] "-->
-               <!--routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">-->
-                <!--Detail-->
-            <!--</a>-->
-            <!--<a [routerLink]=" ['./barrel'] "-->
-               <!--routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">-->
-                <!--Barrel-->
-            <!--</a>-->
-            <!--<a [routerLink]=" ['./about'] "-->
-               <!--routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">-->
-                <!--About-->
-            <!--</a>-->
-        <!--</nav>-->
 
         <main>
             <router-outlet></router-outlet>
