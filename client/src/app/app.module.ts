@@ -17,7 +17,9 @@ import {
 } from '@angular/router';
 import {
     MdButtonModule,
-    MdCheckboxModule
+    MdCheckboxModule,
+    MdMenuModule,
+    MdToolbarModule
 } from '@angular/material';
 
 /*
@@ -71,9 +73,11 @@ type StoreType = {
         FormsModule,
         HttpModule,
         BrowserAnimationsModule,
+        RouterModule.forRoot(ROUTES, {useHash: true, preloadingStrategy: PreloadAllModules}),
         MdButtonModule,
         MdCheckboxModule,
-        RouterModule.forRoot(ROUTES, {useHash: true, preloadingStrategy: PreloadAllModules})
+        MdMenuModule,
+        MdToolbarModule
     ],
 
     /**

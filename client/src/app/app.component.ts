@@ -19,32 +19,62 @@ import {AppState} from './app.service';
         './app.component.css'
     ],
     template: `
+
         <nav>
-            <a [routerLink]=" ['./'] "
-               routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
-                Index
-            </a>
-            <a [routerLink]=" ['./home'] "
-               routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
-                Home
-            </a>
-            <a [routerLink]=" ['./users'] "
-               routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
-                Users
-            </a>
-            <a [routerLink]=" ['./detail'] "
-               routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
-                Detail
-            </a>
-            <a [routerLink]=" ['./barrel'] "
-               routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
-                Barrel
-            </a>
-            <a [routerLink]=" ['./about'] "
-               routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
-                About
-            </a>
+            <md-toolbar>
+                <span>MyTimezones</span>
+                <span class="fill-remaining-space"></span>
+                <span>Right Aligned Text</span>
+                <button md-button [mdMenuTriggerFor]="menu">Menu</button>
+            </md-toolbar>
+            <md-menu #menu="mdMenu">
+                <button md-menu-item>Item 1</button>
+                <button md-menu-item>Item 2</button>
+            </md-menu>
         </nav>
+
+        <md-menu #menu="mdMenu">
+            <button md-menu-item>
+                <md-icon> dialpad</md-icon>
+                <span> Redial </span>
+            </button>
+            <button md-menu-item disabled>
+                <md-icon> voicemail</md-icon>
+                <span> Check voicemail </span>
+            </button>
+            <button md-menu-item>
+                <md-icon> notifications_off</md-icon>
+                <span> Disable alerts </span>
+            </button>
+        </md-menu>
+
+
+        <!--<nav>-->
+            <!--<a [routerLink]=" ['./'] "-->
+               <!--routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">-->
+                <!--Index-->
+            <!--</a>-->
+            <!--<a [routerLink]=" ['./home'] "-->
+               <!--routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">-->
+                <!--Home-->
+            <!--</a>-->
+            <!--<a [routerLink]=" ['./users'] "-->
+               <!--routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">-->
+                <!--Users-->
+            <!--</a>-->
+            <!--<a [routerLink]=" ['./detail'] "-->
+               <!--routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">-->
+                <!--Detail-->
+            <!--</a>-->
+            <!--<a [routerLink]=" ['./barrel'] "-->
+               <!--routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">-->
+                <!--Barrel-->
+            <!--</a>-->
+            <!--<a [routerLink]=" ['./about'] "-->
+               <!--routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">-->
+                <!--About-->
+            <!--</a>-->
+        <!--</nav>-->
 
         <main>
             <router-outlet></router-outlet>
