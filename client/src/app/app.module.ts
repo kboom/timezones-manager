@@ -1,6 +1,7 @@
 import {BrowserModule} from '@angular/platform-browser';
 import {FormsModule} from '@angular/forms';
 import {HttpModule} from '@angular/http';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {
     NgModule,
     ApplicationRef
@@ -14,6 +15,10 @@ import {
     RouterModule,
     PreloadAllModules
 } from '@angular/router';
+import {
+    MdButtonModule,
+    MdCheckboxModule
+} from '@angular/material';
 
 /*
  * Platform and Environment providers/directives/pipes
@@ -65,8 +70,12 @@ type StoreType = {
         BrowserModule,
         FormsModule,
         HttpModule,
+        BrowserAnimationsModule,
+        MdButtonModule,
+        MdCheckboxModule,
         RouterModule.forRoot(ROUTES, {useHash: true, preloadingStrategy: PreloadAllModules})
     ],
+
     /**
      * Expose our Services and Providers into Angular's dependency injection.
      */

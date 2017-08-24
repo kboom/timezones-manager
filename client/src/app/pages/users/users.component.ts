@@ -10,6 +10,7 @@ import { XLargeDirective } from './x-large';
 @Component({
   selector: 'users',
   providers: [
+
   ],
   styleUrls: [ './users.component.css' ],
   templateUrl: './users.component.html'
