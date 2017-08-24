@@ -50,7 +50,7 @@ export class SignInDialogComponent {
     doLogin(event): void {
         let formData = this.loginForm.value;
         this.authService.authenticate(formData)
-            .subscribe(this.dialogRef.close)
+            .subscribe((x) => this.dialogRef.close(x))
     }
 
 }
