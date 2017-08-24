@@ -33,12 +33,13 @@ import {APP_RESOLVER_PROVIDERS} from './app.resolver';
 import {AppState, InternalStateType} from './app.service';
 import {HomeComponent} from './pages/home';
 import {AboutComponent} from './pages/about';
+import {UsersComponent} from "./pages/users/users.component";
 import {NoContentComponent} from './pages/no-content';
 import {XLargeDirective} from './pages/home/x-large';
+import {UserMenuComponent} from './components/UserMenu'
 
 import '../styles/styles.scss';
 import '../styles/headings.css';
-import {UsersComponent} from "./pages/users/users.component";
 
 // Application wide providers
 const APP_PROVIDERS = [
@@ -63,7 +64,8 @@ type StoreType = {
         HomeComponent,
         UsersComponent,
         NoContentComponent,
-        XLargeDirective
+        XLargeDirective,
+        UserMenuComponent
     ],
     /**
      * Import Angular's modules.
