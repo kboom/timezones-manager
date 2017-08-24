@@ -19,6 +19,7 @@ import {
  */
 
 // modules
+import {ServerModule} from './+server';
 import {SecurityModule} from './+security';
 
 import {ENV_PROVIDERS} from "./environment";
@@ -78,6 +79,7 @@ type StoreType = {
         ReactiveFormsModule,
         HttpModule,
         HttpClientModule,
+        ServerModule,
         SecurityModule,
         BrowserAnimationsModule,
         RouterModule.forRoot(ROUTES, {useHash: true, preloadingStrategy: PreloadAllModules}),

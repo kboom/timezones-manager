@@ -14,11 +14,19 @@ enum AuthenticationEvent {
 
 @Injectable()
 export class TokenAddingInterceptor implements HttpInterceptor {
+
+    // constructor(private securityService: SecurityService) {
+    //
+    // }
+
     intercept (req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-        const authReq = req.clone({
-            headers: req.headers.set('Authorization', 'AFAFAFFF')
-        });
-        return next.handle(authReq);
+        // if(this.securityService.isLoggedIn()) {
+        //     return next.handle(req.clone({
+        //         headers: req.headers.set('Authorization', this.securityService.authentication.token.accessToken)
+        //     }));
+        // } else {
+            return next.handle(req);
+        // }
     }
 }
 
@@ -53,6 +61,11 @@ export class SecurityService {
 
     isAuthenticated(): Observable<Boolean> {
         return Observable.defer(() => Observable.of(this.authentication.isAuthenticated()))
+    }
+
+    // delete this
+    isLoggedIn() {
+        return this.authentication.isAuthenticated();
     }
 
 }

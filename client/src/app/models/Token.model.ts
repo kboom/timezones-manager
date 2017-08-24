@@ -1,7 +1,9 @@
 export class TokenCodesModel {
 
-    constructor(private token: String) {
-        this.token = token;
+    readonly accessToken: string;
+
+    constructor(private token: string) {
+        this.accessToken = token;
     }
 
 }
