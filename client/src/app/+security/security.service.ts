@@ -1,4 +1,4 @@
-import {EventEmitter, Injectable} from "@angular/core";
+import {EventEmitter, Injectable, Injector} from "@angular/core";
 import {Observable} from "rxjs/Observable";
 import "rxjs/add/observable/defer";
 import {AuthenticationModel} from "../models/Authentication.model";
@@ -10,24 +10,6 @@ import {HttpClient, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest} from "
 
 enum AuthenticationEvent {
     SIGN_IN_FAILED
-}
-
-@Injectable()
-export class TokenAddingInterceptor implements HttpInterceptor {
-
-    // constructor(private securityService: SecurityService) {
-    //
-    // }
-
-    intercept (req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-        // if(this.securityService.isLoggedIn()) {
-        //     return next.handle(req.clone({
-        //         headers: req.headers.set('Authorization', this.securityService.authentication.token.accessToken)
-        //     }));
-        // } else {
-            return next.handle(req);
-        // }
-    }
 }
 
 @Injectable()
@@ -68,4 +50,24 @@ export class SecurityService {
         return this.authentication.isAuthenticated();
     }
 
+}
+
+
+@Injectable()
+export class TokenAddingInterceptor implements HttpInterceptor {
+
+    constructor(private injector: Injector) {
+
+    }
+
+    intercept (req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+        const securityService = this.injector.get(SecurityService);
+        if(securityService.isLoggedIn()) {
+            return next.handle(req.clone({
+                headers: req.headers.set('Authorization', securityService.authentication.token.accessToken)
+            }));
+        } else {
+            return next.handle(req);
+        }
+    }
 }
