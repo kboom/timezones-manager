@@ -5,8 +5,7 @@ import com.toptal.ggurgul.timezones.functional.database.User.*
 import com.toptal.ggurgul.timezones.functional.rules.AuthenticatedAsUser
 import com.toptal.ggurgul.timezones.functional.tests.AbstractFunctionalTest
 import io.restassured.RestAssured.given
-import org.hamcrest.Matchers.equalTo
-import org.hamcrest.Matchers.hasSize
+import org.hamcrest.Matchers.*
 import org.junit.Before
 import org.junit.Test
 
@@ -63,10 +62,11 @@ internal class TimezonesTests : AbstractFunctionalTest() {
     fun adminSeesAllTimezones() {
         given()
                 .header("Authorization", authenticationRule.token)
-                .get("/timezones")
+                .get("/timezones?projection=withDetails")
                 .then()
                 .statusCode(200)
                 .body("_embedded.timezones", hasSize<String>(equalTo(4)))
+                .body("_embedded.timezones.owner", containsInAnyOrder<String>("greg", "greg", "agatha", "alice"))
     }
 
     @Test
