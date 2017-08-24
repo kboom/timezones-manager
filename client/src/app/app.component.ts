@@ -22,9 +22,9 @@ import {AppState} from './app.service';
 
         <nav>
             <md-toolbar>
-                <span>MyTimezones</span>
+                <button md-button>Timezones</button>
+                <button md-button>Users</button>
                 <span class="fill-remaining-space"></span>
-                <span>Right Aligned Text</span>
                 <button md-button [mdMenuTriggerFor]="menu">Menu</button>
             </md-toolbar>
             <md-menu #menu="mdMenu">
