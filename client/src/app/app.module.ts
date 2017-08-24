@@ -19,7 +19,8 @@ import {
     MdButtonModule,
     MdCheckboxModule,
     MdMenuModule,
-    MdToolbarModule
+    MdToolbarModule,
+    MdDialogModule
 } from '@angular/material';
 
 /*
@@ -37,6 +38,7 @@ import {UsersComponent} from "./pages/users/users.component";
 import {NoContentComponent} from './pages/no-content';
 import {XLargeDirective} from './pages/home/x-large';
 import {UserMenuComponent} from './components/UserMenu'
+import {SignInDialogComponent} from './components/SignInDialog'
 import {AuthenticationService} from "./services/authentication.service";
 import {ResponseMappingService} from "./services/responseMapping.service";
 
@@ -69,7 +71,8 @@ type StoreType = {
         UsersComponent,
         NoContentComponent,
         XLargeDirective,
-        UserMenuComponent
+        UserMenuComponent,
+        SignInDialogComponent
     ],
     /**
      * Import Angular's modules.
@@ -83,7 +86,12 @@ type StoreType = {
         MdButtonModule,
         MdCheckboxModule,
         MdMenuModule,
-        MdToolbarModule
+        MdToolbarModule,
+        MdDialogModule
+    ],
+
+    entryComponents: [
+        SignInDialogComponent
     ],
 
     /**

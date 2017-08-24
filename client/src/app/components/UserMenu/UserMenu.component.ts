@@ -1,6 +1,8 @@
 import {Component, OnDestroy, OnInit} from "@angular/core";
 import {AuthenticationService} from "../../services/authentication.service";
 import {Subscription} from "rxjs/Subscription";
+import {MdDialog} from "@angular/material";
+import {SignInDialogComponent} from "../SignInDialog/SignInDialog.component";
 
 @Component({
     selector: 'userMenu',
@@ -15,20 +17,27 @@ import {Subscription} from "rxjs/Subscription";
         </div>
 
         <ng-template #signInBtn>
-            <button md-button>Sign in</button>
+            <button md-button (click)="this.openSignInDialog()">Sign in</button>
         </ng-template>
         
         
-    `,
+    `
 })
 export class UserMenuComponent implements OnInit, OnDestroy {
 
     authenticationEvents$: Subscription;
 
-    constructor(private authService: AuthenticationService) {}
+    constructor(
+        private authService: AuthenticationService,
+        private dialog: MdDialog
+    ) {}
 
     handleAuthenticationEvent(event) {
         console.log("Authentication event");
+    }
+
+    openSignInDialog() {
+        this.dialog.open(SignInDialogComponent);
     }
 
     public ngOnInit() {
