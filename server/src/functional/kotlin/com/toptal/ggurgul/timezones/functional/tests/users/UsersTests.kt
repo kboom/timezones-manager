@@ -116,17 +116,28 @@ class UsersTests : AbstractFunctionalTest() {
                     "username": "alice2",
                     "password": "abcdef",
                     "email": "qwerty666@any.com",
-                    "enabled": true,
-                    "authorities": ["/authorities/ROLE_ADMIN"]
+                    "enabled": true
                 }""".trimIndent())
-                .put("/users/${ALICE.id}?projection=withDetails")
+                .put("/users/${ALICE.id}")
                 .then()
                 .statusCode(200)
                 .body("username", equalTo("alice2"))
                 .body("email", equalTo("qwerty666@any.com"))
                 .body("enabled", `is`(true))
-                .body("authorities", hasSize<Any>(1))
-                .body("authorities[0].name", equalTo("ROLE_ADMIN"))
+    }
+
+    @Test
+    @AuthenticatedAsUser(AGATHA)
+    fun managerCanAssignUserRoles() {
+        RestAssured.given()
+                .header("Authorization", authenticationRule.token)
+                .contentType("text/uri-list")
+                .body("""
+                    http://localhost:8080/api/authorities/ROLE_MANAGER
+                    """.trimIndent())
+                .post("/users/${ALICE.id}/authorities")
+                .then()
+                .statusCode(204)
     }
 
 }

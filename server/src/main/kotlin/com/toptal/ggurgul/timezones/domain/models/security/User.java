@@ -46,9 +46,13 @@ public class User {
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
+            uniqueConstraints = {
+                    @UniqueConstraint(columnNames = {"USER_ID", "AUTHORITY_NAME"})
+            },
             name = "USER_AUTHORITIES",
             joinColumns = {@JoinColumn(name = "USER_ID", referencedColumnName = "ID")},
-            inverseJoinColumns = {@JoinColumn(name = "AUTHORITY_NAME", referencedColumnName = "AUTHORITY_NAME")})
+            inverseJoinColumns = {@JoinColumn(name = "AUTHORITY_NAME", referencedColumnName = "AUTHORITY_NAME")}
+    )
     private List<Authority> authorities;
 
     public Long getId() {
