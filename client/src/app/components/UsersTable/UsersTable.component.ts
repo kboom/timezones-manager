@@ -38,7 +38,7 @@ import {RoleModel} from "../../models/Role.model";
 
                 <ng-container cdkColumnDef="enabled">
                     <md-header-cell *cdkHeaderCellDef md-sort-header> Is enabled </md-header-cell>
-                    <md-cell *cdkCellDef="let row"> {{row.enabled}} </md-cell>
+                    <md-cell *cdkCellDef="let row"> {{row.enabled ? 'Yes' : 'No'}} </md-cell>
                 </ng-container>
 
                 <ng-container cdkColumnDef="roles">
