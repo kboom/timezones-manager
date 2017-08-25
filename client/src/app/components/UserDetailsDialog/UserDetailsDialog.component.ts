@@ -1,7 +1,10 @@
-import {Component} from "@angular/core";
+import {Component, Inject} from "@angular/core";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {MdDialogRef} from "@angular/material";
 import {SecurityService} from "../../+security/security.service";
+import {MD_DIALOG_DATA} from '@angular/material';
+import {UserModel} from "../../models/User.model";
+import { pick } from 'lodash-es';
 
 @Component({
     selector: 'userDetailsDialog',
@@ -43,6 +46,7 @@ export class UserDetailsDialogComponent {
     userDetailsForm: FormGroup;
 
     constructor(
+        @Inject(MD_DIALOG_DATA) private initialValues: UserModel,
         private fb: FormBuilder,
         private dialogRef: MdDialogRef<UserDetailsDialogComponent>,
         private authService: SecurityService
@@ -53,6 +57,8 @@ export class UserDetailsDialogComponent {
             email: ["", Validators.required],
             enabled: ["", Validators.required],
         });
+
+        this.userDetailsForm.setValue(pick(initialValues, ['username', 'password', 'email', 'enabled']));
     }
 
     doLogin(event): void {

@@ -76,7 +76,9 @@ export class UsersTableComponent implements OnInit {
     }
 
     edit(user) {
-        const dialog = this.dialog.open(UserDetailsDialogComponent);
+        const dialog = this.dialog.open(UserDetailsDialogComponent, {
+            data: user
+        });
         dialog.afterClosed().subscribe(result => {
             console.log(`Dialog result: ${result}`);
         });
