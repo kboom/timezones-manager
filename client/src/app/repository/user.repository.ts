@@ -4,23 +4,33 @@ import "rxjs/add/observable/merge";
 import "rxjs/add/operator/map";
 import {Injectable} from "@angular/core";
 import {UserModel} from "../models/User.model";
+import {HttpClient} from "@angular/common/http";
+import {Observable} from "rxjs/Observable";
+import {EntityCollectionModel, EntityFactory} from "../models/EntityCollection.model";
+
+const getAllUsersURL = "http://localhost:8080/api/users";
+
+class UserFactory implements EntityFactory<UserModel> {
+
+    construct(obj: any): UserModel {
+        return new UserModel(obj.username, obj.email)
+    }
+
+}
 
 @Injectable()
 export class UserRepository {
 
-    dataChange: BehaviorSubject<UserModel[]> = new BehaviorSubject<UserModel[]>([]);
+    private userFactory = new UserFactory();
 
-    constructor() {
-        const copiedData = this.data.slice();
-        copiedData.push(new UserModel("user1","mail4"));
-        copiedData.push(new UserModel("user2","mail3"));
-        copiedData.push(new UserModel("user3","mail2"));
-        copiedData.push(new UserModel("user4","mail1"));
-        this.dataChange.next(copiedData);
+    constructor(private http: HttpClient) {
+
     }
 
-    get data(): UserModel[] {
-        return this.dataChange.value;
+    public getAllUsers(): Observable<EntityCollectionModel<UserModel>> {
+        return this.http.get(getAllUsersURL)
+            .map((response: any) => new EntityCollectionModel('users', response, this.userFactory))
+            .catch(() => Observable.throw("Could not get users"));
     }
 
 }

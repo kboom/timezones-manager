@@ -66,12 +66,14 @@ export class UsersTableComponent implements OnInit {
                 if (!this.dataSource) { return; }
                 this.dataSource.filter = this.filter.nativeElement.value;
             });
+        this.dataSource.loadData();
     }
 
 }
 
 export class UserTableDataSource extends DataSource<any> {
 
+    dataChange = new BehaviorSubject<UserModel[]>([]);
     filterChange = new BehaviorSubject('');
 
     get filter(): string { return this.filterChange.value; }
@@ -82,15 +84,23 @@ export class UserTableDataSource extends DataSource<any> {
         super();
     }
 
+    loadData() {
+        this.userRepository.getAllUsers()
+            .map((entityCollection) => entityCollection.entities)
+            .subscribe((tab) => {
+                this.dataChange.next(tab);
+            });
+    }
+
     connect(): Observable<UserModel[]> {
         const displayDataChanges = [
-            this.userRepository.dataChange,
+            this.dataChange,
             this.sort.mdSortChange,
             this.filterChange,
         ];
 
         return Observable.merge(...displayDataChanges).map(() => {
-            return this.userRepository.data.slice().filter((item: UserModel) => {
+            return this.dataChange.value.slice().filter((item: UserModel) => {
                 const searchStr = (item.username + item.email).toLowerCase();
                 return searchStr.indexOf(this.filter.toLowerCase()) != -1;
             });
@@ -98,10 +108,11 @@ export class UserTableDataSource extends DataSource<any> {
     }
 
     disconnect() {
+
     }
 
     getSortedData(): UserModel[] {
-        const data = this.userRepository.data.slice();
+        const data = this.dataChange.value.slice();
 
         if (!this.sort.active || this.sort.direction == '') {
             return data;
@@ -126,4 +137,5 @@ export class UserTableDataSource extends DataSource<any> {
             return (valueA < valueB ? -1 : 1) * (this.sort.direction == 'asc' ? 1 : -1);
         });
     }
+
 }
