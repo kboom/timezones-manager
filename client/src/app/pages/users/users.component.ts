@@ -1,11 +1,11 @@
-import {
-  Component,
-  OnInit
-} from '@angular/core';
+import {Component, OnInit} from "@angular/core";
 
-import { AppState } from '../../app.service';
-import { Title } from './title';
-import { XLargeDirective } from './x-large';
+import {AppState} from "../../app.service";
+import {Title} from "./title";
+import {XLargeDirective} from "./x-large";
+import "rxjs/add/operator/startWith";
+import "rxjs/add/observable/merge";
+import "rxjs/add/operator/map";
 
 @Component({
   selector: 'users',

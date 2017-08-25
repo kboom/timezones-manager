@@ -2,6 +2,7 @@ import {BrowserModule} from "@angular/platform-browser";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {HttpModule} from "@angular/http";
 import {HttpClientModule} from "@angular/common/http";
+import { CdkTableModule } from '@angular/cdk';
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 import {ApplicationRef, NgModule} from "@angular/core";
 import {createInputTransfer, createNewHosts, removeNgStyles} from "@angularclass/hmr";
@@ -12,7 +13,9 @@ import {
     MdDialogModule,
     MdInputModule,
     MdMenuModule,
-    MdToolbarModule
+    MdToolbarModule,
+    MdTableModule,
+    MdSortModule
 } from "@angular/material";
 /*
  * Platform and Environment providers/directives/pipes
@@ -38,6 +41,8 @@ import {SignInDialogComponent} from "./components/SignInDialog";
 import {SecurityService} from "./+security/security.service";
 import {ResponseMappingService} from "./+security/responseMapping.service";
 import {SecurityContextHolder} from "./+security/security.context";
+import {UsersTableComponent} from "./components/UsersTable/UsersTable.component";
+import {UserRepository} from "./repository/user.repository";
 
 import "../styles/styles.scss";
 import "../styles/headings.css";
@@ -48,6 +53,7 @@ const APP_PROVIDERS = [
     SecurityService,
     ResponseMappingService,
     SecurityContextHolder,
+    UserRepository,
     AppState
 ];
 
@@ -70,7 +76,8 @@ type StoreType = {
         NoContentComponent,
         XLargeDirective,
         UserMenuComponent,
-        SignInDialogComponent
+        SignInDialogComponent,
+        UsersTableComponent
     ],
     /**
      * Import Angular's modules.
@@ -84,13 +91,16 @@ type StoreType = {
         ServerModule,
         SecurityModule,
         BrowserAnimationsModule,
+        CdkTableModule,
         RouterModule.forRoot(ROUTES, {useHash: true, preloadingStrategy: PreloadAllModules}),
         MdInputModule,
         MdButtonModule,
         MdCheckboxModule,
         MdMenuModule,
         MdToolbarModule,
-        MdDialogModule
+        MdDialogModule,
+        MdTableModule,
+        MdSortModule
     ],
 
     entryComponents: [
