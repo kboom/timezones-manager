@@ -37,6 +37,7 @@ import {UserMenuComponent} from "./components/UserMenu";
 import {SignInDialogComponent} from "./components/SignInDialog";
 import {SecurityService} from "./+security/security.service";
 import {ResponseMappingService} from "./+security/responseMapping.service";
+import {SecurityContextHolder} from "./+security/security.context";
 
 import "../styles/styles.scss";
 import "../styles/headings.css";
@@ -46,6 +47,7 @@ const APP_PROVIDERS = [
     ...APP_RESOLVER_PROVIDERS,
     SecurityService,
     ResponseMappingService,
+    SecurityContextHolder,
     AppState
 ];
 

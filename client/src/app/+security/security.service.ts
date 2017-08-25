@@ -9,6 +9,7 @@ import "rxjs/add/operator/catch";
 import "rxjs/add/observable/throw";
 import {HttpClient, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest} from "@angular/common/http";
 import {UserModel} from "src/app/models/User.model";
+import {SecurityContextHolder} from "./security.context";
 
 enum AuthenticationEvent {
     SIGN_IN_FAILED
@@ -19,9 +20,8 @@ export class SecurityService {
 
     private authenticationEventsEmitter: EventEmitter<AuthenticationEvent> = new EventEmitter();
 
-    authentication: AuthenticationModel = AuthenticationModel.noAuthentication();
-
-    constructor(private http: HttpClient,
+    constructor(private securityContextHolder: SecurityContextHolder,
+                private http: HttpClient,
                 private responseMapper: ResponseMappingService) {
 
     }
@@ -38,18 +38,13 @@ export class SecurityService {
         const authentication$ = this.doAuthenticate(username, password)
         authentication$.subscribe((authentication) => {
             console.log(`Authenticated user ${authentication}`)
-            this.authentication = authentication;
+            this.securityContextHolder.authentication = authentication;
         });
         return authentication$;
     }
 
-    isAuthenticated(): Observable<Boolean> {
-        return Observable.defer(() => Observable.of(this.authentication.isAuthenticated()))
-    }
-
-    // delete this
-    isLoggedIn() {
-        return this.authentication.isAuthenticated();
+    isAuthenticated(): Boolean {
+        return this.securityContextHolder.authentication.isAuthenticated();
     }
 
     private doAuthenticate(username, password): Observable<any> {
@@ -70,10 +65,10 @@ export class TokenAddingInterceptor implements HttpInterceptor {
     }
 
     intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-        const securityService = this.injector.get(SecurityService);
-        if (securityService.isLoggedIn()) {
+        const securityContext = this.injector.get(SecurityContextHolder).authentication;
+        if (securityContext.isAuthenticated()) {
             return next.handle(req.clone({
-                headers: req.headers.set('Authorization', securityService.authentication.tokenCodes.accessToken)
+                headers: req.headers.set('Authorization', securityContext.tokenCodes.accessToken)
             }));
         } else {
             return next.handle(req);

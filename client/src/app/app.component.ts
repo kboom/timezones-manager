@@ -1,12 +1,11 @@
 /**
  * Angular 2 decorators and services
  */
-import {
-    Component,
-    OnInit,
-    ViewEncapsulation
-} from '@angular/core';
-import {AppState} from './app.service';
+import {Component, OnInit, ViewEncapsulation} from "@angular/core";
+import {AppState} from "./app.service";
+import {SecurityService} from "./+security/security.service";
+import {RoleModelAware} from "./models/Role.model";
+import {SecurityContextHolder} from "./+security/security.context";
 
 /**
  * App Component
@@ -31,12 +30,13 @@ import {AppState} from './app.service';
                     Timezones
                 </a>
                 <a [routerLink]=" ['./users'] "
+                   *ngIf="this.securityContext.authentication.hasAnyRole(RoleModel.ROLE_ADMIN, RoleModel.ROLE_MANAGER)"
                    routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
                     Users
                 </a>
                 <span class="fill-remaining-space"></span>
                 <userMenu>
-                    
+
                 </userMenu>
             </md-toolbar>
         </nav>
@@ -47,13 +47,17 @@ import {AppState} from './app.service';
 
     `
 })
+@RoleModelAware
 export class AppComponent implements OnInit {
     public angularclassLogo = 'assets/img/angularclass-avatar.png';
     public name = 'Angular 2 Webpack Starter';
     public url = 'https://twitter.com/AngularClass';
 
-    constructor(public appState: AppState) {
-    }
+    constructor(
+        private appState: AppState,
+        private readonly securityService: SecurityService,
+        private readonly securityContext: SecurityContextHolder
+    ) {}
 
     public ngOnInit() {
         console.log('Initial App State', this.appState.state);

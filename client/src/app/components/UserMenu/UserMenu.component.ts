@@ -8,7 +8,7 @@ import {SignInDialogComponent} from "../SignInDialog/SignInDialog.component";
     selector: 'userMenu',
     template: `
 
-        <div *ngIf="this.authService.isAuthenticated() | async; else signInBtn">
+        <div *ngIf="this.authService.isAuthenticated(); else signInBtn">
             <button md-button [mdMenuTriggerFor]="menu">Menu</button>
             <md-menu #menu="mdMenu">
                 <button md-menu-item>Item 1</button>
