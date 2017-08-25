@@ -1,11 +1,11 @@
+import {RoleModel} from "./Role.model";
 export class UserModel {
-    username: string;
-    email: string;
 
-
-    constructor(username: string, email: string) {
-        this.username = username;
-        this.email = email;
-    }
+    constructor(
+        public username: string,
+        public email: string,
+        public enabled: boolean,
+        public roles: RoleModel[]
+    ) {}
 
 }

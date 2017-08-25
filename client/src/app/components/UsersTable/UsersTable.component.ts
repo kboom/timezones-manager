@@ -11,6 +11,7 @@ import "rxjs/add/operator/debounceTime";
 import {UserModel} from "../../models/User.model";
 import {UserRepository} from "../../repository/user.repository";
 import {BehaviorSubject} from "rxjs/BehaviorSubject";
+import {RoleModel} from "../../models/Role.model";
 
 @Component({
     selector: 'usersTable',
@@ -35,6 +36,16 @@ import {BehaviorSubject} from "rxjs/BehaviorSubject";
                     <md-cell *cdkCellDef="let row"> {{row.email}} </md-cell>
                 </ng-container>
 
+                <ng-container cdkColumnDef="enabled">
+                    <md-header-cell *cdkHeaderCellDef md-sort-header> Is enabled </md-header-cell>
+                    <md-cell *cdkCellDef="let row"> {{row.enabled}} </md-cell>
+                </ng-container>
+
+                <ng-container cdkColumnDef="roles">
+                    <md-header-cell *cdkHeaderCellDef md-sort-header> Roles </md-header-cell>
+                    <md-cell *cdkCellDef="let row"> {{mapRoles(row.roles)}} </md-cell>
+                </ng-container>
+
                 <md-header-row *cdkHeaderRowDef="displayedColumns"></md-header-row>
                 <md-row *cdkRowDef="let row; columns: displayedColumns;"></md-row>
             </md-table>
@@ -44,7 +55,7 @@ import {BehaviorSubject} from "rxjs/BehaviorSubject";
 })
 export class UsersTableComponent implements OnInit {
 
-    displayedColumns = ['username', 'email'];
+    displayedColumns = ['username', 'email', 'enabled', 'roles'];
     dataSource: UserTableDataSource | null;
 
     @ViewChild(MdSort)
@@ -55,6 +66,10 @@ export class UsersTableComponent implements OnInit {
 
     constructor(private userRepository: UserRepository) {
 
+    }
+
+    mapRoles(roles) {
+        return roles.map((role) => RoleModel[role]).join(", ")
     }
 
     ngOnInit() {
