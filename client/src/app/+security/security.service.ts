@@ -26,17 +26,21 @@ export class SecurityService {
 
     }
 
-    getAuthenticationEvents$() {
+    public getAuthenticationEvents$() {
         return this.authenticationEventsEmitter.asObservable();
     }
 
-    authenticate({username, password}): Observable<any> {
+    public authenticate({username, password}): Observable<any> {
         const authentication$ = this.doAuthenticate(username, password);
         authentication$.subscribe((authentication) => {
             console.log(`Authenticated user ${authentication}`);
             this.securityContextHolder.setAuthentication(authentication);
         });
         return authentication$;
+    }
+
+    public signOut() {
+        this.securityContextHolder.clearAuthentication();
     }
 
     private doAuthenticate(username, password): Observable<any> {

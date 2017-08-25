@@ -14,8 +14,7 @@ import {Observable} from "rxjs/Observable";
             <button md-button [mdMenuTriggerFor]="menu">Hello, {{ this.securityContext.getAuthentication().getUsername() }}!
             </button>
             <md-menu #menu="mdMenu">
-                <button md-menu-item>Item 1</button>
-                <button md-menu-item>Item 2</button>
+                <button md-menu-item (click)="this.authService.signOut()">Sign out</button>
             </md-menu>
         </div>
 

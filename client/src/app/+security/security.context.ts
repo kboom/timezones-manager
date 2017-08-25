@@ -19,9 +19,12 @@ export class SecurityContextHolder {
         return this.authentication;
     }
 
+    clearAuthentication() {
+        this.setAuthentication(AuthenticationModel.noAuthentication());
+    }
+
     public setAuthentication(authentication: AuthenticationModel) {
         this.authentication = authentication;
         this.authenticationSubject.next(authentication);
     }
-
 }
