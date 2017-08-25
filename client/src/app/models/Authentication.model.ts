@@ -1,8 +1,8 @@
 import * as JWT from "jwt-decode";
 import {TokenCodesModel} from "./Token.model";
 import {RoleModel} from "./Role.model";
-import {Observable} from "rxjs/Observable";
 
+// https://gist.github.com/btroncone/d6cf141d6f2c00dc6b35
 export class AuthenticationModel {
 
     readonly details;
@@ -15,8 +15,7 @@ export class AuthenticationModel {
     }
 
     getUsername() {
-        console.log(JSON.stringify(this.details));
-        return this.details.username;
+        return this.details.sub;
     }
 
     hasAnyRole(...role: RoleModel[]) {
@@ -26,10 +25,6 @@ export class AuthenticationModel {
         } else {
             return false;
         }
-    }
-
-    authenticated$(): Observable<Boolean> {
-        return Observable.of(this.isAuthenticated())
     }
 
     isAuthenticated(): Boolean {

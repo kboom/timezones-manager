@@ -34,7 +34,7 @@ export class SecurityService {
         const authentication$ = this.doAuthenticate(username, password);
         authentication$.subscribe((authentication) => {
             console.log(`Authenticated user ${authentication}`);
-            this.securityContextHolder.authentication = authentication;
+            this.securityContextHolder.setAuthentication(authentication);
         });
         return authentication$;
     }
@@ -57,7 +57,7 @@ export class TokenAddingInterceptor implements HttpInterceptor {
     }
 
     intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-        const securityContext = this.injector.get(SecurityContextHolder).authentication;
+        const securityContext = this.injector.get(SecurityContextHolder).getAuthentication();
         if (securityContext.isAuthenticated()) {
             return next.handle(req.clone({
                 headers: req.headers.set('Authorization', securityContext.tokenCodes.accessToken)
