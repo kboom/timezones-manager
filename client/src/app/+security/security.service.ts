@@ -35,16 +35,12 @@ export class SecurityService {
     }
 
     authenticate({username, password}): Observable<any> {
-        const authentication$ = this.doAuthenticate(username, password)
+        const authentication$ = this.doAuthenticate(username, password);
         authentication$.subscribe((authentication) => {
-            console.log(`Authenticated user ${authentication}`)
+            console.log(`Authenticated user ${authentication}`);
             this.securityContextHolder.authentication = authentication;
         });
         return authentication$;
-    }
-
-    isAuthenticated(): Boolean {
-        return this.securityContextHolder.authentication.isAuthenticated();
     }
 
     private doAuthenticate(username, password): Observable<any> {

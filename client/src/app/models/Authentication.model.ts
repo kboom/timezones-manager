@@ -1,6 +1,7 @@
 import * as JWT from "jwt-decode";
 import {TokenCodesModel} from "./Token.model";
 import {RoleModel} from "./Role.model";
+import {Observable} from "rxjs/Observable";
 
 export class AuthenticationModel {
 
@@ -27,8 +28,12 @@ export class AuthenticationModel {
         }
     }
 
+    authenticated$(): Observable<Boolean> {
+        return Observable.of(this.isAuthenticated())
+    }
+
     isAuthenticated(): Boolean {
-        return !!this.tokenCodes
+        return !!this.tokenCodes;
     }
 
     static noAuthentication(): AuthenticationModel {
