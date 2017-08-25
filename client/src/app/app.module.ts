@@ -8,6 +8,7 @@ import {ApplicationRef, NgModule} from "@angular/core";
 import {createInputTransfer, createNewHosts, removeNgStyles} from "@angularclass/hmr";
 import {PreloadAllModules, RouterModule} from "@angular/router";
 import { LocalStorageModule } from 'angular-2-local-storage';
+import { FlexLayoutModule } from '@angular/flex-layout';
 import {
     MdButtonModule,
     MdCheckboxModule,
@@ -107,7 +108,8 @@ type StoreType = {
         LocalStorageModule.withConfig({
             prefix: 'timezones',
             storageType: 'localStorage'
-        })
+        }),
+        FlexLayoutModule
     ],
 
     entryComponents: [

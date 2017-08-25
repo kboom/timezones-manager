@@ -10,8 +10,8 @@ import {SecurityService} from "../../+security/security.service";
         <form [formGroup]="userDetailsForm" (ngSubmit)="this.doLogin($event)">
 
             <h2 md-dialog-title>Update user</h2>
-
-            <md-dialog-content>
+            
+            <md-dialog-content fxLayout='column'>
 
                 <md-input-container>
                     <input mdInput formControlName="username" type="text" placeholder="Username">
@@ -20,6 +20,12 @@ import {SecurityService} from "../../+security/security.service";
                 <md-input-container>
                     <input mdInput formControlName="password" type="password" placeholder="Password">
                 </md-input-container>
+
+                <md-input-container>
+                    <input mdInput formControlName="email" type="email" placeholder="E-mail">
+                </md-input-container>
+                
+                <md-checkbox formControlName="enabled">Enabled</md-checkbox>
 
             </md-dialog-content>
 
@@ -43,7 +49,9 @@ export class UserDetailsDialogComponent {
     ) {
         this.userDetailsForm = this.fb.group({
             username: ["", Validators.required],
-            password: ["", Validators.required]
+            password: ["", Validators.required],
+            email: ["", Validators.required],
+            enabled: ["", Validators.required],
         });
     }
 
