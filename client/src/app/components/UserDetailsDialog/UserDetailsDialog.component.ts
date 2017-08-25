@@ -5,6 +5,8 @@ import {SecurityService} from "../../+security/security.service";
 import {MD_DIALOG_DATA} from '@angular/material';
 import {UserModel} from "../../models/User.model";
 import { pick } from 'lodash-es';
+import {UserRepository} from "../../repository/user.repository";
+import {Entity} from "../../models/hateoas/Entity.model";
 
 @Component({
     selector: 'userDetailsDialog',
@@ -46,10 +48,10 @@ export class UserDetailsDialogComponent {
     userDetailsForm: FormGroup;
 
     constructor(
-        @Inject(MD_DIALOG_DATA) private initialValues: UserModel,
+        @Inject(MD_DIALOG_DATA) private userEntity: Entity<UserModel>,
         private fb: FormBuilder,
         private dialogRef: MdDialogRef<UserDetailsDialogComponent>,
-        private authService: SecurityService
+        private userRepository: UserRepository
     ) {
         this.userDetailsForm = this.fb.group({
             username: ["", Validators.required],
@@ -58,13 +60,13 @@ export class UserDetailsDialogComponent {
             enabled: ["", Validators.required],
         });
 
-        this.userDetailsForm.setValue(pick(initialValues, ['username', 'password', 'email', 'enabled']));
+        this.userDetailsForm.setValue(pick(userEntity.entity, ['username', 'password', 'email', 'enabled']));
     }
 
     doLogin(event): void {
-        let formData = this.userDetailsForm.value;
-        // this.authService.authenticate(formData)
-        //     .subscribe((x) => this.dialogRef.close(x))
+        const formData = this.userDetailsForm.value;
+        this.userRepository.updateUser(this.userEntity.withUpdatedEntity(formData))
+            .subscribe((x) => this.dialogRef.close(x))
     }
 
 }

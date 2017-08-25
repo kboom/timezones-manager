@@ -13,6 +13,7 @@ import {UserRepository} from "../../repository/user.repository";
 import {BehaviorSubject} from "rxjs/BehaviorSubject";
 import {RoleModel} from "../../models/Role.model";
 import {UserDetailsDialogComponent} from "../UserDetailsDialog/UserDetailsDialog.component";
+import {Entity} from "../../models/hateoas/Entity.model";
 
 @Component({
     selector: 'usersTable',
@@ -29,22 +30,22 @@ import {UserDetailsDialogComponent} from "../UserDetailsDialog/UserDetailsDialog
                 
                 <ng-container cdkColumnDef="username">
                     <md-header-cell *cdkHeaderCellDef md-sort-header>Username</md-header-cell>
-                    <md-cell *cdkCellDef="let row"> {{row.username}} </md-cell>
+                    <md-cell *cdkCellDef="let row"> {{row.entity.username}} </md-cell>
                 </ng-container>
 
                 <ng-container cdkColumnDef="email">
                     <md-header-cell *cdkHeaderCellDef md-sort-header> E-mail </md-header-cell>
-                    <md-cell *cdkCellDef="let row"> {{row.email}} </md-cell>
+                    <md-cell *cdkCellDef="let row"> {{row.entity.email}} </md-cell>
                 </ng-container>
 
                 <ng-container cdkColumnDef="enabled">
                     <md-header-cell *cdkHeaderCellDef md-sort-header> Is enabled </md-header-cell>
-                    <md-cell *cdkCellDef="let row"> {{row.enabled ? 'Yes' : 'No'}} </md-cell>
+                    <md-cell *cdkCellDef="let row"> {{row.entity.enabled ? 'Yes' : 'No'}} </md-cell>
                 </ng-container>
 
                 <ng-container cdkColumnDef="roles">
                     <md-header-cell *cdkHeaderCellDef md-sort-header> Roles </md-header-cell>
-                    <md-cell *cdkCellDef="let row"> {{mapRoles(row.roles)}} </md-cell>
+                    <md-cell *cdkCellDef="let row"> {{mapRoles(row.entity.roles)}} </md-cell>
                 </ng-container>
 
                 <ng-container cdkColumnDef="controls">
@@ -75,9 +76,9 @@ export class UsersTableComponent implements OnInit {
 
     }
 
-    edit(user) {
+    edit(userEntity) {
         const dialog = this.dialog.open(UserDetailsDialogComponent, {
-            data: user
+            data: userEntity
         });
         dialog.afterClosed().subscribe(result => {
             console.log(`Dialog result: ${result}`);
@@ -104,7 +105,7 @@ export class UsersTableComponent implements OnInit {
 
 export class UserTableDataSource extends DataSource<any> {
 
-    dataChange = new BehaviorSubject<UserModel[]>([]);
+    dataChange = new BehaviorSubject<Entity<UserModel>[]>([]);
     filterChange = new BehaviorSubject('');
 
     get filter(): string { return this.filterChange.value; }
@@ -123,7 +124,7 @@ export class UserTableDataSource extends DataSource<any> {
             });
     }
 
-    connect(): Observable<UserModel[]> {
+    connect(): Observable<Entity<UserModel>[]> {
         const displayDataChanges = [
             this.dataChange,
             this.sort.mdSortChange,
@@ -131,8 +132,8 @@ export class UserTableDataSource extends DataSource<any> {
         ];
 
         return Observable.merge(...displayDataChanges).map(() => {
-            return this.getSortedData().filter((item: UserModel) => {
-                const searchStr = (item.username + item.email).toLowerCase();
+            return this.getSortedData().filter((entity: Entity<UserModel>) => {
+                const searchStr = (entity.entity.username + entity.entity.email).toLowerCase();
                 return searchStr.indexOf(this.filter.toLowerCase()) != -1;
             });
         });
@@ -142,7 +143,7 @@ export class UserTableDataSource extends DataSource<any> {
 
     }
 
-    getSortedData(): UserModel[] {
+    getSortedData(): Entity<UserModel>[] {
         const data = this.dataChange.value.slice();
 
         if (!this.sort.active || this.sort.direction == '') {
@@ -155,10 +156,10 @@ export class UserTableDataSource extends DataSource<any> {
 
             switch (this.sort.active) {
                 case 'username':
-                    [propertyA, propertyB] = [a.username, b.username];
+                    [propertyA, propertyB] = [a.entity.username, b.entity.username];
                     break;
                 case 'password':
-                    [propertyA, propertyB] = [a.email, b.email];
+                    [propertyA, propertyB] = [a.entity.email, b.entity.email];
                     break;
             }
 

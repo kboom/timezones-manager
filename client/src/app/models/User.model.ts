@@ -5,8 +5,8 @@ export class UserModel {
         public username: string,
         public email: string,
         public enabled: boolean,
-        public roles: RoleModel[],
-        public password: string = null
+        public roles: RoleModel[] = [],
+        public password: string = null,
     ) {}
 
 }
