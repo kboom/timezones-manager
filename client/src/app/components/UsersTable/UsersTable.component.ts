@@ -100,7 +100,7 @@ export class UserTableDataSource extends DataSource<any> {
         ];
 
         return Observable.merge(...displayDataChanges).map(() => {
-            return this.dataChange.value.slice().filter((item: UserModel) => {
+            return this.getSortedData().filter((item: UserModel) => {
                 const searchStr = (item.username + item.email).toLowerCase();
                 return searchStr.indexOf(this.filter.toLowerCase()) != -1;
             });
