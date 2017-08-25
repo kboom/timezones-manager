@@ -30,10 +30,6 @@ export class SecurityService {
         return this.authenticationEventsEmitter.asObservable();
     }
 
-    getAuthenticatedUser(): Observable<UserModel> {
-        return null;
-    }
-
     authenticate({username, password}): Observable<any> {
         const authentication$ = this.doAuthenticate(username, password);
         authentication$.subscribe((authentication) => {
