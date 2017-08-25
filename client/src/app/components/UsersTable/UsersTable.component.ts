@@ -1,12 +1,16 @@
-import {Component, ElementRef, ViewChild} from "@angular/core";
+import {Component, ElementRef, OnInit, ViewChild} from "@angular/core";
 import {DataSource} from "@angular/cdk";
 import {MdSort} from "@angular/material";
 import {Observable} from "rxjs/Observable";
 import "rxjs/add/operator/startWith";
 import "rxjs/add/observable/merge";
+import "rxjs/add/observable/fromEvent";
 import "rxjs/add/operator/map";
+import "rxjs/add/operator/distinctUntilChanged";
+import "rxjs/add/operator/debounceTime";
 import {UserModel} from "../../models/User.model";
 import {UserRepository} from "../../repository/user.repository";
+import {BehaviorSubject} from "rxjs/BehaviorSubject";
 
 @Component({
     selector: 'usersTable',
@@ -38,7 +42,7 @@ import {UserRepository} from "../../repository/user.repository";
         
     `,
 })
-export class UsersTableComponent {
+export class UsersTableComponent implements OnInit {
 
     displayedColumns = ['username', 'email'];
     dataSource: UserTableDataSource | null;
@@ -55,11 +59,23 @@ export class UsersTableComponent {
 
     ngOnInit() {
         this.dataSource = new UserTableDataSource(this.userRepository, this.sort);
+        Observable.fromEvent(this.filter.nativeElement, 'keyup')
+            .debounceTime(150)
+            .distinctUntilChanged()
+            .subscribe(() => {
+                if (!this.dataSource) { return; }
+                this.dataSource.filter = this.filter.nativeElement.value;
+            });
     }
 
 }
 
 export class UserTableDataSource extends DataSource<any> {
+
+    filterChange = new BehaviorSubject('');
+
+    get filter(): string { return this.filterChange.value; }
+    set filter(filter: string) { this.filterChange.next(filter); }
 
     constructor(private userRepository: UserRepository,
                 private sort: MdSort) {
@@ -70,10 +86,14 @@ export class UserTableDataSource extends DataSource<any> {
         const displayDataChanges = [
             this.userRepository.dataChange,
             this.sort.mdSortChange,
+            this.filterChange,
         ];
 
         return Observable.merge(...displayDataChanges).map(() => {
-            return this.getSortedData();
+            return this.userRepository.data.slice().filter((item: UserModel) => {
+                const searchStr = (item.username + item.email).toLowerCase();
+                return searchStr.indexOf(this.filter.toLowerCase()) != -1;
+            });
         });
     }
 
