@@ -1,6 +1,6 @@
 import {Component, ElementRef, OnInit, ViewChild} from "@angular/core";
 import {DataSource} from "@angular/cdk";
-import {MdSort} from "@angular/material";
+import {MdSort, MdDialog} from "@angular/material";
 import {Observable} from "rxjs/Observable";
 import "rxjs/add/operator/startWith";
 import "rxjs/add/observable/merge";
@@ -12,6 +12,7 @@ import {UserModel} from "../../models/User.model";
 import {UserRepository} from "../../repository/user.repository";
 import {BehaviorSubject} from "rxjs/BehaviorSubject";
 import {RoleModel} from "../../models/Role.model";
+import {UserDetailsDialogComponent} from "../UserDetailsDialog/UserDetailsDialog.component";
 
 @Component({
     selector: 'usersTable',
@@ -25,7 +26,7 @@ import {RoleModel} from "../../models/Role.model";
                 </md-input-container>
             </div>
             <md-table #table [dataSource]="dataSource" mdSort>
-
+                
                 <ng-container cdkColumnDef="username">
                     <md-header-cell *cdkHeaderCellDef md-sort-header>Username</md-header-cell>
                     <md-cell *cdkCellDef="let row"> {{row.username}} </md-cell>
@@ -46,6 +47,11 @@ import {RoleModel} from "../../models/Role.model";
                     <md-cell *cdkCellDef="let row"> {{mapRoles(row.roles)}} </md-cell>
                 </ng-container>
 
+                <ng-container cdkColumnDef="controls">
+                    <md-header-cell *cdkHeaderCellDef md-sort-header> Actions </md-header-cell>
+                    <md-cell *cdkCellDef="let row"> <button md-button (click)="edit(row)">Edit</button> </md-cell>
+                </ng-container>
+
                 <md-header-row *cdkHeaderRowDef="displayedColumns"></md-header-row>
                 <md-row *cdkRowDef="let row; columns: displayedColumns;"></md-row>
             </md-table>
@@ -55,7 +61,7 @@ import {RoleModel} from "../../models/Role.model";
 })
 export class UsersTableComponent implements OnInit {
 
-    displayedColumns = ['username', 'email', 'enabled', 'roles'];
+    displayedColumns = ['username', 'email', 'enabled', 'roles', 'controls'];
     dataSource: UserTableDataSource | null;
 
     @ViewChild(MdSort)
@@ -64,8 +70,16 @@ export class UsersTableComponent implements OnInit {
     @ViewChild('filter')
     filter: ElementRef;
 
-    constructor(private userRepository: UserRepository) {
+    constructor(private userRepository: UserRepository,
+                private dialog: MdDialog) {
 
+    }
+
+    edit(user) {
+        const dialog = this.dialog.open(UserDetailsDialogComponent);
+        dialog.afterClosed().subscribe(result => {
+            console.log(`Dialog result: ${result}`);
+        });
     }
 
     mapRoles(roles) {

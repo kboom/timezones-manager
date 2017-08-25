@@ -39,6 +39,7 @@ import {NoContentComponent} from "./pages/no-content";
 import {XLargeDirective} from "./pages/home/x-large";
 import {UserMenuComponent} from "./components/UserMenu";
 import {SignInDialogComponent} from "./components/SignInDialog";
+import {UserDetailsDialogComponent} from "./components/UserDetailsDialog";
 import {SecurityService} from "./+security/security.service";
 import {ResponseMappingService} from "./+security/responseMapping.service";
 import {SecurityContextHolder} from "./+security/security.context";
@@ -78,6 +79,7 @@ type StoreType = {
         XLargeDirective,
         UserMenuComponent,
         SignInDialogComponent,
+        UserDetailsDialogComponent,
         UsersTableComponent
     ],
     /**
@@ -109,7 +111,8 @@ type StoreType = {
     ],
 
     entryComponents: [
-        SignInDialogComponent
+        SignInDialogComponent,
+        UserDetailsDialogComponent
     ],
 
     /**
