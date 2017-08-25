@@ -30,7 +30,7 @@ import {SecurityContextHolder} from "./+security/security.context";
                     Timezones
                 </a>
                 <a [routerLink]=" ['./users'] "
-                   *ngIf="this.securityContext.authentication.hasAnyRole(RoleModel.ROLE_ADMIN, RoleModel.ROLE_MANAGER)"
+                   *ngIf="this.securityContext.getAuthentication().hasAnyRole(RoleModel.ROLE_ADMIN, RoleModel.ROLE_MANAGER)"
                    routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
                     Users
                 </a>

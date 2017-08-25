@@ -27,7 +27,7 @@ export class AuthenticationModel {
         }
     }
 
-    isAuthenticated(): Boolean {
+    isAuthenticated(): boolean {
         return !!this.tokenCodes;
     }
 
