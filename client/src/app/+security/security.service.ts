@@ -70,4 +70,5 @@ export class TokenAddingInterceptor implements HttpInterceptor {
             return next.handle(req);
         }
     }
+
 }
