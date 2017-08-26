@@ -26,6 +26,7 @@ import {ConfirmationDialogComponent} from "../ConfirmationDialog/ConfirmationDia
                 <md-input-container floatPlaceholder="never">
                     <input mdInput #filter placeholder="Filter users">
                 </md-input-container>
+                <button md-raised-button (click)="createUser()"><md-icon>add</md-icon>Create user</button>
             </div>
             <md-table #table [dataSource]="dataSource" mdSort>
                 
@@ -78,6 +79,13 @@ export class UsersTableComponent implements OnInit {
     constructor(private userRepository: UserRepository,
                 private dialog: MdDialog) {
 
+    }
+
+    createUser() {
+        const dialog = this.dialog.open(UserDetailsDialogComponent);
+        dialog.afterClosed().subscribe(result => {
+            console.log(`Dialog result: ${result}`);
+        });
     }
 
     editUser(userEntity) {

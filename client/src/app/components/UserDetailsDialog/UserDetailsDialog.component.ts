@@ -83,13 +83,15 @@ export class UserDetailsDialogComponent {
             ])
         });
 
-        this.userDetailsForm.setValue(
-            extend({}, pick(userEntity.entity, ['username', 'password', 'email', 'enabled']), {
-                roles: EnumEx.getValues(RoleModel).map((role) => {
-                    return includes(userEntity.entity.roles, role);
+        if(userEntity != null) {
+            this.userDetailsForm.setValue(
+                extend({}, pick(userEntity.entity, ['username', 'password', 'email', 'enabled']), {
+                    roles: EnumEx.getValues(RoleModel).map((role) => {
+                        return includes(userEntity.entity.roles, role);
+                    })
                 })
-            })
-        );
+            );
+        }
     }
 
     doUpdate(event): void {
