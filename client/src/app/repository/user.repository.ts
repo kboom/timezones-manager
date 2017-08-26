@@ -61,6 +61,10 @@ export class UserRepository {
         });
     }
 
+    public deleteUser(userEntity: Entity<UserModel>) {
+        return this.http.delete(userEntity.links['self']['href']);
+    }
+
     private constructRoleURIsFor(userEntity: Entity<UserModel>) {
         const basePath = "http://localhost:8080/api/privileges/:roleName";
         return userEntity.entity.roles.map((role) => basePath.replace(":roleName", RoleModel[role])).join("\n");

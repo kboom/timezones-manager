@@ -18,7 +18,8 @@ import {
     MdMenuModule,
     MdToolbarModule,
     MdTableModule,
-    MdSortModule
+    MdSortModule,
+    MdIconModule
 } from "@angular/material";
 /*
  * Platform and Environment providers/directives/pipes
@@ -48,6 +49,7 @@ import {SecurityContextHolder} from "./+security/security.context";
 import {UsersTableComponent} from "./components/UsersTable/UsersTable.component";
 import {UserRepository} from "./repository/user.repository";
 import {ControlMessagesComponent} from "./components/ControlMessages/ControlMessages.component";
+import {ConfirmationDialogComponent} from "./components/ConfirmationDialog";
 
 import "../styles/styles.scss";
 import "../styles/headings.css";
@@ -84,7 +86,8 @@ type StoreType = {
         SignInDialogComponent,
         UserDetailsDialogComponent,
         UsersTableComponent,
-        ControlMessagesComponent
+        ControlMessagesComponent,
+        ConfirmationDialogComponent
     ],
     /**
      * Import Angular's modules.
@@ -109,6 +112,7 @@ type StoreType = {
         MdDialogModule,
         MdTableModule,
         MdSortModule,
+        MdIconModule,
         LocalStorageModule.withConfig({
             prefix: 'timezones',
             storageType: 'localStorage'
@@ -118,7 +122,8 @@ type StoreType = {
 
     entryComponents: [
         SignInDialogComponent,
-        UserDetailsDialogComponent
+        UserDetailsDialogComponent,
+        ConfirmationDialogComponent
     ],
 
     /**

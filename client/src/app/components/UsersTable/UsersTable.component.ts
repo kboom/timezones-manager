@@ -14,6 +14,7 @@ import {BehaviorSubject} from "rxjs/BehaviorSubject";
 import {RoleModel} from "../../models/Role.model";
 import {UserDetailsDialogComponent} from "../UserDetailsDialog/UserDetailsDialog.component";
 import {Entity} from "../../models/hateoas/Entity.model";
+import {ConfirmationDialogComponent} from "../ConfirmationDialog/ConfirmationDialog.component";
 
 @Component({
     selector: 'usersTable',
@@ -50,7 +51,10 @@ import {Entity} from "../../models/hateoas/Entity.model";
 
                 <ng-container cdkColumnDef="controls">
                     <md-header-cell *cdkHeaderCellDef md-sort-header> Actions </md-header-cell>
-                    <md-cell *cdkCellDef="let row"> <button md-button (click)="edit(row)">Edit</button> </md-cell>
+                    <md-cell *cdkCellDef="let row"> 
+                        <button md-mini-fab (click)="editUser(row)"><md-icon>edit</md-icon></button>
+                        <button md-mini-fab (click)="deleteUser(row)"><md-icon>delete</md-icon></button>
+                    </md-cell>
                 </ng-container>
 
                 <md-header-row *cdkHeaderRowDef="displayedColumns"></md-header-row>
@@ -76,12 +80,26 @@ export class UsersTableComponent implements OnInit {
 
     }
 
-    edit(userEntity) {
+    editUser(userEntity) {
         const dialog = this.dialog.open(UserDetailsDialogComponent, {
             data: userEntity
         });
         dialog.afterClosed().subscribe(result => {
             console.log(`Dialog result: ${result}`);
+        });
+    }
+
+    deleteUser(userEntity) {
+        const dialog = this.dialog.open(ConfirmationDialogComponent, {
+            data: {
+                title: `Delete user ${userEntity.entity.username}`,
+                message: `Are you sure you want to delete user ${userEntity.entity.username}? This action cannot be undone.`
+            }
+        });
+        dialog.afterClosed().subscribe(shouldDelete => {
+            if(shouldDelete) {
+                this.userRepository.deleteUser(userEntity).subscribe();
+            }
         });
     }
 
