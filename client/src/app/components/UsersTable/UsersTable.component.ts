@@ -19,19 +19,23 @@ import {CreateUserDialogComponent} from "../CreateUserDialog/CreateUserDialog.co
 
 @Component({
     selector: 'usersTable',
-    styleUrls: ['UsersTable.css'],
+    styleUrls: ['./UsersTable.scss'],
     template: `
 
-        <div class="example-container mat-elevation-z8">
-            <div class="example-header">
-                <md-input-container floatPlaceholder="never">
+        <div class="users-table mat-elevation-z8">
+            
+            <div class="users-table_header" fxLayout='row' fxLayoutAlign='space-between center' fxLayoutGap="20px">
+                
+                <md-input-container fxFlex="grow" floatPlaceholder="never">
                     <input mdInput #filter placeholder="Filter users">
                 </md-input-container>
+                
                 <button md-raised-button (click)="createUser()">
-                    <md-icon>add</md-icon>
                     Create user
                 </button>
+                
             </div>
+            
             <md-table #table [dataSource]="dataSource" mdSort>
 
                 <ng-container cdkColumnDef="username">
