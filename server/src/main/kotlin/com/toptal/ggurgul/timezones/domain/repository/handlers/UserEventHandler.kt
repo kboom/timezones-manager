@@ -28,14 +28,14 @@ open class UserEventHandler
     fun handleUserCreate(user: User) {
         user.password = passwordEncoder.encode(user.password)
         user.authorities = systemRunner.runInSystemContext {
-            authorityRepository.findAll(user.authorities.map { it.name })
+            authorityRepository.findAll(user.authorities!!.map { it.name })
         }
     }
 
     @HandleBeforeSave
     fun handleUserUpdate(user: User) {
         if (user.password == null || user.password == "") {
-            val storedUser = systemRunner.runInSystemContext { userRepository.findOne(user.id) }
+            val storedUser = systemRunner.runInSystemContext { userRepository.findOne(user.id!!) }
             user.password = storedUser.password
         } else {
             user.password = passwordEncoder.encode(user.password)

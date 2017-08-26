@@ -33,11 +33,11 @@ enum class User(
             password = "qwerty666",
             email = "alice@test.com"
     ),
-    ANN(
+    KATE(
             id = 103L,
-            username = "ann",
+            username = "kate",
             password = "test123",
-            email = "ann@test.com",
+            email = "kate@test.com",
             enabled = false
     )
 

@@ -20,18 +20,18 @@ open class TimezoneEventHandler
 ) {
 
     companion object {
-        private val logger = LogFactory.getLog(TimezoneEventHandler::class.java)
+        private val LOG = LogFactory.getLog(TimezoneEventHandler::class.java)
     }
 
     @HandleBeforeCreate
     fun handleTimezoneSave(timezone: Timezone) {
-        logger.debug("Creating timezone")
+        LOG.debug("Creating timezone")
         timezone.owner = userService.getActingUser()
     }
 
     @HandleBeforeSave
     fun handleTimezoneUpdate(timezone: Timezone) {
-        logger.debug("Updating timezone")
+        LOG.debug("Updating timezone")
         val existingTimezone = timezoneRepository.findOne(timezone.id!!)
         timezone.owner = existingTimezone.owner
     }
