@@ -2,6 +2,7 @@ package com.toptal.ggurgul.timezones.security.permissions.checkers
 
 import com.toptal.ggurgul.timezones.domain.models.Timezone
 import com.toptal.ggurgul.timezones.domain.repository.TimezoneRepository
+import com.toptal.ggurgul.timezones.security.SystemRunner
 import com.toptal.ggurgul.timezones.security.permissions.Permission.*
 import com.toptal.ggurgul.timezones.security.permissions.PermissionChecker
 import com.toptal.ggurgul.timezones.security.permissions.PermissionGrantRequest
@@ -11,7 +12,8 @@ import org.springframework.stereotype.Component
 @Component
 open class TimezonePermissionChecker
 @Autowired constructor(
-        private val timezoneRepository: TimezoneRepository
+        private val timezoneRepository: TimezoneRepository,
+        private val systemRunner: SystemRunner
 ) : PermissionChecker {
 
     companion object {
@@ -22,7 +24,7 @@ open class TimezonePermissionChecker
         return if (grantRequest.permissionNeeded == CREATE_TIMEZONE) {
             true
         } else {
-            val timezone = timezoneRepository.findById(getIdFrom(grantRequest))
+            val timezone = systemRunner.runInSystemContext { timezoneRepository.findOne(getIdFrom(grantRequest)) }
             timezone.owner!!.id == grantRequest.principal.id
         }
     }

@@ -12,41 +12,36 @@ import org.springframework.security.access.prepost.PreAuthorize
 // org.springframework.data.rest.webmvc.RepositoryEntityController
 @Api(value = "timezone", description = "Timezone operations", tags = arrayOf("timezone"))
 @RepositoryRestResource
+//@PreAuthorize("hasRole('ROLE_SYSTEM')") // todo fix - something is not secured as this fails!
 interface TimezoneRepository : CrudRepository<Timezone, Long> {
-
-    /**
-     * Internal, unsecured method to be used by the application.
-     */
-    @RestResource(exported = false)
-    fun findById(timezoneId: Long): Timezone
 
     // Methods used by Spring-Data-Rest
 
     @Query("select t from Timezone t where t.owner.username like ?#{hasRole('ROLE_ADMIN') ? '%' : principal.username}")
     override fun findAll(): MutableIterable<Timezone>
 
-    @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_ADMIN') or hasPermission(#timezoneId, 'Timezone', 'timezone:create') or hasPermission(#timezone, 'Timezone', 'timezone:edit')")
+    @PreAuthorize("hasAnyRole('ROLE_SYSTEM', 'ROLE_ADMIN') or hasPermission(#timezoneId, 'Timezone', 'timezone:create') or hasPermission(#timezone, 'Timezone', 'timezone:edit')")
     override fun <S : Timezone?> save(@Param("timezone") timezone: S?): S
 
-    @PreAuthorize("hasRole('ROLE_ADMIN') or hasPermission(#timezoneId, 'Timezone', 'timezone:view')")
+    @PreAuthorize("hasAnyRole('ROLE_SYSTEM', 'ROLE_ADMIN') or hasPermission(#timezoneId, 'Timezone', 'timezone:view')")
     override fun findOne(@Param("timezoneId") timezoneId: Long?): Timezone
 
-    @PreAuthorize("hasRole('ROLE_ADMIN') or hasPermission(#timezone, 'timezone:delete')")
+    @PreAuthorize("hasAnyRole('ROLE_SYSTEM', 'ROLE_ADMIN') or hasPermission(#timezone, 'timezone:delete')")
     override fun delete(@Param("timezone") timezone: Timezone?)
 
 
     // Other methods should also be secured but are not used (by default) by Spring-Data-Rest
 
-    @PreAuthorize("hasRole('ROLE_ADMIN') or hasPermission(#timezoneId, 'Timezone', 'timezone:view')")
+    @PreAuthorize("hasAnyRole('ROLE_SYSTEM', 'ROLE_ADMIN') or hasPermission(#timezoneId, 'Timezone', 'timezone:view')")
     override fun findAll(@Param("timezoneIds") timezoneIds: MutableIterable<Long>?): MutableIterable<Timezone>
 
-    @PreAuthorize("hasRole('ROLE_ADMIN') or hasPermission(#timezoneId, 'Timezone', 'timezone:delete')")
+    @PreAuthorize("hasAnyRole('ROLE_SYSTEM', 'ROLE_ADMIN') or hasPermission(#timezoneId, 'Timezone', 'timezone:delete')")
     override fun delete(@Param("timezoneId") timezoneId: Long)
 
-    @PreAuthorize("hasRole('ROLE_ADMIN') or hasPermission(#timezoneIds, 'Timezone', 'timezone:delete')")
+    @PreAuthorize("hasAnyRole('ROLE_SYSTEM', 'ROLE_ADMIN') or hasPermission(#timezoneIds, 'Timezone', 'timezone:delete')")
     override fun delete(@Param("timezoneIds") timezoneIds: MutableIterable<Timezone>)
 
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasAnyRole('ROLE_SYSTEM', 'ROLE_ADMIN')")
     override fun deleteAll()
 
 }

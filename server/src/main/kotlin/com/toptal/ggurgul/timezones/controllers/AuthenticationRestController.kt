@@ -3,6 +3,7 @@ package com.toptal.ggurgul.timezones.controllers
 import com.toptal.ggurgul.timezones.security.models.JwtAuthenticationRequest
 import com.toptal.ggurgul.timezones.security.JwtTokenUtil
 import com.toptal.ggurgul.timezones.security.JwtUser
+import com.toptal.ggurgul.timezones.security.SystemRunner
 import com.toptal.ggurgul.timezones.security.models.JwtAuthenticationResponse
 import io.swagger.annotations.Api
 import io.swagger.annotations.ApiOperation
@@ -34,7 +35,8 @@ constructor(
         private val tokenHeader: String,
         private val authenticationManager: AuthenticationManager,
         private val jwtTokenUtil: JwtTokenUtil,
-        private val userDetailsService: UserDetailsService
+        private val userDetailsService: UserDetailsService,
+        private val systemRunner: SystemRunner
 ) {
 
     @ApiOperation(value = "Obtain token", response = JwtAuthenticationResponse::class)
@@ -47,11 +49,12 @@ constructor(
     fun createAuthenticationToken(
             @RequestBody authenticationRequest: JwtAuthenticationRequest, device: Device): ResponseEntity<*> {
 
-        val authentication = authenticate(authenticationRequest)
+        SecurityContextHolder.getContext().authentication = authenticate(authenticationRequest)
 
-        SecurityContextHolder.getContext().authentication = authentication
+        val userDetails = systemRunner.runInSystemContext {
+            userDetailsService.loadUserByUsername(authenticationRequest.username)
+        }
 
-        val userDetails = userDetailsService.loadUserByUsername(authenticationRequest.username)
         val token = jwtTokenUtil.generateToken(userDetails, device)
         return ResponseEntity.ok(JwtAuthenticationResponse(token))
     }

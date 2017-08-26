@@ -4,6 +4,7 @@ import com.toptal.ggurgul.timezones.domain.models.security.Authority
 import com.toptal.ggurgul.timezones.domain.models.security.User
 import com.toptal.ggurgul.timezones.domain.repository.UserRepository
 import com.toptal.ggurgul.timezones.domain.repository.AuthorityRepository
+import com.toptal.ggurgul.timezones.security.SystemRunner
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.rest.core.annotation.HandleBeforeCreate
 import org.springframework.data.rest.core.annotation.HandleBeforeLinkSave
@@ -19,29 +20,26 @@ open class UserEventHandler
 @Autowired constructor(
         private val passwordEncoder: BCryptPasswordEncoder,
         private val userRepository: UserRepository,
-        private val authorityRepository: AuthorityRepository
+        private val authorityRepository: AuthorityRepository,
+        private val systemRunner: SystemRunner
 ) {
 
     @HandleBeforeCreate
     fun handleUserCreate(user: User) {
         user.password = passwordEncoder.encode(user.password)
-        user.authorities = authorityRepository.findAll(user.authorities.map { it.name })
+        user.authorities = systemRunner.runInSystemContext {
+            authorityRepository.findAll(user.authorities.map { it.name })
+        }
     }
 
     @HandleBeforeSave
     fun handleUserUpdate(user: User) {
         if (user.password == null || user.password == "") {
-            val storedUser = userRepository.findOne(user.id)
+            val storedUser = systemRunner.runInSystemContext { userRepository.findOne(user.id) }
             user.password = storedUser.password
         } else {
             user.password = passwordEncoder.encode(user.password)
         }
-//        user.authorities = authorityRepository.findAll(user.authorities.map { it.name })
-    }
-
-    @HandleBeforeLinkSave
-    fun handleBeforeLinkSave(authorities: MutableList<Authority>) {
-        System.out.println("abc")
     }
 
 }

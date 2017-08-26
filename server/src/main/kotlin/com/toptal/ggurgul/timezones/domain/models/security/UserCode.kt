@@ -28,6 +28,6 @@ class UserCode {
 
     @Column(name = "CODE")
     @NotNull
-    private var code: String? = null
+    var code: String? = null
 
 }

@@ -10,7 +10,7 @@ fun prepareDatabase(configure: DbSetupBuilder.() -> Unit) {
     val password = System.getProperty("DB_PASSWORD", "test")
 
     dbSetup(to = DriverManagerDestination(url, user, password)) {
-        deleteAllFrom("TIMEZONES", "USER_AUTHORITIES", "USERS")
+        deleteAllFrom("USER_CODES", "TIMEZONES", "USER_AUTHORITIES", "USERS")
         configure()
     }.launch()
 }

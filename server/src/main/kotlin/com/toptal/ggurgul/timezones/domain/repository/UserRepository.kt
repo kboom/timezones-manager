@@ -12,6 +12,7 @@ import java.util.*
 
 @Primary
 @Api(value = "user", description = "User operations", tags = arrayOf("user"))
+//@PreAuthorize("hasRole('ROLE_SYSTEM')") // todo fix - something is not secured as this fails!
 @RepositoryRestResource
 interface UserRepository : CrudRepository<User, Long> {
 
@@ -21,16 +22,16 @@ interface UserRepository : CrudRepository<User, Long> {
     @RestResource(exported = false)
     fun findByUsername(username: String): Optional<User>
 
-    @PreAuthorize("hasAnyRole('ROLE_MANAGER', 'ROLE_ADMIN') or #userId == principal.id")
+    @PreAuthorize("hasAnyRole('ROLE_SYSTEM', 'ROLE_MANAGER', 'ROLE_ADMIN') or #userId == principal.id")
     override fun findOne(@Param("userId") id: Long): User
 
-    @PreAuthorize("hasAnyRole('ROLE_MANAGER', 'ROLE_ADMIN') or #user.id == principal.id")
+    @PreAuthorize("hasAnyRole('ROLE_SYSTEM', 'ROLE_MANAGER', 'ROLE_ADMIN') or #user.id == principal.id")
     override fun delete(@Param("user") user: User?)
 
-    @PreAuthorize("hasAnyRole('ROLE_MANAGER', 'ROLE_ADMIN') or #user.id == null or  #user.id == principal.id")
+    @PreAuthorize("hasAnyRole('ROLE_SYSTEM', 'ROLE_MANAGER', 'ROLE_ADMIN') or  #user.id == principal.id")
     override fun <S : User?> save(@Param("user") user: S): S
 
-    @PreAuthorize("hasAnyRole('ROLE_MANAGER', 'ROLE_ADMIN')")
+    @PreAuthorize("hasAnyRole('ROLE_SYSTEM', 'ROLE_MANAGER', 'ROLE_ADMIN')")
     override fun findAll(): MutableIterable<User>
 
 }
