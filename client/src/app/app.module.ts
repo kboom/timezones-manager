@@ -19,7 +19,8 @@ import {
     MdToolbarModule,
     MdTableModule,
     MdSortModule,
-    MdIconModule
+    MdIconModule,
+    MdSlideToggleModule
 } from "@angular/material";
 /*
  * Platform and Environment providers/directives/pipes
@@ -119,6 +120,7 @@ type StoreType = {
         MdTableModule,
         MdSortModule,
         MdIconModule,
+        MdSlideToggleModule,
         LocalStorageModule.withConfig({
             prefix: 'timezones',
             storageType: 'localStorage'

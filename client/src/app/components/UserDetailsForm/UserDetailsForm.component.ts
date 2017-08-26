@@ -35,7 +35,7 @@ export interface UserEntityManager {
             </md-input-container>
             <control-messages [control]="userDetailsForm.controls.email"></control-messages>
 
-            <md-checkbox formControlName="enabled">Enabled</md-checkbox>
+            <md-slide-toggle formControlName="enabled">Enabled</md-slide-toggle>
 
             <div style="height: 35px;"></div>
 
