@@ -63,7 +63,7 @@ export class UserRepository {
 
     private constructRoleURIsFor(userEntity: Entity<UserModel>) {
         const basePath = "http://localhost:8080/api/privileges/:roleName";
-        return userEntity.entity.roles.map((role) => basePath.replace(":roleName", RoleModel[role])).join(",");
+        return userEntity.entity.roles.map((role) => basePath.replace(":roleName", RoleModel[role])).join("\n");
     }
 
 }

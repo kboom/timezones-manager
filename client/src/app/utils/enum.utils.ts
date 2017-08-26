@@ -1,4 +1,4 @@
-class EnumEx {
+export class EnumEx {
     static getNamesAndValues<T extends number>(e: any) {
         return EnumEx.getNames(e).map(n => ({ name: n, value: e[n] as T }));
     }
