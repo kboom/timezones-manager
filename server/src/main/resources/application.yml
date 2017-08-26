@@ -7,11 +7,21 @@ jwt:
   expiration: 604800
 
 spring:
+
+  mail:
+    properties:
+      mail:
+        smtp:
+          connectiontimeout: 5000
+          timeout: 3000
+          writetimeout: 5000
+
   jpa:
     database-platform: org.hibernate.dialect.PostgreSQL94Dialect
     show-sql: true
     hibernate:
       ddl-auto: create-drop
+
   datasource:
       url: jdbc:postgresql://0.0.0.0:5432/test
       username: test
@@ -22,3 +32,16 @@ logging:
   level:
     org.springframework:
       security: DEBUG
+
+mail:
+  host: localhost
+  account:
+    username: noreply@timezones.com
+    password: test
+
+registration:
+  confirmation:
+    link: http://localhost:3000/#/register?confirmation=##code##
+  email:
+    from: noreply@timezones.com
+    subject: Your registration link

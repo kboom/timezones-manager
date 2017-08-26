@@ -1,5 +1,6 @@
 package com.toptal.ggurgul.timezones.controllers
 
+import com.toptal.ggurgul.timezones.domain.events.RegistrationCodeIssuedEvent
 import com.toptal.ggurgul.timezones.domain.models.security.AuthorityName
 import com.toptal.ggurgul.timezones.domain.models.security.User
 import com.toptal.ggurgul.timezones.domain.models.security.UserCodeType
@@ -15,6 +16,7 @@ import io.swagger.annotations.ApiOperation
 import io.swagger.annotations.ApiResponse
 import io.swagger.annotations.ApiResponses
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.context.ApplicationEventPublisher
 import org.springframework.http.ResponseEntity
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
@@ -37,7 +39,8 @@ constructor(
         private val userRepository: UserRepository,
         private val userCodesRepository: UserCodesRepository,
         private val passwordEncoder: BCryptPasswordEncoder,
-        private val userCodeFactory: UserCodeFactory
+        private val userCodeFactory: UserCodeFactory,
+        private val eventPublisher: ApplicationEventPublisher
 ) {
 
     @ApiOperation(value = "Register account")
@@ -59,11 +62,13 @@ constructor(
         user.email = registrationRequest.email
         user.enabled = false
 
-        systemRunner.runInSystemContext {
+        val userCode = systemRunner.runInSystemContext {
             userRepository.save(user)
             val userCode = userCodeFactory.generateFor(user, UserCodeType.REGISTRATION_CONFIRMATION)
             userCodesRepository.save(userCode)
         }
+
+        eventPublisher.publishEvent(RegistrationCodeIssuedEvent(userCode))
 
         return ResponseEntity.ok("Registered")
     }

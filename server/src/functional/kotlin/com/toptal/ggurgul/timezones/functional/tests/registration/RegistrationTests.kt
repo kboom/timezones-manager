@@ -14,7 +14,7 @@ class RegistrationTests : AbstractFunctionalTest() {
                     {
                         "username": "peter",
                         "password": "peterPan123",
-                        "email": "blackhole@test.com"
+                        "email": "gurgul.grzegorz@gmail.com"
                     }
                 """.trim())
                 .post("/registration")
