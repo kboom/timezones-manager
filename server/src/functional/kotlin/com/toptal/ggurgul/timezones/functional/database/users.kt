@@ -32,6 +32,13 @@ enum class User(
             username = "alice",
             password = "qwerty666",
             email = "alice@test.com"
+    ),
+    ANN(
+            id = 103L,
+            username = "ann",
+            password = "test123",
+            email = "ann@test.com",
+            enabled = false
     )
 
 }

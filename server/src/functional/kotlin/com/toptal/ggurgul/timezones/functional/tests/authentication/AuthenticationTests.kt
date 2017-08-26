@@ -20,13 +20,29 @@ internal class AuthenticationTests : AbstractFunctionalTest() {
                 insertUser(this, GREG)
                 insertUser(this, AGATHA)
                 insertUser(this, ALICE)
+                insertUser(this, ANN)
             }
             insertInto("USER_AUTHORITIES") {
                 assignAuthorityToUser(this, Authority.ADMIN, GREG)
                 assignAuthorityToUser(this, Authority.MANAGER, AGATHA)
                 assignAuthorityToUser(this, Authority.USER, ALICE)
+                assignAuthorityToUser(this, Authority.USER, ANN)
             }
         }
+    }
+
+    @Test
+    fun userCannotObtainTokenIfNotEnabled() {
+        given()
+                .body("""
+                    {
+                        "username": "${ANN.username}",
+                        "password": "${ANN.password}"
+                    }
+                """.trim())
+                .post("/auth")
+                .then()
+                .statusCode(401)
     }
 
     @Test
