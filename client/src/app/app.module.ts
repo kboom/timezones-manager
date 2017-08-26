@@ -50,6 +50,7 @@ import {UsersTableComponent} from "./components/UsersTable/UsersTable.component"
 import {UserRepository} from "./repository/user.repository";
 import {ControlMessagesComponent} from "./components/ControlMessages/ControlMessages.component";
 import {ConfirmationDialogComponent} from "./components/ConfirmationDialog";
+import {UserDetailsFormComponent} from "./components/UserDetailsForm/UserDetailsForm.component";
 
 import "../styles/styles.scss";
 import "../styles/headings.css";
@@ -87,7 +88,8 @@ type StoreType = {
         UserDetailsDialogComponent,
         UsersTableComponent,
         ControlMessagesComponent,
-        ConfirmationDialogComponent
+        ConfirmationDialogComponent,
+        UserDetailsFormComponent
     ],
     /**
      * Import Angular's modules.
