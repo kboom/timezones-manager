@@ -75,7 +75,7 @@ open class WebSecurityConfig : WebSecurityConfigurerAdapter() {
                         "/webjars/**",
                         "/v2/api-docs/**"
                 ).permitAll()
-                .antMatchers("/auth/**")
+                .antMatchers("/auth/**", "/registration/**")
                 .permitAll()
                 .anyRequest()
                 .authenticated()
