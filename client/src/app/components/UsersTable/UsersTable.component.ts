@@ -30,8 +30,8 @@ import {CreateUserDialogComponent} from "../CreateUserDialog/CreateUserDialog.co
                     <input mdInput #filter placeholder="Filter users">
                 </md-input-container>
                 
-                <button md-raised-button (click)="createUser()">
-                    Create user
+                <button md-raised-button class="mat-primary" (click)="createUser()">
+                    Create
                 </button>
                 
             </div>

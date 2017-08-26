@@ -39,14 +39,12 @@ export interface UserEntityManager {
 
             <div style="height: 35px;"></div>
 
-            <div formArrayName="authorities">
+            <div formArrayName="authorities" fxLayout='row wrap' fxLayoutAlign='space-between center' fxLayoutGap="20px">
                 <md-checkbox [formControlName]="RoleModel[roleName]"
                              *ngFor="let roleName of EnumEx.getNames(RoleModel)">
                     {{ roleName }}
                 </md-checkbox>
             </div>
-
-            <pre>{{ userDetailsForm.value | json }}</pre>
 
         </form>
 

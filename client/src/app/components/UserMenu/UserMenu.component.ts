@@ -54,7 +54,7 @@ export class UserMenuComponent implements OnInit, OnDestroy {
     }
 
     public ngOnDestroy() {
-        this.authenticationEvents$.unsubscribe()
+        // this.authenticationEvents$.unsubscribe()
     }
 
 }

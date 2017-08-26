@@ -23,9 +23,11 @@ import {UserFactory} from "../../models/factory/index";
 
             </md-dialog-content>
 
-            <md-dialog-actions>
+            <div style="height: 35px"></div>
+            
+            <md-dialog-actions fxLayout='row' fxLayoutAlign='space-between center'>
                 <button md-button md-dialog-close>Cancel</button>
-                <button type="submit" md-button form="userDetailsForm">Create</button>
+                <button class="mat-primary" type="submit" md-raised-button form="userDetailsForm">Create</button>
             </md-dialog-actions>
 
         </div>
