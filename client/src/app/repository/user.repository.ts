@@ -4,40 +4,22 @@ import "rxjs/add/observable/zip";
 import "rxjs/add/operator/map";
 import {Injectable} from "@angular/core";
 import {UserModel} from "../models/User.model";
-import {HttpClient} from "@angular/common/http";
+import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {Observable} from "rxjs/Observable";
-import {EntityCollectionModel, EntityFactory} from "../models/hateoas/EntityCollection.model";
+import {EntityCollectionModel} from "../models/hateoas/EntityCollection.model";
 import {RoleModel} from "../models/Role.model";
-import {Entity, ModelFactory} from "../models/hateoas/Entity.model";
-import {extend, omit} from 'lodash-es';
-import {HttpHeaders} from "@angular/common/http";
+import {Entity} from "../models/hateoas/Entity.model";
+import {extend, omit, transform} from "lodash-es";
+import {UserFactory} from "../models/factory";
 
 const getAllUsersURL = "http://localhost:8080/api/users?projection=withDetails";
-const getAllRolesURL = "http://localhost:8080/api/roles?projection=withDetails";
-
-class UserFactory implements EntityFactory<UserModel>, ModelFactory<UserModel> {
-
-    constructModel = (obj: any): UserModel => {
-        return new UserModel(
-            obj.username,
-            obj.email,
-            obj.enabled,
-            (obj.authorities || []).map((authority) => RoleModel[authority.name])
-        )
-    };
-
-    constructEntity = (obj: any): Entity<UserModel> => {
-        return Entity.fromJSON(obj, this);
-    };
-
-}
+const postUserURL = "http://localhost:8080/api/users";
 
 @Injectable()
 export class UserRepository {
 
-    private userFactory = new UserFactory();
-
-    constructor(private http: HttpClient) {
+    constructor(private userFactory: UserFactory,
+                private http: HttpClient) {
 
     }
 
@@ -47,9 +29,19 @@ export class UserRepository {
             .catch(() => Observable.throw("Could not get users"));
     }
 
+    createUser(userEntity: Entity<UserModel>): Observable<any> {
+        return this.http.post(postUserURL, transform(userEntity.entity, (result, value, key) => {
+            if(key == 'authorities') {
+                result[key] = value.map((val) => `/authorities/${RoleModel[val]}`)
+            } else {
+                result[key] = value;
+            }
+        }, {}));
+    }
+
     public updateUser(userEntity: Entity<UserModel>): Observable<Entity<UserModel>> {
         return Observable.create((observer) => {
-            const userUpdate$ = this.http.put(userEntity.links['self']['href'], omit(userEntity.entity, ['roles']));
+            const userUpdate$ = this.http.put(userEntity.links['self']['href'], omit(userEntity.entity, ['authorities']));
 
             const privilegeUpdate$ = this.http.put(userEntity.links['authorities']['href'],
                 this.constructRoleURIsFor(userEntity), {
@@ -66,8 +58,8 @@ export class UserRepository {
     }
 
     private constructRoleURIsFor(userEntity: Entity<UserModel>) {
-        const basePath = "http://localhost:8080/api/privileges/:roleName";
-        return userEntity.entity.roles.map((role) => basePath.replace(":roleName", RoleModel[role])).join("\n");
+        const basePath = "http://localhost:8080/api/authorities/:roleName";
+        return userEntity.entity.authorities.map((role) => basePath.replace(":roleName", RoleModel[role])).join("\n");
     }
 
 }

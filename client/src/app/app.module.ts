@@ -48,9 +48,11 @@ import {ResponseMappingService} from "./+security/responseMapping.service";
 import {SecurityContextHolder} from "./+security/security.context";
 import {UsersTableComponent} from "./components/UsersTable/UsersTable.component";
 import {UserRepository} from "./repository/user.repository";
+import {UserFactory} from "./models/factory";
 import {ControlMessagesComponent} from "./components/ControlMessages/ControlMessages.component";
 import {ConfirmationDialogComponent} from "./components/ConfirmationDialog";
 import {UserDetailsFormComponent} from "./components/UserDetailsForm/UserDetailsForm.component";
+import {CreateUserDialogComponent} from "./components/CreateUserDialog/CreateUserDialog.component";
 
 import "../styles/styles.scss";
 import "../styles/headings.css";
@@ -62,6 +64,7 @@ const APP_PROVIDERS = [
     ResponseMappingService,
     SecurityContextHolder,
     UserRepository,
+    UserFactory,
     AppState
 ];
 
@@ -89,7 +92,8 @@ type StoreType = {
         UsersTableComponent,
         ControlMessagesComponent,
         ConfirmationDialogComponent,
-        UserDetailsFormComponent
+        UserDetailsFormComponent,
+        CreateUserDialogComponent
     ],
     /**
      * Import Angular's modules.
@@ -125,7 +129,8 @@ type StoreType = {
     entryComponents: [
         SignInDialogComponent,
         UserDetailsDialogComponent,
-        ConfirmationDialogComponent
+        ConfirmationDialogComponent,
+        CreateUserDialogComponent
     ],
 
     /**

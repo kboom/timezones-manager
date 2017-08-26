@@ -39,7 +39,7 @@ export interface UserEntityManager {
 
             <div style="height: 35px;"></div>
 
-            <div formArrayName="roles">
+            <div formArrayName="authorities">
                 <md-checkbox [formControlName]="RoleModel[roleName]"
                              *ngFor="let roleName of EnumEx.getNames(RoleModel)">
                     {{ roleName }}
@@ -70,7 +70,7 @@ export class UserDetailsFormComponent implements OnInit {
             password: ["", Validators.required, ValidationService.passwordValidator],
             email: ["", Validators.required, ValidationService.emailValidator],
             enabled: [false, Validators.required],
-            roles: this.fb.array([
+            authorities: this.fb.array([
                 [false],
                 [false],
                 [false]
@@ -85,8 +85,8 @@ export class UserDetailsFormComponent implements OnInit {
     setValues = (userEntity: Entity<UserModel>) => {
         this.userDetailsForm.setValue(
             extend({}, pick(userEntity.entity, ['username', 'password', 'email', 'enabled']), {
-                roles: EnumEx.getValues(RoleModel).map((role) => {
-                    return includes(userEntity.entity.roles, role);
+                authorities: EnumEx.getValues(RoleModel).map((role) => {
+                    return includes(userEntity.entity.authorities, role);
                 })
             })
         );
@@ -95,7 +95,7 @@ export class UserDetailsFormComponent implements OnInit {
     onSubmit(event): void {
         const formData = this.userDetailsForm.value;
         this.entityManager.onSubmit(this.userEntity.withUpdatedEntity(transform(formData, (result, value, key) => {
-            if (key == 'roles') {
+            if (key == 'authorities') {
                 result[key] = EnumEx.getValues(RoleModel).filter((role) => value[role])
             } else {
                 result[key] = value;

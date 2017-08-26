@@ -1,6 +1,7 @@
 import {Entity} from "./Entity.model";
 
 export interface EntityFactory<T> {
+    constructNewEntity(): Entity<T>
     constructEntity(obj: any): Entity<T>
 }
 

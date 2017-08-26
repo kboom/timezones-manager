@@ -1,6 +1,6 @@
 import {Component, ElementRef, OnInit, ViewChild} from "@angular/core";
 import {DataSource} from "@angular/cdk";
-import {MdSort, MdDialog} from "@angular/material";
+import {MdDialog, MdSort} from "@angular/material";
 import {Observable} from "rxjs/Observable";
 import "rxjs/add/operator/startWith";
 import "rxjs/add/observable/merge";
@@ -15,46 +15,54 @@ import {RoleModel} from "../../models/Role.model";
 import {UserDetailsDialogComponent} from "../UserDetailsDialog/UserDetailsDialog.component";
 import {Entity} from "../../models/hateoas/Entity.model";
 import {ConfirmationDialogComponent} from "../ConfirmationDialog/ConfirmationDialog.component";
+import {CreateUserDialogComponent} from "../CreateUserDialog/CreateUserDialog.component";
 
 @Component({
     selector: 'usersTable',
     styleUrls: ['UsersTable.css'],
     template: `
-        
+
         <div class="example-container mat-elevation-z8">
             <div class="example-header">
                 <md-input-container floatPlaceholder="never">
                     <input mdInput #filter placeholder="Filter users">
                 </md-input-container>
-                <button md-raised-button (click)="createUser()"><md-icon>add</md-icon>Create user</button>
+                <button md-raised-button (click)="createUser()">
+                    <md-icon>add</md-icon>
+                    Create user
+                </button>
             </div>
             <md-table #table [dataSource]="dataSource" mdSort>
-                
+
                 <ng-container cdkColumnDef="username">
                     <md-header-cell *cdkHeaderCellDef md-sort-header>Username</md-header-cell>
-                    <md-cell *cdkCellDef="let row"> {{row.entity.username}} </md-cell>
+                    <md-cell *cdkCellDef="let row"> {{row.entity.username}}</md-cell>
                 </ng-container>
 
                 <ng-container cdkColumnDef="email">
-                    <md-header-cell *cdkHeaderCellDef md-sort-header> E-mail </md-header-cell>
-                    <md-cell *cdkCellDef="let row"> {{row.entity.email}} </md-cell>
+                    <md-header-cell *cdkHeaderCellDef md-sort-header> E-mail</md-header-cell>
+                    <md-cell *cdkCellDef="let row"> {{row.entity.email}}</md-cell>
                 </ng-container>
 
                 <ng-container cdkColumnDef="enabled">
-                    <md-header-cell *cdkHeaderCellDef md-sort-header> Is enabled </md-header-cell>
-                    <md-cell *cdkCellDef="let row"> {{row.entity.enabled ? 'Yes' : 'No'}} </md-cell>
+                    <md-header-cell *cdkHeaderCellDef md-sort-header> Is enabled</md-header-cell>
+                    <md-cell *cdkCellDef="let row"> {{row.entity.enabled ? 'Yes' : 'No'}}</md-cell>
                 </ng-container>
 
                 <ng-container cdkColumnDef="roles">
-                    <md-header-cell *cdkHeaderCellDef md-sort-header> Roles </md-header-cell>
-                    <md-cell *cdkCellDef="let row"> {{mapRoles(row.entity.roles)}} </md-cell>
+                    <md-header-cell *cdkHeaderCellDef md-sort-header> Roles</md-header-cell>
+                    <md-cell *cdkCellDef="let row"> {{mapRoles(row.entity.authorities)}}</md-cell>
                 </ng-container>
 
                 <ng-container cdkColumnDef="controls">
-                    <md-header-cell *cdkHeaderCellDef md-sort-header> Actions </md-header-cell>
-                    <md-cell *cdkCellDef="let row"> 
-                        <button md-mini-fab (click)="editUser(row)"><md-icon>edit</md-icon></button>
-                        <button md-mini-fab (click)="deleteUser(row)"><md-icon>delete</md-icon></button>
+                    <md-header-cell *cdkHeaderCellDef md-sort-header> Actions</md-header-cell>
+                    <md-cell *cdkCellDef="let row">
+                        <button md-mini-fab (click)="editUser(row)">
+                            <md-icon>edit</md-icon>
+                        </button>
+                        <button md-mini-fab (click)="deleteUser(row)">
+                            <md-icon>delete</md-icon>
+                        </button>
                     </md-cell>
                 </ng-container>
 
@@ -62,7 +70,7 @@ import {ConfirmationDialogComponent} from "../ConfirmationDialog/ConfirmationDia
                 <md-row *cdkRowDef="let row; columns: displayedColumns;"></md-row>
             </md-table>
         </div>
-        
+
     `,
 })
 export class UsersTableComponent implements OnInit {
@@ -82,7 +90,7 @@ export class UsersTableComponent implements OnInit {
     }
 
     createUser() {
-        const dialog = this.dialog.open(UserDetailsDialogComponent);
+        const dialog = this.dialog.open(CreateUserDialogComponent);
         dialog.afterClosed().subscribe(result => {
             console.log(`Dialog result: ${result}`);
         });
@@ -105,7 +113,7 @@ export class UsersTableComponent implements OnInit {
             }
         });
         dialog.afterClosed().subscribe(shouldDelete => {
-            if(shouldDelete) {
+            if (shouldDelete) {
                 this.userRepository.deleteUser(userEntity).subscribe();
             }
         });
@@ -121,7 +129,9 @@ export class UsersTableComponent implements OnInit {
             .debounceTime(150)
             .distinctUntilChanged()
             .subscribe(() => {
-                if (!this.dataSource) { return; }
+                if (!this.dataSource) {
+                    return;
+                }
                 this.dataSource.filter = this.filter.nativeElement.value;
             });
         this.dataSource.loadData();
@@ -134,8 +144,13 @@ export class UserTableDataSource extends DataSource<any> {
     dataChange = new BehaviorSubject<Entity<UserModel>[]>([]);
     filterChange = new BehaviorSubject('');
 
-    get filter(): string { return this.filterChange.value; }
-    set filter(filter: string) { this.filterChange.next(filter); }
+    get filter(): string {
+        return this.filterChange.value;
+    }
+
+    set filter(filter: string) {
+        this.filterChange.next(filter);
+    }
 
     constructor(private userRepository: UserRepository,
                 private sort: MdSort) {

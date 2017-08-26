@@ -7,7 +7,7 @@ import {SecurityService} from "../../+security/security.service";
     selector: 'signInDialog',
     template: `
 
-        <form [formGroup]="loginForm" (ngSubmit)="this.doUpdate($event)">
+        <form [formGroup]="loginForm" (ngSubmit)="this.doLogin($event)">
 
             <h2 md-dialog-title>Please sign in</h2>
 
