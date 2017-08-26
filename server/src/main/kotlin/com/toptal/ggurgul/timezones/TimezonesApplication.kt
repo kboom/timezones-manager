@@ -46,6 +46,7 @@ open class TimezonesApplication {
             override fun configureRepositoryRestConfiguration(config: RepositoryRestConfiguration) {
                 config.repositoryDetectionStrategy = ANNOTATED
                 config.exposeIdsFor(Authority::class.java)
+                config.isReturnBodyOnCreate = true
             }
         }
 

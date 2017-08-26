@@ -118,7 +118,7 @@ class UsersTests : AbstractFunctionalTest() {
                     "email": "qwerty666@any.com",
                     "enabled": true
                 }""".trimIndent())
-                .put("/users/${ALICE.id}")
+                .put("/users/${ALICE.id}?projection=withDetails")
                 .then()
                 .statusCode(200)
                 .body("username", equalTo("alice2"))

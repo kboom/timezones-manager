@@ -12,6 +12,7 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import {
     MdButtonModule,
     MdCheckboxModule,
+    MdSelectModule,
     MdDialogModule,
     MdInputModule,
     MdMenuModule,
@@ -46,6 +47,7 @@ import {ResponseMappingService} from "./+security/responseMapping.service";
 import {SecurityContextHolder} from "./+security/security.context";
 import {UsersTableComponent} from "./components/UsersTable/UsersTable.component";
 import {UserRepository} from "./repository/user.repository";
+import {ControlMessagesComponent} from "./components/ControlMessages/ControlMessages.component";
 
 import "../styles/styles.scss";
 import "../styles/headings.css";
@@ -81,7 +83,8 @@ type StoreType = {
         UserMenuComponent,
         SignInDialogComponent,
         UserDetailsDialogComponent,
-        UsersTableComponent
+        UsersTableComponent,
+        ControlMessagesComponent
     ],
     /**
      * Import Angular's modules.
@@ -100,6 +103,7 @@ type StoreType = {
         MdInputModule,
         MdButtonModule,
         MdCheckboxModule,
+        MdSelectModule,
         MdMenuModule,
         MdToolbarModule,
         MdDialogModule,
