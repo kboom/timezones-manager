@@ -6,6 +6,7 @@ import {SignInDialogComponent} from "../SignInDialog/SignInDialog.component";
 import {SecurityContextHolder} from "../../+security/security.context";
 import {Observable} from "rxjs/Observable";
 import {RegistrationDialogComponent} from "../RegistrationDialog/RegistrationDialog.component";
+import {Router} from "@angular/router";
 
 @Component({
     selector: 'userMenu',
@@ -36,7 +37,8 @@ export class UserMenuComponent implements OnInit, OnDestroy {
 
     constructor(private authService: SecurityService,
                 private securityContext: SecurityContextHolder,
-                private dialog: MdDialog) {
+                private dialog: MdDialog,
+                private router: Router) {
         this.isLoggedIn$ = this.securityContext.getAuthentication$()
             .map((authentication) => authentication.isAuthenticated())
     }
@@ -48,14 +50,14 @@ export class UserMenuComponent implements OnInit, OnDestroy {
     openRegistrationDialog() {
         this.dialog.open(RegistrationDialogComponent).afterClosed()
             .subscribe(result => {
-                console.log(`Dialog result: ${result}`);
+
             });
     }
 
     openSignInDialog() {
         this.dialog.open(SignInDialogComponent).afterClosed()
             .subscribe(result => {
-                console.log(`Dialog result: ${result}`);
+                this.router.navigate(['home']);
             });
     }
 

@@ -4,7 +4,7 @@ import {XLargeDirective} from "./x-large";
 import "rxjs/add/operator/startWith";
 import "rxjs/add/observable/merge";
 import "rxjs/add/operator/map";
-import {ActivatedRoute} from "@angular/router";
+import {ActivatedRoute, Router} from "@angular/router";
 import {Subscription} from "rxjs/Subscription";
 import {SecurityService} from "../../+security/security.service";
 import {Observable} from "rxjs/Observable";
@@ -61,7 +61,8 @@ export class RegistrationComponent implements OnInit, OnDestroy {
 
     constructor(private route: ActivatedRoute,
                 private securityService: SecurityService,
-                private dialog: MdDialog) {
+                private dialog: MdDialog,
+                private router: Router) {
 
     }
 
@@ -77,7 +78,7 @@ export class RegistrationComponent implements OnInit, OnDestroy {
     openSignInDialog = () => {
         this.dialog.open(SignInDialogComponent).afterClosed()
             .subscribe(result => {
-                console.log(`Dialog result: ${result}`);
+                this.router.navigate(['home']);
             });
     };
 
