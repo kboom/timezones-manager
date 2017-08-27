@@ -10,6 +10,7 @@ import {SecurityService} from "../../+security/security.service";
 import {Observable} from "rxjs/Observable";
 import {SignInDialogComponent} from "../../components/SignInDialog/SignInDialog.component";
 import {MdDialog} from "@angular/material";
+import {RegistrationDialogComponent} from "../../components/RegistrationDialog/RegistrationDialog.component";
 
 enum ConfirmationStatus {
     PENDING,
@@ -38,13 +39,15 @@ enum ConfirmationStatus {
                     <button class="mat-primary" (click)="openSignInDialog()" md-button>Sign in</button>
                 </md-card-actions>
             </md-card>
-            <md-card *ngSwitchCase="ConfirmationStatus.FAILED" fxLayout='column'>
-                <h3>Your account could not be verified!</h3>
-                <div fxLayout='row' fxLayoutAlign="center center" fxLayoutGap="20px">
-                    <div>Try again later</div>
-                    <div>or</div>
-                    <button md-button>Send a new validation link</button>
-                </div>
+            <md-card *ngSwitchCase="ConfirmationStatus.FAILED">
+                <md-card-header>
+                    <md-card-title>Failure</md-card-title>
+                    <md-card-subtitle>Your account could not be verified!</md-card-subtitle>
+                </md-card-header>
+                <md-card-actions>
+                    <button (click)="openSignInDialog()" md-button>I already have account</button>
+                    <button class="mat-primary" (click)="openRegistrationDialog()" md-button>I am a new user</button>
+                </md-card-actions>
             </md-card>
         </div>
 
@@ -80,6 +83,11 @@ export class RegistrationComponent implements OnInit, OnDestroy {
             .subscribe(result => {
                 this.router.navigate(['home']);
             });
+    };
+
+    openRegistrationDialog = () => {
+        this.dialog.open(RegistrationDialogComponent).afterClosed()
+            .subscribe();
     };
 
     handleConfirmationSuccess = () => {
