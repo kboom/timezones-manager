@@ -10,7 +10,7 @@ import org.junit.Test
 class RegistrationTests : AbstractFunctionalTest() {
 
     companion object {
-        val CONFIRMATION_CODE_FOR_ANN = "a2F0ZTo2ZTVmMjJkZTQ5YzMzOTkwMDEyM2IyMjlmYTAwNjAwNQ=="
+        val CONFIRMATION_CODE_FOR_KATE = "a2F0ZTo2ZTVmMjJkZTQ5YzMzOTkwMDEyM2IyMjlmYTAwNjAwNQ=="
     }
 
     @Before
@@ -23,7 +23,7 @@ class RegistrationTests : AbstractFunctionalTest() {
                 assignAuthorityToUser(this, Authority.USER, User.KATE)
             }
             insertInto("USER_CODES") {
-                insertRegistrationConfirmationCode(this, User.KATE, CONFIRMATION_CODE_FOR_ANN)
+                insertRegistrationConfirmationCode(this, User.KATE, CONFIRMATION_CODE_FOR_KATE)
             }
         }
     }
@@ -58,11 +58,28 @@ class RegistrationTests : AbstractFunctionalTest() {
     }
 
     @Test
+    fun cannotUseSameConfirmationCodeTwice() {
+        val confirmationRequest = RestAssured.given()
+                .body("""
+                    {
+                        "code": "$CONFIRMATION_CODE_FOR_KATE"
+                    }
+                """.trim())
+
+        confirmationRequest
+                .post("/registration/confirmation")
+        confirmationRequest
+                .post("/registration/confirmation")
+                .then()
+                .statusCode(403)
+    }
+
+    @Test
     fun accountIsActivatedForValidConfirmationCode() {
         RestAssured.given()
                 .body("""
                     {
-                        "code": "$CONFIRMATION_CODE_FOR_ANN"
+                        "code": "$CONFIRMATION_CODE_FOR_KATE"
                     }
                 """.trim())
                 .post("/registration/confirmation")

@@ -37,6 +37,7 @@ open class UserService(
 
         return if (code == userCode.code) {
             user.enabled = true
+            userCodesRepository.delete(userCode)
         } else throw IllegalStateException()
     }
 
