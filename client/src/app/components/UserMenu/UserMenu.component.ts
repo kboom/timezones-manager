@@ -1,7 +1,7 @@
 import {Component, OnDestroy, OnInit} from "@angular/core";
 import {SecurityService} from "../../+security/security.service";
 import {Subscription} from "rxjs/Subscription";
-import {MdDialog} from "@angular/material";
+import {MdDialog, MdSnackBar} from "@angular/material";
 import {SignInDialogComponent} from "../SignInDialog/SignInDialog.component";
 import {SecurityContextHolder} from "../../+security/security.context";
 import {Observable} from "rxjs/Observable";
@@ -17,7 +17,7 @@ import {Router} from "@angular/router";
                 }}!
             </button>
             <md-menu #menu="mdMenu">
-                <button md-menu-item (click)="this.authService.signOut()">Sign out</button>
+                <button md-menu-item (click)="signOut()">Sign out</button>
             </md-menu>
         </div>
 
@@ -38,6 +38,7 @@ export class UserMenuComponent implements OnInit, OnDestroy {
     constructor(private authService: SecurityService,
                 private securityContext: SecurityContextHolder,
                 private dialog: MdDialog,
+                private snackBar: MdSnackBar,
                 private router: Router) {
         this.isLoggedIn$ = this.securityContext.getAuthentication$()
             .map((authentication) => authentication.isAuthenticated())
@@ -59,6 +60,19 @@ export class UserMenuComponent implements OnInit, OnDestroy {
             .subscribe(result => {
                 this.router.navigate(['home']);
             });
+    }
+
+    signOut() {
+        this.authService.signOut().subscribe(() => {
+            this.router.navigate(['home']);
+        }, () => {
+            const snackBarRef = this.snackBar.open("Could not log out!", "Close", {
+                duration: 5000,
+            });
+            snackBarRef.onAction().subscribe(() => {
+                snackBarRef.dismiss()
+            });
+        });
     }
 
     public ngOnInit() {

@@ -10,6 +10,7 @@ import "rxjs/add/observable/throw";
 import {HttpClient, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest} from "@angular/common/http";
 import {UserModel} from "src/app/models/User.model";
 import {SecurityContextHolder} from "./security.context";
+import {Router} from "@angular/router";
 
 enum AuthenticationEvent {
     SIGN_IN_FAILED
@@ -51,6 +52,7 @@ export class SecurityService {
 
     public signOut() {
         this.securityContextHolder.clearAuthentication();
+        return Observable.of(null);
     }
 
     private doAuthenticate(username, password): Observable<any> {
