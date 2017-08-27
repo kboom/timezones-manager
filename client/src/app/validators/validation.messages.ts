@@ -10,7 +10,8 @@ export class ValidationMessageProvider {
             'username.regex': 'Username can contain only alphanumeric characters',
             'password.regex': 'Invalid password. Password must be at least 6 characters long, and contain a number.',
             'password.equality': 'Passwords have to match',
-            'minlength': `Minimum length ${validatorValue.requiredLength}`
+            'minlength': `Minimum length ${validatorValue.requiredLength}`,
+            'role:atLeastOne': 'At least one role must be selected'
         }[validatorCode];
     }
 

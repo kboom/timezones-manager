@@ -6,6 +6,8 @@ import {Entity} from "../../models/hateoas/Entity.model";
 import {RoleModel, RoleModelAware} from "../../models/Role.model";
 import {EnumEx, WithEnumEx} from "../../utils/enum.utils";
 import {Observable} from "rxjs/Observable";
+import {EMAIL_REGEX, PASSWORD_REGEX, USERNAME_REGEX} from "../../validators/validation.rules";
+import {atLeastOneTrue, validatorFor} from "../../validators/common.validators";
 
 export interface UserEntityManager {
 
@@ -39,13 +41,14 @@ export interface UserEntityManager {
             <div style="height: 35px;"></div>
 
             <div formArrayName="authorities" fxLayout='row wrap' fxLayoutAlign='space-between center'
-                 fxLayoutGap="20px">
+                 fxLayoutGap="20px" style="padding-bottom: 15px">
                 <md-checkbox [formControlName]="RoleModel[roleName]"
                              *ngFor="let roleName of EnumEx.getNames(RoleModel)">
                     {{ roleName }}
                 </md-checkbox>
             </div>
-
+            <control-messages [control]="userDetailsForm.controls.authorities"></control-messages>
+            
         </form>
 
     `
@@ -54,7 +57,7 @@ export interface UserEntityManager {
 @WithEnumEx
 export class UserDetailsFormComponent implements OnInit {
 
-    userDetailsForm: FormGroup;
+    public userDetailsForm: FormGroup;
 
     @Input()
     private userEntity: Entity<UserModel>;
@@ -64,15 +67,15 @@ export class UserDetailsFormComponent implements OnInit {
 
     constructor(private fb: FormBuilder) {
         this.userDetailsForm = this.fb.group({
-            username: ["", Validators.required],
-            password: ["", Validators.required],
-            email: ["", Validators.required],
+            username: ["", Validators.required, validatorFor(USERNAME_REGEX)],
+            password: ["", Validators.required, validatorFor(PASSWORD_REGEX)],
+            email: ["", Validators.required, validatorFor(EMAIL_REGEX)],
             enabled: [false, Validators.required],
             authorities: this.fb.array([
                 [false],
                 [false],
                 [false]
-            ])
+            ], atLeastOneTrue('role:atLeastOne'))
         });
     }
 

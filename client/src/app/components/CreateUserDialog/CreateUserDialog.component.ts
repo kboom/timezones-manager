@@ -1,4 +1,4 @@
-import {Component, Inject} from "@angular/core";
+import {Component, Inject, ViewChild} from "@angular/core";
 import {FormGroup} from "@angular/forms";
 import {MD_DIALOG_DATA, MdDialogRef} from "@angular/material";
 import {UserModel} from "../../models/User.model";
@@ -8,6 +8,7 @@ import {Entity} from "../../models/hateoas/Entity.model";
 import {UserEntityManager} from "src/app/components/UserDetailsForm/UserDetailsForm.component";
 import {Observable} from "rxjs/Observable";
 import {UserFactory} from "../../models/factory/index";
+import {UserDetailsFormComponent} from "../../components/UserDetailsForm";
 
 @Component({
     selector: 'userDetailsDialog',
@@ -27,7 +28,8 @@ import {UserFactory} from "../../models/factory/index";
             
             <md-dialog-actions fxLayout='row' fxLayoutAlign='space-between center'>
                 <button md-button md-dialog-close>Cancel</button>
-                <button class="mat-primary" type="submit" md-raised-button form="userDetailsForm">Create</button>
+                <button class="mat-primary" type="submit" md-raised-button form="userDetailsForm" 
+                        [disabled]="!detailsForm.userDetailsForm.valid">Create</button>
             </md-dialog-actions>
 
         </div>
@@ -38,6 +40,9 @@ import {UserFactory} from "../../models/factory/index";
 export class CreateUserDialogComponent implements UserEntityManager {
 
     userEntity: Entity<UserModel>;
+
+    @ViewChild(UserDetailsFormComponent)
+    private detailsForm: UserDetailsFormComponent;
 
     constructor(private dialogRef: MdDialogRef<CreateUserDialogComponent>,
                 private userRepository: UserRepository,

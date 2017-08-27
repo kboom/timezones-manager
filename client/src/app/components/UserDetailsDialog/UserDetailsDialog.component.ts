@@ -1,10 +1,13 @@
-import {Component, Inject} from "@angular/core";
+import {Component, Inject, ViewChild} from "@angular/core";
 import {MD_DIALOG_DATA, MdDialogRef} from "@angular/material";
 import {UserModel} from "../../models/User.model";
 import {extend, includes, map, pick, transform} from "lodash-es";
 import {UserRepository} from "../../repository/user.repository";
 import {Entity} from "../../models/hateoas/Entity.model";
-import {UserEntityManager} from "src/app/components/UserDetailsForm/UserDetailsForm.component";
+import {
+    UserDetailsFormComponent,
+    UserEntityManager
+} from "../UserDetailsForm/UserDetailsForm.component";
 import {Observable} from "rxjs/Observable";
 
 @Component({
@@ -23,7 +26,8 @@ import {Observable} from "rxjs/Observable";
 
             <md-dialog-actions>
                 <button md-button md-dialog-close>Cancel</button>
-                <button type="submit" md-button form="userDetailsForm">Update</button>
+                <button type="submit" md-button form="userDetailsForm"
+                        [disabled]="!detailsForm.userDetailsForm.valid">Update</button>
             </md-dialog-actions>
 
         </div>
@@ -32,6 +36,9 @@ import {Observable} from "rxjs/Observable";
 })
 // [disabled]="!userDetailsForm.valid"
 export class UserDetailsDialogComponent implements UserEntityManager {
+
+    @ViewChild(UserDetailsFormComponent)
+    private detailsForm: UserDetailsFormComponent;
 
     constructor(@Inject(MD_DIALOG_DATA) public userEntity: Entity<UserModel>,
                 private dialogRef: MdDialogRef<UserDetailsDialogComponent>,
