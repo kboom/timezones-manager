@@ -21,7 +21,9 @@ import {
     MdSortModule,
     MdIconModule,
     MdSlideToggleModule,
-    MdSnackBarModule
+    MdSnackBarModule,
+    MdProgressSpinnerModule,
+    MdCardModule
 } from "@angular/material";
 /*
  * Platform and Environment providers/directives/pipes
@@ -127,6 +129,8 @@ type StoreType = {
         MdIconModule,
         MdSnackBarModule,
         MdSlideToggleModule,
+        MdProgressSpinnerModule,
+        MdCardModule,
         LocalStorageModule.withConfig({
             prefix: 'timezones',
             storageType: 'localStorage'

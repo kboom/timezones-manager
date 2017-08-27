@@ -35,6 +35,11 @@ export class SecurityService {
             .catch((error: any) => Observable.throw(error));
     }
 
+    public confirmAccount(confirmationCode): Observable<any> {
+        return this.http.post("http://localhost:8080/api/registration/confirmation", JSON.stringify({ code: confirmationCode }))
+            .catch((error: any) => Observable.throw(error));
+    }
+
     public authenticate({username, password}): Observable<any> {
         const authentication$ = this.doAuthenticate(username, password);
         authentication$.subscribe((authentication) => {
