@@ -23,7 +23,8 @@ import {
     MdSlideToggleModule,
     MdSnackBarModule,
     MdProgressSpinnerModule,
-    MdCardModule
+    MdCardModule,
+    MdGridListModule
 } from "@angular/material";
 /*
  * Platform and Environment providers/directives/pipes
@@ -58,13 +59,16 @@ import {ResponseMappingService} from "./+security/responseMapping.service";
 import {SecurityContextHolder} from "./+security/security.context";
 import {UsersTableComponent} from "./components/UsersTable/UsersTable.component";
 import {UserRepository} from "./repository/user.repository";
-import {UserFactory} from "./models/factory";
+import {TimezoneFactory, UserFactory} from "./models/factory";
 import {ControlMessagesComponent} from "./components/ControlMessages/ControlMessages.component";
 import {ConfirmationDialogComponent} from "./components/ConfirmationDialog";
 import {UserDetailsFormComponent} from "./components/UserDetailsForm/UserDetailsForm.component";
 import {CreateUserDialogComponent} from "./components/CreateUserDialog/CreateUserDialog.component";
 import {RegistrationDialogComponent} from "./components/RegistrationDialog/RegistrationDialog.component";
 import {ValidationMessageProvider} from "./validators/validation.messages";
+import {TimezonesRepository} from "./repository/timezones.repository";
+import {CanActivateTimezones, TimezonesPage, TimezonesResolver} from "./pages/timezones/timezones.page";
+import {TimezoneComponent} from "./components/TimezoneComponent/Timezone.component";
 
 // Application wide providers
 const APP_PROVIDERS = [
@@ -75,6 +79,10 @@ const APP_PROVIDERS = [
     ValidationMessageProvider,
     UserRepository,
     UserFactory,
+    TimezonesRepository,
+    TimezoneFactory,
+    CanActivateTimezones,
+    TimezonesResolver,
     AppState
 ];
 
@@ -94,6 +102,8 @@ type StoreType = {
         AboutComponent,
         HomeComponent,
         UsersComponent,
+        TimezonesPage,
+        TimezoneComponent,
         RegistrationComponent,
         NoContentComponent,
         XLargeDirective,
@@ -131,6 +141,7 @@ type StoreType = {
         MdTableModule,
         MdSortModule,
         MdIconModule,
+        MdGridListModule,
         MdSnackBarModule,
         MdSlideToggleModule,
         MdProgressSpinnerModule,
