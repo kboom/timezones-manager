@@ -5,13 +5,15 @@ import {MdDialog} from "@angular/material";
 import {SignInDialogComponent} from "../SignInDialog/SignInDialog.component";
 import {SecurityContextHolder} from "../../+security/security.context";
 import {Observable} from "rxjs/Observable";
+import {RegistrationDialogComponent} from "../RegistrationDialog/RegistrationDialog.component";
 
 @Component({
     selector: 'userMenu',
     template: `
 
         <div *ngIf="this.isLoggedIn$ | async; else signInBtn">
-            <button md-button [mdMenuTriggerFor]="menu">Hello, {{ this.securityContext.getAuthentication().getUsername() }}!
+            <button md-button [mdMenuTriggerFor]="menu">Hello, {{ this.securityContext.getAuthentication().getUsername()
+                }}!
             </button>
             <md-menu #menu="mdMenu">
                 <button md-menu-item (click)="this.authService.signOut()">Sign out</button>
@@ -20,6 +22,7 @@ import {Observable} from "rxjs/Observable";
 
         <ng-template #signInBtn>
             <button md-button (click)="this.openSignInDialog()">Sign in</button>
+            <button md-button class="mat-primary" (click)="this.openRegistrationDialog()">Register</button>
         </ng-template>
 
 
@@ -42,11 +45,18 @@ export class UserMenuComponent implements OnInit, OnDestroy {
         console.log("Authentication event");
     }
 
+    openRegistrationDialog() {
+        this.dialog.open(RegistrationDialogComponent).afterClosed()
+            .subscribe(result => {
+                console.log(`Dialog result: ${result}`);
+            });
+    }
+
     openSignInDialog() {
-        const dialog = this.dialog.open(SignInDialogComponent);
-        dialog.afterClosed().subscribe(result => {
-            console.log(`Dialog result: ${result}`);
-        });
+        this.dialog.open(SignInDialogComponent).afterClosed()
+            .subscribe(result => {
+                console.log(`Dialog result: ${result}`);
+            });
     }
 
     public ngOnInit() {

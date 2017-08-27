@@ -54,6 +54,7 @@ import {ControlMessagesComponent} from "./components/ControlMessages/ControlMess
 import {ConfirmationDialogComponent} from "./components/ConfirmationDialog";
 import {UserDetailsFormComponent} from "./components/UserDetailsForm/UserDetailsForm.component";
 import {CreateUserDialogComponent} from "./components/CreateUserDialog/CreateUserDialog.component";
+import {RegistrationDialogComponent} from "./components/RegistrationDialog/RegistrationDialog.component";
 
 import "../styles/styles.scss";
 import "../styles/headings.css";
@@ -94,7 +95,8 @@ type StoreType = {
         ControlMessagesComponent,
         ConfirmationDialogComponent,
         UserDetailsFormComponent,
-        CreateUserDialogComponent
+        CreateUserDialogComponent,
+        RegistrationDialogComponent
     ],
     /**
      * Import Angular's modules.
@@ -132,7 +134,8 @@ type StoreType = {
         SignInDialogComponent,
         UserDetailsDialogComponent,
         ConfirmationDialogComponent,
-        CreateUserDialogComponent
+        CreateUserDialogComponent,
+        RegistrationDialogComponent
     ],
 
     /**
