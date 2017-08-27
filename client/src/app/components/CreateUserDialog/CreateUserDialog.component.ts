@@ -46,7 +46,7 @@ export class CreateUserDialogComponent implements UserEntityManager {
 
     constructor(private dialogRef: MdDialogRef<CreateUserDialogComponent>,
                 private userRepository: UserRepository,
-    private userFactory: UserFactory) {
+                private userFactory: UserFactory) {
         this.userEntity = userFactory.constructNewEntity()
     }
 

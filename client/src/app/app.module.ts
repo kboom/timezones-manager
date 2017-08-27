@@ -71,6 +71,7 @@ import {CanActivateTimezones, TimezonesPage, TimezonesResolver} from "./pages/ti
 import {TimezoneComponent} from "./components/TimezoneComponent/Timezone.component";
 import {TimezoneForm} from "./components/TimezoneForm/Timezone.form";
 import {EditTimezoneDialogComponent} from "./components/EditTimezoneDialog/EditTimezoneDialog.component";
+import {CreateTimezoneDialogComponent} from "./components/CreateTimezoneDialog/CreateTimezoneDialog.component";
 
 // Application wide providers
 const APP_PROVIDERS = [
@@ -112,6 +113,7 @@ type StoreType = {
         UserMenuComponent,
         SignInDialogComponent,
         UserDetailsDialogComponent,
+        CreateTimezoneDialogComponent,
         UsersTableComponent,
         ControlMessagesComponent,
         ConfirmationDialogComponent,
@@ -163,7 +165,8 @@ type StoreType = {
         ConfirmationDialogComponent,
         CreateUserDialogComponent,
         RegistrationDialogComponent,
-        EditTimezoneDialogComponent
+        EditTimezoneDialogComponent,
+        CreateTimezoneDialogComponent
     ],
 
     /**

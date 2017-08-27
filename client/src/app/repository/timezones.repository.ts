@@ -12,6 +12,7 @@ import {TimezoneFactory} from "../models/factory/index";
 import {Entity} from "../models/hateoas/Entity.model";
 
 const getAllTimezonesUrl = "http://localhost:8080/api/timezones?projection=withDetails";
+const postTimezoneURL = "http://localhost:8080/api/timezones";
 
 @Injectable()
 export class TimezonesRepository {
@@ -29,6 +30,10 @@ export class TimezonesRepository {
 
     public updateTimezone(timezoneEntity: Entity<TimezoneModel>): Observable<any> {
         return this.http.put(timezoneEntity.links['self']['href'], timezoneEntity.entity);
+    }
+
+    public createTimezone(timezoneEntity: Entity<TimezoneModel>) {
+        return this.http.post(postTimezoneURL, timezoneEntity.entity);
     }
 
 }
