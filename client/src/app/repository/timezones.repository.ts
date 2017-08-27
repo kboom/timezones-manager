@@ -9,6 +9,7 @@ import {EntityCollectionModel} from "../models/hateoas/EntityCollection.model";
 import {extend, omit, transform} from "lodash-es";
 import {TimezoneModel} from "src/app/models/Timezone.model";
 import {TimezoneFactory} from "../models/factory/index";
+import {Entity} from "../models/hateoas/Entity.model";
 
 const getAllTimezonesUrl = "http://localhost:8080/api/timezones?projection=withDetails";
 
@@ -24,6 +25,10 @@ export class TimezonesRepository {
         return this.http.get(getAllTimezonesUrl)
             .map((body: any) => new EntityCollectionModel('timezones', body, this.timezoneFactory))
             .catch(() => Observable.throw("Could not get timezones"));
+    }
+
+    public updateTimezone(timezoneEntity: Entity<TimezoneModel>): Observable<any> {
+        return this.http.put(timezoneEntity.links['self']['href'], timezoneEntity.entity);
     }
 
 }

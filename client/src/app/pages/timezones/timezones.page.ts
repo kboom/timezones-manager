@@ -11,6 +11,8 @@ import {TimezonesRepository} from "../../repository/timezones.repository";
 import {BehaviorSubject} from "rxjs/BehaviorSubject";
 import {Entity} from "../../models/hateoas/Entity.model";
 import {TimezoneModel} from "../../models/Timezone.model";
+import {EditTimezoneDialogComponent} from "../../components/EditTimezoneDialog/EditTimezoneDialog.component";
+import {MdDialog} from "@angular/material";
 
 @Component({
     selector: 'timezonesPage',
@@ -21,7 +23,7 @@ import {TimezoneModel} from "../../models/Timezone.model";
         <div class="timezones__container" fxLayout='row wrap' fxLayoutAlign='center start' fxLayoutGap="20px">
 
             <timezone class="timezones__timezone" fxFlex="nogrow" [timezone]="timezone.entity" class="timezones__timezone"
-                      *ngFor="let timezone of timezones$ | async"></timezone>
+                      *ngFor="let timezone of timezones$ | async" (onEdit)="editTimezone(timezone)"></timezone>
 
         </div>
 
@@ -32,13 +34,22 @@ export class TimezonesPage implements OnInit {
 
     private timezones$ = new BehaviorSubject<Entity<TimezoneModel>[]>([]);
 
-    constructor(private route: ActivatedRoute) {
+    constructor(private route: ActivatedRoute, private dialog: MdDialog) {
     }
 
     ngOnInit(): void {
         this.route.data.map((data) => data.timezones).subscribe((timezones) => {
             this.timezones$.next(timezones.entities);
         })
+    }
+
+    editTimezone(timezoneEntity) {
+        this.dialog.open(EditTimezoneDialogComponent, {
+            data: timezoneEntity
+        }).afterClosed()
+            .subscribe(result => {
+
+            });
     }
 
 }

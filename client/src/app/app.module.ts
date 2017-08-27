@@ -69,6 +69,8 @@ import {ValidationMessageProvider} from "./validators/validation.messages";
 import {TimezonesRepository} from "./repository/timezones.repository";
 import {CanActivateTimezones, TimezonesPage, TimezonesResolver} from "./pages/timezones/timezones.page";
 import {TimezoneComponent} from "./components/TimezoneComponent/Timezone.component";
+import {TimezoneForm} from "./components/TimezoneForm/Timezone.form";
+import {EditTimezoneDialogComponent} from "./components/EditTimezoneDialog/EditTimezoneDialog.component";
 
 // Application wide providers
 const APP_PROVIDERS = [
@@ -113,7 +115,9 @@ type StoreType = {
         UsersTableComponent,
         ControlMessagesComponent,
         ConfirmationDialogComponent,
+        EditTimezoneDialogComponent,
         UserDetailsFormComponent,
+        TimezoneForm,
         CreateUserDialogComponent,
         RegistrationDialogComponent
     ],
@@ -158,7 +162,8 @@ type StoreType = {
         UserDetailsDialogComponent,
         ConfirmationDialogComponent,
         CreateUserDialogComponent,
-        RegistrationDialogComponent
+        RegistrationDialogComponent,
+        EditTimezoneDialogComponent
     ],
 
     /**

@@ -11,6 +11,8 @@ interface TimezoneProjection {
 
     fun getLocationName(): String
 
+    fun getDifferenceToGMT(): Int
+
     @Value("#{target.owner.username}")
     fun getOwner(): String
 

@@ -1,4 +1,6 @@
-import {Component, Input} from "@angular/core";
+import {Component, EventEmitter, Input, Output} from "@angular/core";
+import {MdDialog} from "@angular/material";
+import {EditTimezoneDialogComponent} from "../EditTimezoneDialog/EditTimezoneDialog.component";
 
 interface Timezone {
     name: string
@@ -15,14 +17,16 @@ interface Timezone {
             <md-card-header>
                 <md-card-title-group>
                     <md-card-title>{{ timezone.name }}</md-card-title>
-                    <md-card-subtitle><strong>{{ timezone.locationName }}</strong>, GMT {{ (timezone.differenceToGMT >= 0 ? "+" : "-") + timezone.differenceToGMT }}</md-card-subtitle>
+                    <md-card-subtitle><strong>{{ timezone.locationName }}</strong>, GMT
+                        {{ (timezone.differenceToGMT >= 0 ? "+" : "-") + timezone.differenceToGMT }}
+                    </md-card-subtitle>
                 </md-card-title-group>
             </md-card-header>
             <md-card-content>
                 Nice analog-live clock will be placed here
             </md-card-content>
             <md-card-actions>
-                <button md-button>Edit</button>
+                <button md-button (click)="onEdit.emit()">Edit</button>
             </md-card-actions>
         </md-card>
 
@@ -31,6 +35,9 @@ interface Timezone {
 export class TimezoneComponent {
 
     @Input()
-    private timezone: Timezone
+    private timezone: Timezone;
+
+    @Output()
+    private onEdit: EventEmitter<any> = new EventEmitter();
 
 }
