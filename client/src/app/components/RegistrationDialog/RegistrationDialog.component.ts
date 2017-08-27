@@ -1,6 +1,6 @@
 import {Component} from "@angular/core";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
-import {MdDialogRef} from "@angular/material";
+import {MdDialogRef, MdSnackBar} from "@angular/material";
 import {SecurityService} from "../../+security/security.service";
 import {omit} from "lodash-es";
 
@@ -46,11 +46,10 @@ export class RegistrationDialogComponent {
 
     registrationForm: FormGroup;
 
-    constructor(
-        private fb: FormBuilder,
-        private dialogRef: MdDialogRef<RegistrationDialogComponent>,
-        private authService: SecurityService
-    ) {
+    constructor(private fb: FormBuilder,
+                private dialogRef: MdDialogRef<RegistrationDialogComponent>,
+                private authService: SecurityService,
+                private snackBar: MdSnackBar) {
         this.registrationForm = this.fb.group({
             username: ["", Validators.required],
             email: ["", Validators.required],
@@ -62,7 +61,15 @@ export class RegistrationDialogComponent {
     doRegister(event): void {
         let formData = this.registrationForm.value;
         this.authService.registerAccount(omit(formData, ['passwordRepeated']))
-            .subscribe((x) => this.dialogRef.close(x))
+            .subscribe((x) => {
+                const snackBarRef = this.snackBar.open("Please check your mailbox", "Close", {
+                    duration: 5000,
+                });
+                snackBarRef.onAction().subscribe(() => {
+                    snackBarRef.dismiss()
+                });
+                this.dialogRef.close(x)
+            })
     }
 
 }
