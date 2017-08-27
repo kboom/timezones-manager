@@ -8,6 +8,8 @@ import {ActivatedRoute} from "@angular/router";
 import {Subscription} from "rxjs/Subscription";
 import {SecurityService} from "../../+security/security.service";
 import {Observable} from "rxjs/Observable";
+import {SignInDialogComponent} from "../../components/SignInDialog/SignInDialog.component";
+import {MdDialog} from "@angular/material";
 
 enum ConfirmationStatus {
     PENDING,
@@ -33,7 +35,7 @@ enum ConfirmationStatus {
                     <md-card-subtitle>Your account has been successfully confirmed!</md-card-subtitle>
                 </md-card-header>
                 <md-card-actions>
-                    <button class="mat-primary" md-button>Sign in</button>
+                    <button class="mat-primary" (click)="openSignInDialog()" md-button>Sign in</button>
                 </md-card-actions>
             </md-card>
             <md-card *ngSwitchCase="ConfirmationStatus.FAILED" fxLayout='column'>
@@ -58,7 +60,8 @@ export class RegistrationComponent implements OnInit, OnDestroy {
     queryParams$$: Subscription;
 
     constructor(private route: ActivatedRoute,
-                private securityService: SecurityService) {
+                private securityService: SecurityService,
+                private dialog: MdDialog) {
 
     }
 
@@ -70,6 +73,13 @@ export class RegistrationComponent implements OnInit, OnDestroy {
                     .subscribe(this.handleConfirmationSuccess, this.handleConfirmationFailure)
             });
     }
+
+    openSignInDialog = () => {
+        this.dialog.open(SignInDialogComponent).afterClosed()
+            .subscribe(result => {
+                console.log(`Dialog result: ${result}`);
+            });
+    };
 
     handleConfirmationSuccess = () => {
         this.confirmationStatus = ConfirmationStatus.SUCCESSFUL;
