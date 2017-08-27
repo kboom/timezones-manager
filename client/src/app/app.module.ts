@@ -66,7 +66,7 @@ import {ValidationMessageProvider} from "./validators/validation.messages";
 import {TimezonesRepository} from "./repository/timezones.repository";
 import {
     CanActivateTimezones,
-    TimezonesPage,
+    TimezonesPage, TimezonesPageService,
     TimezonesResolver,
     TimezonesToolbarComponent
 } from "./pages/timezones/timezones.page";
@@ -90,6 +90,7 @@ const APP_PROVIDERS = [
     CanActivateTimezones,
     TimezonesResolver,
     TimezonesToolbarComponent,
+    TimezonesPageService,
     AppState
 ];
 
