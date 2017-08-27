@@ -2,6 +2,7 @@ import {Component} from "@angular/core";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {MdDialogRef} from "@angular/material";
 import {SecurityService} from "../../+security/security.service";
+import {omit} from "lodash-es";
 
 @Component({
     selector: 'signInDialog',
@@ -60,7 +61,7 @@ export class RegistrationDialogComponent {
 
     doRegister(event): void {
         let formData = this.registrationForm.value;
-        this.authService.authenticate(formData)
+        this.authService.registerAccount(omit(formData, ['passwordRepeated']))
             .subscribe((x) => this.dialogRef.close(x))
     }
 

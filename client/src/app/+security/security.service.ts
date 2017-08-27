@@ -30,6 +30,11 @@ export class SecurityService {
         return this.authenticationEventsEmitter.asObservable();
     }
 
+    public registerAccount({username, password, email}): Observable<any> {
+        return this.http.post("http://localhost:8080/api/registration", JSON.stringify({username, password, email}))
+            .catch((error: any) => Observable.throw(error));
+    }
+
     public authenticate({username, password}): Observable<any> {
         const authentication$ = this.doAuthenticate(username, password);
         authentication$.subscribe((authentication) => {
