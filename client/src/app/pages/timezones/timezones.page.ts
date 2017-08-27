@@ -13,6 +13,7 @@ import {Entity} from "../../models/hateoas/Entity.model";
 import {TimezoneModel} from "../../models/Timezone.model";
 import {EditTimezoneDialogComponent} from "../../components/EditTimezoneDialog/EditTimezoneDialog.component";
 import {MdDialog} from "@angular/material";
+import {CreateTimezoneDialogComponent} from "../../components/CreateTimezoneDialog/CreateTimezoneDialog.component";
 
 @Component({
     selector: 'timezonesPage',
@@ -22,7 +23,8 @@ import {MdDialog} from "@angular/material";
 
         <div class="timezones__container" fxLayout='row wrap' fxLayoutAlign='center start' fxLayoutGap="20px">
 
-            <timezone class="timezones__timezone" fxFlex="nogrow" [timezone]="timezone.entity" class="timezones__timezone"
+            <timezone class="timezones__timezone" fxFlex="nogrow" [timezone]="timezone.entity"
+                      class="timezones__timezone"
                       *ngFor="let timezone of timezones$ | async" (onEdit)="editTimezone(timezone)"></timezone>
 
         </div>
@@ -58,11 +60,25 @@ export class TimezonesPage implements OnInit {
     providers: [],
     template: `
 
-        <md-toolbar-row>hello</md-toolbar-row>
+        <md-toolbar-row>
+            <div style="width: 100%" fxLayout="row" fxLayoutAlign="space-between" fxLayoutGap="20px">
+                <div fxFlex="grow"></div>
+                <button md-raised-button class="mat-primary" (click)="createTimezone()">Create</button>
+            </div>
+        </md-toolbar-row>
 
     `
 })
 export class TimezonesToolbarComponent {
+
+    constructor(private dialog: MdDialog) {}
+
+    createTimezone(timezoneEntity) {
+        this.dialog.open(CreateTimezoneDialogComponent).afterClosed()
+            .subscribe(result => {
+
+            });
+    }
 
 }
 
