@@ -1,16 +1,11 @@
-import {Component, Inject, ViewChild} from "@angular/core";
-import {FormBuilder, FormGroup, Validators} from "@angular/forms";
+import {Component, Inject} from "@angular/core";
 import {MD_DIALOG_DATA, MdDialogRef} from "@angular/material";
 import {UserModel} from "../../models/User.model";
 import {extend, includes, map, pick, transform} from "lodash-es";
 import {UserRepository} from "../../repository/user.repository";
 import {Entity} from "../../models/hateoas/Entity.model";
-import {RoleModelAware} from "../../models/Role.model";
-import {WithEnumEx} from "../../utils/enum.utils";
-import {ValidationService} from "../../services/validation.service";
 import {UserEntityManager} from "src/app/components/UserDetailsForm/UserDetailsForm.component";
 import {Observable} from "rxjs/Observable";
-import {Subject} from "rxjs/Subject";
 
 @Component({
     selector: 'userDetailsDialog',

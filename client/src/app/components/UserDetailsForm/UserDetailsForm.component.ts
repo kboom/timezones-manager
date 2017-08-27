@@ -5,7 +5,6 @@ import {extend, includes, map, pick, transform} from "lodash-es";
 import {Entity} from "../../models/hateoas/Entity.model";
 import {RoleModel, RoleModelAware} from "../../models/Role.model";
 import {EnumEx, WithEnumEx} from "../../utils/enum.utils";
-import {ValidationService} from "../../services/validation.service";
 import {Observable} from "rxjs/Observable";
 
 export interface UserEntityManager {
@@ -39,7 +38,8 @@ export interface UserEntityManager {
 
             <div style="height: 35px;"></div>
 
-            <div formArrayName="authorities" fxLayout='row wrap' fxLayoutAlign='space-between center' fxLayoutGap="20px">
+            <div formArrayName="authorities" fxLayout='row wrap' fxLayoutAlign='space-between center'
+                 fxLayoutGap="20px">
                 <md-checkbox [formControlName]="RoleModel[roleName]"
                              *ngFor="let roleName of EnumEx.getNames(RoleModel)">
                     {{ roleName }}
@@ -65,8 +65,8 @@ export class UserDetailsFormComponent implements OnInit {
     constructor(private fb: FormBuilder) {
         this.userDetailsForm = this.fb.group({
             username: ["", Validators.required],
-            password: ["", Validators.required, ValidationService.passwordValidator],
-            email: ["", Validators.required, ValidationService.emailValidator],
+            password: ["", Validators.required],
+            email: ["", Validators.required],
             enabled: [false, Validators.required],
             authorities: this.fb.array([
                 [false],

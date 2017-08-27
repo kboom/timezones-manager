@@ -35,6 +35,11 @@ import {SecurityModule} from './+security';
 
 import {ENV_PROVIDERS} from "./environment";
 import {ROUTES} from "./app.routes";
+
+// styles
+import "../styles/styles.scss";
+import "../styles/headings.css";
+
 // App is our top level component
 import {AppComponent} from "./app.component";
 import {APP_RESOLVER_PROVIDERS} from "./app.resolver";
@@ -59,9 +64,7 @@ import {ConfirmationDialogComponent} from "./components/ConfirmationDialog";
 import {UserDetailsFormComponent} from "./components/UserDetailsForm/UserDetailsForm.component";
 import {CreateUserDialogComponent} from "./components/CreateUserDialog/CreateUserDialog.component";
 import {RegistrationDialogComponent} from "./components/RegistrationDialog/RegistrationDialog.component";
-
-import "../styles/styles.scss";
-import "../styles/headings.css";
+import {ValidationMessageProvider} from "./validators/validation.messages";
 
 // Application wide providers
 const APP_PROVIDERS = [
@@ -69,6 +72,7 @@ const APP_PROVIDERS = [
     SecurityService,
     ResponseMappingService,
     SecurityContextHolder,
+    ValidationMessageProvider,
     UserRepository,
     UserFactory,
     AppState
