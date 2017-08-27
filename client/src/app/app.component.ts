@@ -21,15 +21,16 @@ import {SecurityContextHolder} from "./+security/security.context";
 
         <nav>
             <md-toolbar>
-                <a [routerLink]=" ['./home'] "
+                
+                <a md-button [routerLink]=" ['./home'] "
                    routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
                     Home
                 </a>
-                <a [routerLink]=" ['./timezones'] "
+                <a md-button [routerLink]=" ['./timezones'] "
                    routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
                     Timezones
                 </a>
-                <a [routerLink]=" ['./users'] "
+                <a md-button [routerLink]=" ['./users'] "
                    *ngIf="this.securityContext.getAuthentication().hasAnyRole(RoleModel.ROLE_ADMIN, RoleModel.ROLE_MANAGER)"
                    routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
                     Users
@@ -38,6 +39,9 @@ import {SecurityContextHolder} from "./+security/security.context";
                 <userMenu>
 
                 </userMenu>
+                
+                <md-toolbar-row>afaf</md-toolbar-row>
+                
             </md-toolbar>
         </nav>
 
