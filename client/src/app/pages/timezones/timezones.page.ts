@@ -57,13 +57,16 @@ export class TimezonesPage implements OnInit {
 
 @Component({
     selector: 'timezones-toolbar',
+    styleUrls: ["timezones.page.scss"],
     providers: [],
     template: `
 
-        <md-toolbar-row>
-            <div style="width: 100%" fxLayout="row" fxLayoutAlign="space-between" fxLayoutGap="20px">
-                <div fxFlex="grow"></div>
-                <button md-raised-button class="mat-primary" (click)="createTimezone()">Create</button>
+        <md-toolbar-row class="timezones-navbar">
+            <div style="width: 100%" fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="20px">
+                <md-input-container class="timezones-navbar__element" fxFlex="grow">
+                    <input mdInput placeholder="Filter">
+                </md-input-container>
+                <button md-raised-button class="timezones-navbar__element mat-primary" (click)="createTimezone()">Create</button>
             </div>
         </md-toolbar-row>
 
