@@ -40,6 +40,7 @@ import {AppState, InternalStateType} from "./app.service";
 import {HomeComponent} from "./pages/home";
 import {AboutComponent} from "./pages/about";
 import {UsersComponent} from "./pages/users/users.component";
+import {RegistrationComponent} from "./pages/registration";
 import {NoContentComponent} from "./pages/no-content";
 import {XLargeDirective} from "./pages/home/x-large";
 import {UserMenuComponent} from "./components/UserMenu";
@@ -87,6 +88,7 @@ type StoreType = {
         AboutComponent,
         HomeComponent,
         UsersComponent,
+        RegistrationComponent,
         NoContentComponent,
         XLargeDirective,
         UserMenuComponent,
