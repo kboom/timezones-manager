@@ -2,45 +2,42 @@ import {BrowserModule} from "@angular/platform-browser";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {HttpModule} from "@angular/http";
 import {HttpClientModule} from "@angular/common/http";
-import { CdkTableModule } from '@angular/cdk';
+import {CdkTableModule} from "@angular/cdk";
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 import {ApplicationRef, NgModule} from "@angular/core";
 import {createInputTransfer, createNewHosts, removeNgStyles} from "@angularclass/hmr";
 import {PreloadAllModules, RouterModule} from "@angular/router";
-import { LocalStorageModule } from 'angular-2-local-storage';
-import { FlexLayoutModule } from '@angular/flex-layout';
+import {LocalStorageModule} from "angular-2-local-storage";
+import {FlexLayoutModule} from "@angular/flex-layout";
 import {
     MdButtonModule,
+    MdCardModule,
     MdCheckboxModule,
-    MdSelectModule,
     MdDialogModule,
+    MdGridListModule,
+    MdIconModule,
     MdInputModule,
     MdMenuModule,
-    MdToolbarModule,
-    MdTableModule,
-    MdSortModule,
-    MdIconModule,
+    MdProgressSpinnerModule,
+    MdSelectModule,
     MdSlideToggleModule,
     MdSnackBarModule,
-    MdProgressSpinnerModule,
-    MdCardModule,
-    MdGridListModule
+    MdSortModule,
+    MdTableModule,
+    MdToolbarModule
 } from "@angular/material";
 /*
  * Platform and Environment providers/directives/pipes
  */
-
 // modules
-import {ServerModule} from './+server';
-import {SecurityModule} from './+security';
+import {ServerModule} from "./+server";
+import {SecurityModule} from "./+security";
 
 import {ENV_PROVIDERS} from "./environment";
 import {ROUTES} from "./app.routes";
-
 // styles
 import "../styles/styles.scss";
 import "../styles/headings.css";
-
 // App is our top level component
 import {AppComponent} from "./app.component";
 import {APP_RESOLVER_PROVIDERS} from "./app.resolver";
@@ -67,11 +64,17 @@ import {CreateUserDialogComponent} from "./components/CreateUserDialog/CreateUse
 import {RegistrationDialogComponent} from "./components/RegistrationDialog/RegistrationDialog.component";
 import {ValidationMessageProvider} from "./validators/validation.messages";
 import {TimezonesRepository} from "./repository/timezones.repository";
-import {CanActivateTimezones, TimezonesPage, TimezonesResolver} from "./pages/timezones/timezones.page";
+import {
+    CanActivateTimezones,
+    TimezonesPage,
+    TimezonesResolver,
+    TimezonesToolbarComponent
+} from "./pages/timezones/timezones.page";
 import {TimezoneComponent} from "./components/TimezoneComponent/Timezone.component";
 import {TimezoneForm} from "./components/TimezoneForm/Timezone.form";
 import {EditTimezoneDialogComponent} from "./components/EditTimezoneDialog/EditTimezoneDialog.component";
 import {CreateTimezoneDialogComponent} from "./components/CreateTimezoneDialog/CreateTimezoneDialog.component";
+import {NavbarComponent} from "./components/Navbar/Navbar.component";
 
 // Application wide providers
 const APP_PROVIDERS = [
@@ -86,6 +89,7 @@ const APP_PROVIDERS = [
     TimezoneFactory,
     CanActivateTimezones,
     TimezonesResolver,
+    TimezonesToolbarComponent,
     AppState
 ];
 
@@ -121,7 +125,9 @@ type StoreType = {
         UserDetailsFormComponent,
         TimezoneForm,
         CreateUserDialogComponent,
-        RegistrationDialogComponent
+        RegistrationDialogComponent,
+        NavbarComponent,
+        TimezonesToolbarComponent
     ],
     /**
      * Import Angular's modules.
@@ -166,7 +172,8 @@ type StoreType = {
         CreateUserDialogComponent,
         RegistrationDialogComponent,
         EditTimezoneDialogComponent,
-        CreateTimezoneDialogComponent
+        CreateTimezoneDialogComponent,
+        TimezonesToolbarComponent
     ],
 
     /**

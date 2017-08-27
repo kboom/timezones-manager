@@ -29,7 +29,6 @@ import {MdDialog} from "@angular/material";
 
     `
 })
-
 export class TimezonesPage implements OnInit {
 
     private timezones$ = new BehaviorSubject<Entity<TimezoneModel>[]>([]);
@@ -51,6 +50,19 @@ export class TimezonesPage implements OnInit {
 
             });
     }
+
+}
+
+@Component({
+    selector: 'timezones-toolbar',
+    providers: [],
+    template: `
+
+        <md-toolbar-row>hello</md-toolbar-row>
+
+    `
+})
+export class TimezonesToolbarComponent {
 
 }
 
@@ -83,6 +95,9 @@ export const TIMEZONES_PAGE_ROUTE = {
     component: TimezonesPage,
     resolve: {
         timezones: TimezonesResolver
+    },
+    data: {
+        toolbar: TimezonesToolbarComponent
     },
     canActivate: [CanActivateTimezones]
 };

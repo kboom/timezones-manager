@@ -19,31 +19,7 @@ import {SecurityContextHolder} from "./+security/security.context";
     ],
     template: `
 
-        <nav>
-            <md-toolbar>
-                
-                <a md-button [routerLink]=" ['./home'] "
-                   routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
-                    Home
-                </a>
-                <a md-button [routerLink]=" ['./timezones'] "
-                   routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
-                    Timezones
-                </a>
-                <a md-button [routerLink]=" ['./users'] "
-                   *ngIf="this.securityContext.getAuthentication().hasAnyRole(RoleModel.ROLE_ADMIN, RoleModel.ROLE_MANAGER)"
-                   routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
-                    Users
-                </a>
-                <span class="fill-remaining-space"></span>
-                <userMenu>
-
-                </userMenu>
-                
-                <md-toolbar-row>afaf</md-toolbar-row>
-                
-            </md-toolbar>
-        </nav>
+        <navbar></navbar>
 
         <main>
             <router-outlet></router-outlet>
@@ -68,11 +44,3 @@ export class AppComponent implements OnInit {
     }
 
 }
-
-/**
- * Please review the https://github.com/AngularClass/angular2-examples/ repo for
- * more angular app examples that you may copy/paste
- * (The examples may not be updated as quickly. Please open an issue on github for us to update it)
- * For help or questions please contact us at @AngularClass on twitter
- * or our chat on Slack at https://AngularClass.com/slack-join
- */
