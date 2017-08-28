@@ -18,16 +18,13 @@ interface Timezone {
                 <md-card-title-group>
                     <md-card-title>{{ timezone.name }}</md-card-title>
                     <md-card-subtitle><strong>{{ timezone.locationName }}</strong>, GMT
-                        <!--{{ (timezone.differenceToGMT >= 0 ? "+" : "") + timezone.differenceToGMT }}-->
-                        
-                        <analog-clock></analog-clock>
-                        
-                        
+                        {{ (timezone.differenceToGMT >= 0 ? "+" : "") + timezone.differenceToGMT }}
                     </md-card-subtitle>
                 </md-card-title-group>
             </md-card-header>
             <md-card-content>
-                <div class="timezone__time">{{ time$ | async | amDateFormat: 'HH:mm:ss' }}</div>
+                <analog-clock></analog-clock>
+                <div class="timezone__time">{{ time$ | async | amDateFormat: 'HH:mm' }}</div>
             </md-card-content>
             <md-card-actions fxLayout='row' fxLayoutAlign='space-between center'>
                 <button md-button (click)="onEdit.emit()">Edit</button>

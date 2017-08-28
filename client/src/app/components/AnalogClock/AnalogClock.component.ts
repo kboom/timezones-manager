@@ -150,10 +150,8 @@ export class AnalogClockComponent implements OnInit {
         let containers = document.querySelectorAll('.minutes-container');
         let secondAngle = Number.parseInt(containers[containers.length - 1].getAttribute('data-second-angle'));
         if (secondAngle > 0) {
-            // Set a timeout until the end of the current minute, to move the hand
             let delay = (((360 - secondAngle) / 6) + 0.1) * 1000;
-            console.log(delay);
-            setTimeout(function () {
+            setTimeout(() => {
                 this.moveMinuteHands(containers);
             }, delay);
         }
