@@ -18,7 +18,7 @@ interface Timezone {
                 <md-card-title-group>
                     <md-card-title>{{ timezone.name }}</md-card-title>
                     <md-card-subtitle><strong>{{ timezone.locationName }}</strong>, GMT
-                        {{ (timezone.differenceToGMT >= 0 ? "+" : "-") + timezone.differenceToGMT }}
+                        {{ (timezone.differenceToGMT >= 0 ? "+" : "") + timezone.differenceToGMT }}
                     </md-card-subtitle>
                 </md-card-title-group>
             </md-card-header>
