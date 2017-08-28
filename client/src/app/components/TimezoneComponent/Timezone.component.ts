@@ -1,6 +1,6 @@
-import {Component, EventEmitter, Input, Output} from "@angular/core";
-import {MdDialog} from "@angular/material";
-import {EditTimezoneDialogComponent} from "../EditTimezoneDialog/EditTimezoneDialog.component";
+import {Component, EventEmitter, Input, OnDestroy, OnInit, Output} from "@angular/core";
+import * as moment from 'moment';
+import {Observable} from "rxjs/Observable";
 
 interface Timezone {
     name: string
@@ -23,7 +23,7 @@ interface Timezone {
                 </md-card-title-group>
             </md-card-header>
             <md-card-content>
-                Nice analog-live clock will be placed here
+                <div class="timezone__time">{{ time$ | async | amDateFormat: 'HH:mm:ss' }}</div>
             </md-card-content>
             <md-card-actions>
                 <button md-button (click)="onEdit.emit()">Edit</button>
@@ -33,7 +33,10 @@ interface Timezone {
 
     `
 })
-export class TimezoneComponent {
+export class TimezoneComponent implements OnInit {
+
+    private time$ = Observable.interval(1000)
+        .map((minute) => moment().add(this.timezone.differenceToGMT, "hours").utc(false));
 
     @Input()
     private timezone: Timezone;
@@ -43,5 +46,10 @@ export class TimezoneComponent {
 
     @Output()
     private onDelete: EventEmitter<any> = new EventEmitter();
+
+    ngOnInit(): void {
+        const dateTime = moment();
+
+    }
 
 }

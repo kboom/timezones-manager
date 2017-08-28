@@ -9,6 +9,7 @@ import {createInputTransfer, createNewHosts, removeNgStyles} from "@angularclass
 import {PreloadAllModules, RouterModule} from "@angular/router";
 import {LocalStorageModule} from "angular-2-local-storage";
 import {FlexLayoutModule} from "@angular/flex-layout";
+import { MomentModule } from 'angular2-moment';
 import {
     MdButtonModule,
     MdCardModule,
@@ -174,7 +175,8 @@ type StoreType = {
             prefix: 'timezones',
             storageType: 'localStorage'
         }),
-        FlexLayoutModule
+        FlexLayoutModule,
+        MomentModule
     ],
 
     entryComponents: [
