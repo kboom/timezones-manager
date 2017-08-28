@@ -27,6 +27,7 @@ interface Timezone {
             </md-card-content>
             <md-card-actions>
                 <button md-button (click)="onEdit.emit()">Edit</button>
+                <button md-button (click)="onDelete.emit()">Delete</button>
             </md-card-actions>
         </md-card>
 
@@ -39,5 +40,8 @@ export class TimezoneComponent {
 
     @Output()
     private onEdit: EventEmitter<any> = new EventEmitter();
+
+    @Output()
+    private onDelete: EventEmitter<any> = new EventEmitter();
 
 }

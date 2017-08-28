@@ -13,11 +13,12 @@ import {BehaviorSubject} from "rxjs/BehaviorSubject";
 import {Entity} from "../../models/hateoas/Entity.model";
 import {TimezoneModel} from "../../models/Timezone.model";
 import {EditTimezoneDialogComponent} from "../../components/EditTimezoneDialog/EditTimezoneDialog.component";
-import {MdDialog} from "@angular/material";
+import {MdDialog, MdSnackBar} from "@angular/material";
 import {CreateTimezoneDialogComponent} from "../../components/CreateTimezoneDialog/CreateTimezoneDialog.component";
 import {FormControl} from "@angular/forms";
 import {Observable} from "rxjs/Observable";
 import {Subject} from "rxjs/Subject";
+import {ConfirmationDialogComponent} from "../../components/ConfirmationDialog";
 
 @Injectable()
 export class TimezonesPageService {
@@ -46,7 +47,10 @@ export class TimezonesPageService {
 
             <timezone class="timezones__timezone" fxFlex="nogrow" [timezone]="timezone.entity"
                       class="timezones__timezone"
-                      *ngFor="let timezone of timezones$ | async" (onEdit)="editTimezone(timezone)"></timezone>
+                      *ngFor="let timezone of timezones$ | async"
+                      (onEdit)="editTimezone(timezone)"
+                      (onDelete)="deleteTimezone(timezone)"
+            ></timezone>
 
         </div>
 
@@ -61,7 +65,9 @@ export class TimezonesPage implements OnInit {
 
     constructor(private route: ActivatedRoute,
                 private dialog: MdDialog,
-                private timezonesPageService: TimezonesPageService) {
+                private snackBar: MdSnackBar,
+                private timezonesPageService: TimezonesPageService,
+                private timezonesRepository: TimezonesRepository) {
     }
 
     // this does not work because of BehaviourSubject emits
@@ -87,6 +93,34 @@ export class TimezonesPage implements OnInit {
                 return searchStr.indexOf(filter.toLowerCase()) != -1;
             }) : data.entities;
         }).subscribe((timezones) => this.timezones$.next(timezones))
+    }
+
+    deleteTimezone(timezoneEntity) {
+        const dialog = this.dialog.open(ConfirmationDialogComponent, {
+            data: {
+                title: `Delete timezone ${timezoneEntity.entity.name}`,
+                message: `Are you sure you want to delete timezone ${timezoneEntity.entity.name}? This action cannot be undone.`
+            }
+        });
+        dialog.afterClosed().subscribe(shouldDelete => {
+            if (shouldDelete) {
+                this.timezonesRepository.deleteTimezone(timezoneEntity).subscribe(() => {
+                    const snackBarRef = this.snackBar.open("Timezone deleted", "Close", {
+                        duration: 5000,
+                    });
+                    snackBarRef.onAction().subscribe(() => {
+                        snackBarRef.dismiss()
+                    });
+                }, () => {
+                    const snackBarRef = this.snackBar.open("Could not delete timezone", "Close", {
+                        duration: 5000,
+                    });
+                    snackBarRef.onAction().subscribe(() => {
+                        snackBarRef.dismiss()
+                    });
+                });
+            }
+        });
     }
 
     editTimezone(timezoneEntity) {

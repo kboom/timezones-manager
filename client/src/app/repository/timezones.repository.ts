@@ -32,8 +32,12 @@ export class TimezonesRepository {
         return this.http.put(timezoneEntity.links['self']['href'], timezoneEntity.entity);
     }
 
-    public createTimezone(timezoneEntity: Entity<TimezoneModel>) {
+    public createTimezone(timezoneEntity: Entity<TimezoneModel>): Observable<any>  {
         return this.http.post(postTimezoneURL, timezoneEntity.entity);
+    }
+
+    public deleteTimezone(timezoneEntity: Entity<TimezoneModel>): Observable<any>  {
+        return this.http.delete(timezoneEntity.links['self']['href']);
     }
 
 }

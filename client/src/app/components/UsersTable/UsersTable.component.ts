@@ -1,6 +1,6 @@
 import {Component, ElementRef, OnInit, ViewChild} from "@angular/core";
 import {DataSource} from "@angular/cdk";
-import {MdDialog, MdSort} from "@angular/material";
+import {MdDialog, MdSnackBar, MdSort} from "@angular/material";
 import {Observable} from "rxjs/Observable";
 import "rxjs/add/operator/startWith";
 import "rxjs/add/observable/merge";
@@ -89,7 +89,8 @@ export class UsersTableComponent implements OnInit {
     filter: ElementRef;
 
     constructor(private userRepository: UserRepository,
-                private dialog: MdDialog) {
+                private dialog: MdDialog,
+                private snackBar: MdSnackBar) {
 
     }
 
@@ -118,7 +119,21 @@ export class UsersTableComponent implements OnInit {
         });
         dialog.afterClosed().subscribe(shouldDelete => {
             if (shouldDelete) {
-                this.userRepository.deleteUser(userEntity).subscribe();
+                this.userRepository.deleteUser(userEntity).subscribe(() => {
+                    const snackBarRef = this.snackBar.open("User deleted", "Close", {
+                        duration: 5000,
+                    });
+                    snackBarRef.onAction().subscribe(() => {
+                        snackBarRef.dismiss()
+                    });
+                }, () => {
+                    const snackBarRef = this.snackBar.open("Could not delete user", "Close", {
+                        duration: 5000,
+                    });
+                    snackBarRef.onAction().subscribe(() => {
+                        snackBarRef.dismiss()
+                    });
+                });
             }
         });
     }
