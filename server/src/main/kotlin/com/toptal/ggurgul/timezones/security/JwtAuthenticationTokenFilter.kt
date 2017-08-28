@@ -29,29 +29,28 @@ class JwtAuthenticationTokenFilter : OncePerRequestFilter() {
 
     @Throws(ServletException::class, IOException::class)
     override fun doFilterInternal(request: HttpServletRequest, response: HttpServletResponse, chain: FilterChain) {
-        val authToken = request.getHeader(this.tokenHeader)
-        if(authToken != null) {
-            val username: String?
-            try {
-                username = jwtTokenUtil!!.getUsernameFromToken(authToken)
-            } catch (e: IllegalArgumentException) {
-                chain.doFilter(request, response)
-                return
-            }
+        try {
+            val authToken = request.getHeader(this.tokenHeader)
+            if(authToken != null) {
+                val username = jwtTokenUtil!!.getUsernameFromToken(authToken)
 
-            LOG.info("checking authentication for user " + username)
+                LOG.info("checking authentication for user " + username)
 
-            if (SecurityContextHolder.getContext().authentication == null) {
-                val userDetails = this.userDetailsService!!.loadUserByUsername(username)
-                if (jwtTokenUtil.validateToken(authToken, userDetails)!!) {
-                    val authentication = UsernamePasswordAuthenticationToken(userDetails, null, userDetails.authorities)
-                    authentication.details = WebAuthenticationDetailsSource().buildDetails(request)
-                    logger.info("authenticated user $username, setting security context")
-                    SecurityContextHolder.getContext().authentication = authentication
+                if (SecurityContextHolder.getContext().authentication == null) {
+                    val userDetails = this.userDetailsService!!.loadUserByUsername(username)
+                    if (jwtTokenUtil.validateToken(authToken, userDetails)!!) {
+                        val authentication = UsernamePasswordAuthenticationToken(userDetails, null, userDetails.authorities)
+                        authentication.details = WebAuthenticationDetailsSource().buildDetails(request)
+                        logger.info("authenticated user $username, setting security context")
+                        SecurityContextHolder.getContext().authentication = authentication
+                    }
                 }
             }
-        }
 
-        chain.doFilter(request, response)
+        } catch(e: Exception) {
+            LOG.debug("Could not authenticate user", e)
+        } finally {
+            chain.doFilter(request, response)
+        }
     }
 }

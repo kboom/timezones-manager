@@ -1,6 +1,13 @@
 import {Injectable} from "@angular/core";
-import {HttpEvent, HttpHandler, HttpInterceptor, HttpRequest} from "@angular/common/http";
+import {
+    HttpErrorResponse, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest,
+    HttpResponse
+} from "@angular/common/http";
 import {Observable} from "rxjs/Observable";
+import "rxjs/add/operator/do";
+import {Router} from "@angular/router";
+import {SecurityContextHolder} from "../+security/security.context";
+import {MdSnackBar} from "@angular/material";
 
 @Injectable()
 export class Server {
@@ -10,6 +17,11 @@ export class Server {
 @Injectable()
 export class DefaultContentTypeInterceptor implements HttpInterceptor {
 
+    constructor(private router: Router,
+                private securityContext: SecurityContextHolder,
+                private snackBar: MdSnackBar) {
+    }
+
     intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
         if (!req.headers.has('Content-Type')) {
             req = req.clone({headers: req.headers.set('Content-Type', 'application/json')});
@@ -17,7 +29,23 @@ export class DefaultContentTypeInterceptor implements HttpInterceptor {
         if (!req.headers.has('Accept')) {
             req = req.clone({headers: req.headers.set('Accept', 'application/json')});
         }
-        return next.handle(req);
+        return next.handle(req).do((event: HttpEvent<any>) => {
+            if (event instanceof HttpResponse) {}
+        }, (err: any) => {
+            if (err instanceof HttpErrorResponse) {
+                if (err.status === 401) {
+                    console.log("UNAUTHORIZED");
+                    this.securityContext.clearAuthentication();
+                    const snackBarRef = this.snackBar.open("You've been logged out due to inactivity", "Close", {
+                        duration: 5000,
+                    });
+                    snackBarRef.onAction().subscribe(() => {
+                        snackBarRef.dismiss()
+                    });
+                    this.router.navigate(['home']);
+                }
+            }
+        });
     }
 
 }

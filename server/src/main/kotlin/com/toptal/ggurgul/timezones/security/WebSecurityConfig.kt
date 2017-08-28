@@ -14,6 +14,12 @@ import org.springframework.security.core.userdetails.UserDetailsService
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.security.web.authentication.AnonymousAuthenticationFilter
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource
+import com.google.common.collect.ImmutableList
+import org.springframework.web.cors.CorsConfiguration
+import org.springframework.web.cors.CorsConfigurationSource
+
+
 
 
 @Configuration
@@ -52,9 +58,23 @@ open class WebSecurityConfig : WebSecurityConfigurerAdapter() {
     @Throws(Exception::class)
     open fun authenticationTokenFilterBean() = JwtAuthenticationTokenFilter()
 
+    @Bean
+    fun corsConfigurationSource(): CorsConfigurationSource {
+        val configuration = CorsConfiguration()
+        configuration.allowedOrigins = ImmutableList.of("*")
+        configuration.allowedMethods = ImmutableList.of("HEAD",
+                "GET", "POST", "PUT", "DELETE", "PATCH")
+        configuration.allowCredentials = true
+        configuration.allowedHeaders = ImmutableList.of("Authorization", "Cache-Control", "Content-Type")
+        val source = UrlBasedCorsConfigurationSource()
+        source.registerCorsConfiguration("/**", configuration)
+        return source
+    }
+
     @Throws(Exception::class)
     override fun configure(httpSecurity: HttpSecurity) {
         httpSecurity
+                .cors().and()
                 .csrf().disable()
                 .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)

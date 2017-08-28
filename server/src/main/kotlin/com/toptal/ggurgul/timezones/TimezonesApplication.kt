@@ -20,6 +20,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.web.cors.CorsConfiguration
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource
 import org.springframework.web.filter.CorsFilter
+import org.springframework.boot.web.servlet.FilterRegistrationBean
+
+
 
 
 @SpringBootApplication
@@ -98,6 +101,7 @@ open class TimezonesApplication {
         source.registerCorsConfiguration("/**", config)
         return CorsFilter(source)
     }
+
 
     internal inner class SecurityEvaluationContextExtension : EvaluationContextExtensionSupport() {
 
