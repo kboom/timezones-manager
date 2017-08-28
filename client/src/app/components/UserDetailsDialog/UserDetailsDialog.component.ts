@@ -24,7 +24,7 @@ import {Observable} from "rxjs/Observable";
 
             </md-dialog-content>
 
-            <md-dialog-actions>
+            <md-dialog-actions fxLayout='row' fxLayoutAlign="space-between">
                 <button md-button md-dialog-close>Cancel</button>
                 <button type="submit" md-button form="userDetailsForm"
                         [disabled]="!detailsForm.userDetailsForm.valid">Update</button>

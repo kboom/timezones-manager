@@ -1,7 +1,7 @@
-import {Component, Input, OnInit} from "@angular/core";
-import {FormBuilder, FormGroup, Validators} from "@angular/forms";
+import {Component, Input, OnInit, ViewChild} from "@angular/core";
+import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {UserModel} from "../../models/User.model";
-import {extend, includes, map, pick, transform} from "lodash-es";
+import {extend, includes, map, pick, transform, omit} from "lodash-es";
 import {Entity} from "../../models/hateoas/Entity.model";
 import {RoleModel, RoleModelAware} from "../../models/Role.model";
 import {EnumEx, WithEnumEx} from "../../utils/enum.utils";
@@ -28,12 +28,7 @@ export interface UserEntityManager {
                 <input mdInput formControlName="username" type="text" placeholder="Username">
             </md-input-container>
             <control-messages [control]="userDetailsForm.controls.username"></control-messages>
-
-            <md-input-container>
-                <input mdInput formControlName="password" type="password" placeholder="Password">
-            </md-input-container>
-            <control-messages [control]="userDetailsForm.controls.password"></control-messages>
-
+            
             <md-input-container>
                 <input mdInput formControlName="email" type="email" placeholder="E-mail">
             </md-input-container>
@@ -48,8 +43,15 @@ export interface UserEntityManager {
                 <input mdInput formControlName="lastName" type="text" placeholder="Last name">
             </md-input-container>
             <control-messages [control]="userDetailsForm.controls.lastName"></control-messages>
+            
+            <!-- This does not go to model -->
+            <md-checkbox (change)="togglePassword()">Set password</md-checkbox>
 
-
+            <md-input-container>
+                <input mdInput formControlName="password" type="password" placeholder="Password">
+            </md-input-container>
+            <control-messages [control]="userDetailsForm.controls.password"></control-messages>
+            
             <md-slide-toggle formControlName="enabled">Enabled</md-slide-toggle>
 
             <div style="height: 35px;"></div>
@@ -82,10 +84,11 @@ export class UserDetailsFormComponent implements OnInit {
     constructor(private fb: FormBuilder) {
         this.userDetailsForm = this.fb.group({
             username: ["", Validators.required, validatorFor(USERNAME_REGEX)],
-            password: ["", Validators.required, validatorFor(PASSWORD_REGEX)],
             email: ["", Validators.required, validatorFor(EMAIL_REGEX)],
             firstName: ["", Validators.required, validatorFor(FIRST_NAME_REGEX)],
             lastName: ["", Validators.required, validatorFor(LAST_NAME_REGEX)],
+            setPassword: [false], // this does not get into model
+            password: [{value: null, disabled: true}, Validators.required, validatorFor(PASSWORD_REGEX)],
             enabled: [false, Validators.required],
             authorities: this.fb.array([
                 [false],
@@ -93,6 +96,14 @@ export class UserDetailsFormComponent implements OnInit {
                 [false]
             ], atLeastOneTrue('role:atLeastOne'))
         });
+    }
+
+    togglePassword() {
+        if(this.userDetailsForm.controls.password.disabled) {
+            this.userDetailsForm.controls.password.enable();
+        } else {
+            this.userDetailsForm.controls.password.disable();
+        }
     }
 
     ngOnInit(): void {
@@ -104,14 +115,15 @@ export class UserDetailsFormComponent implements OnInit {
             extend({}, pick(userEntity.entity, ['username', 'password', 'email', 'firstName', 'lastName', 'enabled']), {
                 authorities: EnumEx.getValues(RoleModel).map((role) => {
                     return includes(userEntity.entity.authorities, role);
-                })
+                }),
+                setPassword: false
             })
         );
     };
 
     onSubmit(event): void {
         const formData = this.userDetailsForm.value;
-        this.entityManager.onSubmit(this.userEntity.withUpdatedEntity(transform(formData, (result, value, key) => {
+        this.entityManager.onSubmit(this.userEntity.withUpdatedEntity(transform(omit(formData, ['setPassword']), (result, value, key) => {
             if (key == 'authorities') {
                 result[key] = EnumEx.getValues(RoleModel).filter((role) => value[role])
             } else {
