@@ -82,6 +82,7 @@ import {PasswordChangeDialog} from "./components/PasswordChangeDialog/PasswordCh
 import {PasswordResetDialog} from "./components/PasswordResetDialog/PasswordResetDialog.component";
 import {SetNewPasswordForm} from "./components/SetNewPasswordForm/SetNewPassword.form";
 import {PasswordResetPage} from "./pages/password-reset/password-reset.component";
+import {AnalogClockComponent} from "./components/AnalogClock/AnalogClock.component";
 
 // Application wide providers
 const APP_PROVIDERS = [
@@ -114,6 +115,7 @@ type StoreType = {
     bootstrap: [AppComponent],
     declarations: [
         AppComponent,
+        AnalogClockComponent,
         AboutComponent,
         HomeComponent,
         UsersComponent,
