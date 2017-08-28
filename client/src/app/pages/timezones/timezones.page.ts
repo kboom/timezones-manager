@@ -89,7 +89,7 @@ export class TimezonesPage implements OnInit {
 
         Observable.combineLatest(displayDataChanges, (data, filter) => {
             return !!filter ? data.entities.filter((entity: Entity<TimezoneModel>) => {
-                const searchStr = (entity.entity.name + entity.entity.locationName).toLowerCase();
+                const searchStr = entity.entity.name.toLowerCase();
                 return searchStr.indexOf(filter.toLowerCase()) != -1;
             }) : data.entities;
         }).subscribe((timezones) => this.timezones$.next(timezones))
