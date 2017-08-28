@@ -14,7 +14,7 @@ export class AuthenticationModel {
         }
     }
 
-    getUsername() {
+    getUsername(): string {
         return this.details.sub;
     }
 

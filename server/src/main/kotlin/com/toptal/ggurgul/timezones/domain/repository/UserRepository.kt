@@ -16,11 +16,8 @@ import java.util.*
 @RepositoryRestResource
 interface UserRepository : CrudRepository<User, Long> {
 
-    /**
-     * Internal method used by security
-     */
-    @RestResource(exported = false)
-    fun findByUsername(username: String): Optional<User>
+    @PreAuthorize("hasAnyRole('ROLE_SYSTEM', 'ROLE_MANAGER', 'ROLE_ADMIN') or #username == principal.username")
+    fun findByUsername(@Param("username") username: String): Optional<User>
 
     @PreAuthorize("hasAnyRole('ROLE_SYSTEM', 'ROLE_MANAGER', 'ROLE_ADMIN') or #userId == principal.id")
     override fun findOne(@Param("userId") id: Long): User

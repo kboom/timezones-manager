@@ -7,6 +7,9 @@ import {SecurityContextHolder} from "../../+security/security.context";
 import {Observable} from "rxjs/Observable";
 import {RegistrationDialogComponent} from "../RegistrationDialog/RegistrationDialog.component";
 import {Router} from "@angular/router";
+import {UserRepository} from "../../repository/user.repository";
+import {ProfileDialog} from "../ProfileDialog/ProfileDialog.component";
+import {PasswordChangeDialog} from "../PasswordChangeDialog/PasswordChangeDialog.component";
 
 @Component({
     selector: 'userMenu',
@@ -17,6 +20,8 @@ import {Router} from "@angular/router";
                 }}!
             </button>
             <md-menu #menu="mdMenu">
+                <button md-menu-item (click)="editProfile()">Edit profile</button>
+                <button md-menu-item (click)="changePassword()">Change password</button>
                 <button md-menu-item (click)="signOut()">Sign out</button>
             </md-menu>
         </div>
@@ -36,6 +41,7 @@ export class UserMenuComponent implements OnInit, OnDestroy {
     isLoggedIn$: Observable<Boolean>;
 
     constructor(private authService: SecurityService,
+                private userRepository: UserRepository,
                 private securityContext: SecurityContextHolder,
                 private dialog: MdDialog,
                 private snackBar: MdSnackBar,
@@ -60,6 +66,30 @@ export class UserMenuComponent implements OnInit, OnDestroy {
             .subscribe(result => {
                 this.router.navigate(['home']);
             });
+    }
+
+    changePassword() {
+        const username = this.securityContext.getAuthentication().getUsername();
+        this.userRepository.getUserByUsername(username).subscribe((userEntity) => {
+            this.dialog.open(PasswordChangeDialog, {
+                data: userEntity
+            }).afterClosed()
+                .subscribe(result => {
+
+                });
+        });
+    }
+
+    editProfile() {
+        const username = this.securityContext.getAuthentication().getUsername();
+        this.userRepository.getUserByUsername(username).subscribe((userEntity) => {
+            this.dialog.open(ProfileDialog, {
+                data: userEntity
+            }).afterClosed()
+                .subscribe(result => {
+
+                });
+        });
     }
 
     signOut() {

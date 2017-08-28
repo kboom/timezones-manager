@@ -4,7 +4,7 @@ import "rxjs/add/observable/zip";
 import "rxjs/add/operator/map";
 import {Injectable} from "@angular/core";
 import {UserModel} from "../models/User.model";
-import {HttpClient, HttpHeaders} from "@angular/common/http";
+import {HttpClient, HttpHeaders, HttpParams} from "@angular/common/http";
 import {Observable} from "rxjs/Observable";
 import {EntityCollectionModel} from "../models/hateoas/EntityCollection.model";
 import {RoleModel} from "../models/Role.model";
@@ -14,6 +14,7 @@ import {UserFactory} from "../models/factory";
 
 const getAllUsersURL = "http://localhost:8080/api/users?projection=withDetails";
 const postUserURL = "http://localhost:8080/api/users";
+const getUserByUsernameURL = "http://localhost:8080/api/users/search/findByUsername?projections=withDetails";
 
 @Injectable()
 export class UserRepository {
@@ -21,6 +22,12 @@ export class UserRepository {
     constructor(private userFactory: UserFactory,
                 private http: HttpClient) {
 
+    }
+
+    public getUserByUsername(username: string): Observable<EntityCollectionModel<UserModel>> {
+        return this.http.get(getUserByUsernameURL, { params: new HttpParams().set("username", username) })
+            .map((body: any) => this.userFactory.constructEntity(body))
+            .catch(() => Observable.throw("Could not get user"));
     }
 
     public getAllUsers(): Observable<EntityCollectionModel<UserModel>> {

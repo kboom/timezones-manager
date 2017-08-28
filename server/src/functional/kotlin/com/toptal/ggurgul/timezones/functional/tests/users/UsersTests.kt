@@ -33,6 +33,41 @@ class UsersTests : AbstractFunctionalTest() {
 
     @Test
     @AuthenticatedAsUser(ALICE)
+    fun userCanGetHimselfByUsername() {
+        RestAssured.given()
+                .header("Authorization", authenticationRule.token)
+                .queryParam("username", ALICE.username)
+                .get("/users/search/findByUsername?projections=withDetails")
+                .then()
+                .statusCode(200)
+                .body("username", equalTo("alice"))
+    }
+
+    @Test
+    @AuthenticatedAsUser(ALICE)
+    fun userCannotGetOtherUserByUsername() {
+        RestAssured.given()
+                .header("Authorization", authenticationRule.token)
+                .queryParam("username", GREG.username)
+                .get("/users/search/findByUsername?projections=withDetails")
+                .then()
+                .statusCode(403)
+    }
+
+    @Test
+    @AuthenticatedAsUser(GREG)
+    fun adminCanGetUserByUsername() {
+        RestAssured.given()
+                .header("Authorization", authenticationRule.token)
+                .queryParam("username", ALICE.username)
+                .get("/users/search/findByUsername?projections=withDetails")
+                .then()
+                .statusCode(200)
+                .body("username", equalTo("alice"))
+    }
+
+    @Test
+    @AuthenticatedAsUser(ALICE)
     fun userCannotListUsers() {
         RestAssured.given()
                 .header("Authorization", authenticationRule.token)

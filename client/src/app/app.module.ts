@@ -76,6 +76,8 @@ import {TimezoneForm} from "./components/TimezoneForm/Timezone.form";
 import {EditTimezoneDialogComponent} from "./components/EditTimezoneDialog/EditTimezoneDialog.component";
 import {CreateTimezoneDialogComponent} from "./components/CreateTimezoneDialog/CreateTimezoneDialog.component";
 import {NavbarComponent} from "./components/Navbar/Navbar.component";
+import {ProfileDialog} from "./components/ProfileDialog/ProfileDialog.component";
+import {PasswordChangeDialog} from "./components/PasswordChangeDialog/PasswordChangeDialog.component";
 
 // Application wide providers
 const APP_PROVIDERS = [
@@ -128,7 +130,9 @@ type StoreType = {
         CreateUserDialogComponent,
         RegistrationDialogComponent,
         NavbarComponent,
-        TimezonesToolbarComponent
+        TimezonesToolbarComponent,
+        ProfileDialog,
+        PasswordChangeDialog
     ],
     /**
      * Import Angular's modules.
@@ -174,7 +178,9 @@ type StoreType = {
         RegistrationDialogComponent,
         EditTimezoneDialogComponent,
         CreateTimezoneDialogComponent,
-        TimezonesToolbarComponent
+        TimezonesToolbarComponent,
+        ProfileDialog,
+        PasswordChangeDialog
     ],
 
     /**

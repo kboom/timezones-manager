@@ -51,6 +51,15 @@ export class SecurityService {
         return authentication$;
     }
 
+    public changePassword({ oldPassword, newPassword }) {
+        return this.http.post("http://localhost:8080/api/profile/password", JSON.stringify({ oldPassword, newPassword }))
+            .catch((error: any) => Observable.throw(error));
+    }
+
+    public updateAccount(): Observable<any> {
+        return null;
+    }
+
     public signOut() {
         this.securityContextHolder.clearAuthentication();
         return Observable.of(null);
