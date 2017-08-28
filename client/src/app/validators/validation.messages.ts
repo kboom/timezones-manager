@@ -5,6 +5,8 @@ export class ValidationMessageProvider {
 
     getValidatorErrorMessage = (validatorCode: string, validatorValue?: any) => {
         return {
+            'min': `Minimum value is ${validatorValue.min}`,
+            'max': `Maximum value is ${validatorValue.max}`,
             'required': 'Required',
             'email.regex': 'Invalid email address',
             'username.regex': 'Username can contain only alphanumeric characters',

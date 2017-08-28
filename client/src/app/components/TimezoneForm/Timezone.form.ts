@@ -52,7 +52,7 @@ export class TimezoneForm implements OnInit {
         this.timezoneForm = this.fb.group({
             name: ["", Validators.required, validatorFor(TIMEZONE_NAME_REGEX)],
             locationName: ["", Validators.required, validatorFor(TIMEZONE_LOCATION_REGEX)],
-            differenceToGMT: [0, [Validators.required, Validators.max(23), Validators.min(0)]]
+            differenceToGMT: [0, [Validators.required, Validators.max(12), Validators.min(-12)]]
         });
     }
 
