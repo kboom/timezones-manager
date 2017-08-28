@@ -1,35 +1,29 @@
 package com.toptal.ggurgul.timezones.controllers
 
 import com.toptal.ggurgul.timezones.domain.services.UserService
-import com.toptal.ggurgul.timezones.security.JwtTokenUtil
+import com.toptal.ggurgul.timezones.exceptions.WrongConfirmationCodeException
 import com.toptal.ggurgul.timezones.security.JwtUser
-import com.toptal.ggurgul.timezones.security.models.JwtAuthenticationResponse
-import com.toptal.ggurgul.timezones.security.models.PasswordChangeRequest
-import com.toptal.ggurgul.timezones.security.models.PasswordResetRequest
-import com.toptal.ggurgul.timezones.security.models.UserProfile
+import com.toptal.ggurgul.timezones.security.SystemRunner
+import com.toptal.ggurgul.timezones.security.models.*
 import io.swagger.annotations.Api
 import io.swagger.annotations.ApiOperation
 import io.swagger.annotations.ApiResponse
 import io.swagger.annotations.ApiResponses
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.beans.factory.annotation.Value
 import org.springframework.http.ResponseEntity
-import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.security.core.AuthenticationException
-import org.springframework.security.core.userdetails.UserDetailsService
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestMethod
 import org.springframework.web.bind.annotation.RestController
-
-import javax.servlet.http.HttpServletRequest
 
 @RestController
 @Api(value = "profile", description = "Profile operations", tags = arrayOf("profile"))
 @RequestMapping("/profile")
 class ProfileRestController
 @Autowired constructor(
-        private val userService: UserService
+        private val userService: UserService,
+        private val systemRunner: SystemRunner
 ) {
 
     @ApiOperation(value = "Get profile", response = JwtUser::class)
@@ -52,7 +46,7 @@ class ProfileRestController
         return try {
             userService.updateProfile(userProfile)
             ResponseEntity.ok().build()
-        } catch(e: Exception) {
+        } catch (e: Exception) {
             ResponseEntity.status(403).build()
         }
     }
@@ -90,6 +84,24 @@ class ProfileRestController
             ResponseEntity.ok().build();
         } catch (e: Exception) {
             ResponseEntity.status(200).build() // always 200 not to give out email hints
+        }
+    }
+
+    @ApiOperation(value = "Set new password")
+    @ApiResponses(
+            ApiResponse(code = 200, message = "Changed password"),
+            ApiResponse(code = 400, message = "Wrong confirmation code")
+    )
+    @RequestMapping(value = "/password/reset/confirmation", method = arrayOf(RequestMethod.POST))
+    fun confirmPasswordReset(
+            @RequestBody passwordResetRequest: SetNewPasswordRequest): ResponseEntity<Any> {
+        return try {
+            systemRunner.runInSystemContext {
+                userService.confirmResetPassword(passwordResetRequest.code!!, passwordResetRequest.newPassword!!)
+            }
+            return ResponseEntity.ok("Changed")
+        } catch (e: WrongConfirmationCodeException) {
+            ResponseEntity.status(400).body("Wrong confirmation code")
         }
     }
 

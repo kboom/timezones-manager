@@ -8,6 +8,7 @@ import com.toptal.ggurgul.timezones.domain.repository.UserCodesRepository
 import com.toptal.ggurgul.timezones.domain.repository.UserRepository
 import com.toptal.ggurgul.timezones.exceptions.InvalidPasswordException
 import com.toptal.ggurgul.timezones.exceptions.UserNotFoundException
+import com.toptal.ggurgul.timezones.exceptions.WrongConfirmationCodeException
 import com.toptal.ggurgul.timezones.security.JwtUser
 import com.toptal.ggurgul.timezones.security.SystemRunner
 import com.toptal.ggurgul.timezones.security.models.UserProfile
@@ -84,6 +85,23 @@ open class UserService(
         val userCode = userCodeFactory.generateFor(user, UserCodeType.PASSWORD_RESET)
         userCodesRepository.save(userCode)
         eventPublisher.publishEvent(PasswordResetCodeIssued(userCode))
+    }
+
+    @Transactional
+    @Throws(WrongConfirmationCodeException::class)
+    fun confirmResetPassword(code: String, newPassword: String) {
+        val decodedCode = userCodeTranslator.readFrom(code)
+        val username: String = decodedCode.substringBefore(":")
+
+        val user = userRepository.findByUsername(username).orElseThrow { WrongConfirmationCodeException() }
+
+        val userCode = userCodesRepository.findByUserAndType(user, UserCodeType.PASSWORD_RESET)
+                .orElseThrow { WrongConfirmationCodeException() }
+
+        return if (code == userCode.code) {
+            user.password = passwordEncoder.encode(newPassword)
+            userCodesRepository.delete(userCode)
+        } else throw WrongConfirmationCodeException()
     }
 
 }

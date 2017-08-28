@@ -3,6 +3,7 @@ package com.toptal.ggurgul.timezones.functional.tests.profile
 import com.toptal.ggurgul.timezones.functional.database.*
 import com.toptal.ggurgul.timezones.functional.rules.AuthenticatedAsUser
 import com.toptal.ggurgul.timezones.functional.tests.AbstractFunctionalTest
+import com.toptal.ggurgul.timezones.functional.tests.registration.RegistrationTests
 import io.restassured.RestAssured
 import org.hamcrest.Matchers
 import org.junit.Before
@@ -11,14 +12,23 @@ import org.junit.Test
 
 class ProfileTests : AbstractFunctionalTest() {
 
+    companion object {
+        val CONFIRMATION_CODE_FOR_AGATHA = "YWdhdGhhOjkxODQ0ZmMyYWFjOTQzZTcyMmQwZGNhNGMxZjk1OWNj"
+    }
+
     @Before
     fun setUpDatabase() {
         prepareDatabase {
             insertInto("USERS") {
                 insertUser(this, User.ALICE)
+                insertUser(this, User.AGATHA)
             }
             insertInto("USER_AUTHORITIES") {
                 assignAuthorityToUser(this, Authority.USER, User.ALICE)
+                assignAuthorityToUser(this, Authority.USER, User.AGATHA)
+            }
+            insertInto("USER_CODES") {
+                insertPasswordResetConfirmationCode(this, User.AGATHA, CONFIRMATION_CODE_FOR_AGATHA)
             }
         }
     }
@@ -97,6 +107,18 @@ class ProfileTests : AbstractFunctionalTest() {
                     "email": "blabla@inexistent.com"
                 }""".trimIndent())
                 .post("/profile/password/reset")
+                .then()
+                .statusCode(200)
+    }
+
+    @Test
+    fun canSetNewPassword() {
+        RestAssured.given()
+                .body("""{
+                    "newPassword": "blaa443",
+                    "code": "$CONFIRMATION_CODE_FOR_AGATHA"
+                }""".trimIndent())
+                .post("/profile/password/reset/confirmation")
                 .then()
                 .statusCode(200)
     }

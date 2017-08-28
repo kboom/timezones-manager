@@ -79,6 +79,8 @@ import {NavbarComponent} from "./components/Navbar/Navbar.component";
 import {ProfileDialog} from "./components/ProfileDialog/ProfileDialog.component";
 import {PasswordChangeDialog} from "./components/PasswordChangeDialog/PasswordChangeDialog.component";
 import {PasswordResetDialog} from "./components/PasswordResetDialog/PasswordResetDialog.component";
+import {SetNewPasswordForm} from "./components/SetNewPasswordForm/SetNewPassword.form";
+import {PasswordResetPage} from "./pages/password-reset/password-reset.component";
 
 // Application wide providers
 const APP_PROVIDERS = [
@@ -115,6 +117,7 @@ type StoreType = {
         HomeComponent,
         UsersComponent,
         TimezonesPage,
+        PasswordResetPage,
         TimezoneComponent,
         RegistrationComponent,
         NoContentComponent,
@@ -124,6 +127,7 @@ type StoreType = {
         PasswordResetDialog,
         UserDetailsDialogComponent,
         CreateTimezoneDialogComponent,
+        SetNewPasswordForm,
         UsersTableComponent,
         ControlMessagesComponent,
         ConfirmationDialogComponent,

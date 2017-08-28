@@ -83,10 +83,16 @@ export class SecurityService {
             .catch((error: any) => Observable.throw(error));
     }
 
-    public resetPassword(email: string): Observable<any> {
-        return this.http.post("http://localhost:8080/api/profile/password/reset", JSON.stringify({email}))
+    public resetPassword(details: any): Observable<any> {
+        return this.http.post("http://localhost:8080/api/profile/password/reset", details)
             .catch((error: any) => Observable.throw(error));
     }
+
+    public setNewPasswordAfterReset(newPassword: string, code: string): Observable<any> {
+        return this.http.post("http://localhost:8080/api/profile/password/reset/confirmation", JSON.stringify({newPassword, code}))
+            .catch((error: any) => Observable.throw(error));
+    }
+
 }
 
 
