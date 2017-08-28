@@ -10,6 +10,7 @@ import {
 } from "../../validators/validation.rules";
 import {Entity} from "../../models/hateoas/Entity.model";
 import {UserModel} from "../../models/User.model";
+import {UserProfile} from "../../models/UserProfile.model";
 
 @Component({
     selector: 'profile-dialog',
@@ -22,11 +23,11 @@ import {UserModel} from "../../models/User.model";
             <md-dialog-content fxLayout='column'>
 
                 <md-input-container>
-                    <input mdInput disabled type="text" placeholder="Username" [value]="userEntity.entity.username">
+                    <input mdInput disabled type="text" placeholder="Username" [value]="userProfileEntity.entity.username">
                 </md-input-container>
 
                 <md-input-container>
-                    <input mdInput disabled type="email" placeholder="E-mail" [value]="userEntity.entity.email">
+                    <input mdInput disabled type="email" placeholder="E-mail" [value]="userProfileEntity.entity.email">
                 </md-input-container>
 
                 <form id="profileForm" [formGroup]="profileForm" fxLayout='column'
@@ -63,7 +64,7 @@ export class ProfileDialog implements OnInit {
 
     profileForm: FormGroup;
 
-    constructor(@Inject(MD_DIALOG_DATA) public userEntity: Entity<UserModel>,
+    constructor(@Inject(MD_DIALOG_DATA) public userProfileEntity: Entity<UserProfile>,
                 private fb: FormBuilder,
                 private dialogRef: MdDialogRef<ProfileDialog>,
                 private authService: SecurityService,
@@ -75,16 +76,16 @@ export class ProfileDialog implements OnInit {
     }
 
     ngOnInit(): void {
-        this.setValues(this.userEntity);
+        this.setValues(this.userProfileEntity);
     }
 
-    setValues = (timezoneEntity: Entity<UserModel>) => {
-        this.profileForm.setValue(pick(timezoneEntity.entity, ['firstName', 'lastName']));
+    setValues = (userProfileEntity: Entity<UserProfile>) => {
+        this.profileForm.setValue(pick(userProfileEntity.entity, ['firstName', 'lastName']));
     };
 
     doRegister(event): void {
         const formData = this.profileForm.value;
-        this.authService.updateProfile(this.userEntity.withUpdatedEntity(formData))
+        this.authService.updateProfile(this.userProfileEntity.withUpdatedEntity(formData))
             .subscribe((x) => {
                 const snackBarRef = this.snackBar.open("Your profile has been updated", "Close", {
                     duration: 5000,

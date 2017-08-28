@@ -14,6 +14,8 @@ import {SecurityContextHolder} from "./security.context";
 import {Router} from "@angular/router";
 import {Entity} from "../models/hateoas/Entity.model";
 import {pick} from 'lodash-es';
+import {UserProfile} from "../models/UserProfile.model";
+import {UserProfileFactory} from "../models/factory/index";
 
 enum AuthenticationEvent {
     SIGN_IN_FAILED
@@ -26,7 +28,8 @@ export class SecurityService {
 
     constructor(private securityContextHolder: SecurityContextHolder,
                 private http: HttpClient,
-                private responseMapper: ResponseMappingService) {
+                private responseMapper: ResponseMappingService,
+                private userProfileFactory: UserProfileFactory) {
 
     }
 
@@ -40,7 +43,7 @@ export class SecurityService {
     }
 
     public confirmAccount(confirmationCode): Observable<any> {
-        return this.http.post("http://localhost:8080/api/registration/confirmation", JSON.stringify({ code: confirmationCode }))
+        return this.http.post("http://localhost:8080/api/registration/confirmation", JSON.stringify({code: confirmationCode}))
             .catch((error: any) => Observable.throw(error));
     }
 
@@ -53,13 +56,19 @@ export class SecurityService {
         return authentication$;
     }
 
-    public changePassword({ oldPassword, newPassword }) {
-        return this.http.post("http://localhost:8080/api/profile/password", JSON.stringify({ oldPassword, newPassword }))
+    public changePassword({oldPassword, newPassword}) {
+        return this.http.post("http://localhost:8080/api/profile/password", JSON.stringify({oldPassword, newPassword}))
             .catch((error: any) => Observable.throw(error));
     }
 
-    public updateProfile(entity: Entity<UserModel>): Observable<any> {
-        return this.http.put("http://localhost:8080/api/profile", pick(entity.entity, ['firstName', 'lastName']));
+    public getProfile(): Observable<Entity<UserProfile>> {
+        return this.http.get("http://localhost:8080/api/profile")
+            .map((body: any) => this.userProfileFactory.constructEntity(body))
+            .catch(() => Observable.throw("Could not get profile"));
+    }
+
+    public updateProfile(entity: Entity<UserProfile>): Observable<any> {
+        return this.http.put("http://localhost:8080/api/profile", entity.entity);
     }
 
     public signOut() {

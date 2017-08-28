@@ -56,7 +56,7 @@ import {ResponseMappingService} from "./+security/responseMapping.service";
 import {SecurityContextHolder} from "./+security/security.context";
 import {UsersTableComponent} from "./components/UsersTable/UsersTable.component";
 import {UserRepository} from "./repository/user.repository";
-import {TimezoneFactory, UserFactory} from "./models/factory";
+import {TimezoneFactory, UserFactory, UserProfileFactory} from "./models/factory";
 import {ControlMessagesComponent} from "./components/ControlMessages/ControlMessages.component";
 import {ConfirmationDialogComponent} from "./components/ConfirmationDialog";
 import {UserDetailsFormComponent} from "./components/UserDetailsForm/UserDetailsForm.component";
@@ -89,6 +89,7 @@ const APP_PROVIDERS = [
     UserFactory,
     TimezonesRepository,
     TimezoneFactory,
+    UserProfileFactory,
     CanActivateTimezones,
     TimezonesResolver,
     TimezonesToolbarComponent,

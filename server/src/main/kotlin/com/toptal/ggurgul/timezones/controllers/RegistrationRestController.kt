@@ -1,6 +1,8 @@
 package com.toptal.ggurgul.timezones.controllers
 
+import com.toptal.ggurgul.timezones.domain.models.security.AuthorityName
 import com.toptal.ggurgul.timezones.domain.models.security.User
+import com.toptal.ggurgul.timezones.domain.repository.AuthorityRepository
 import com.toptal.ggurgul.timezones.domain.repository.UserCodesRepository
 import com.toptal.ggurgul.timezones.domain.repository.UserRepository
 import com.toptal.ggurgul.timezones.domain.repository.handlers.TimezoneEventHandler
@@ -31,7 +33,8 @@ class RegistrationRestController
 constructor(
         private val systemRunner: SystemRunner,
         private val passwordEncoder: BCryptPasswordEncoder,
-        private val userService: UserService
+        private val userService: UserService,
+        private val authorityRepository: AuthorityRepository
 ) {
 
     companion object {
@@ -53,6 +56,7 @@ constructor(
                 username = registrationRequest.username
                 password = passwordEncoder.encode(registrationRequest.password)
                 email = registrationRequest.email
+                authorities = listOf(authorityRepository.findOne(AuthorityName.ROLE_USER))
             })
         }
         return ResponseEntity.ok("Registered")

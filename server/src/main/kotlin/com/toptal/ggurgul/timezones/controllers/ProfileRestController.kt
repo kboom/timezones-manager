@@ -31,25 +31,14 @@ class ProfileRestController
         private val userService: UserService
 ) {
 
-    @Value("\${jwt.header}")
-    private val tokenHeader: String? = null
-
-    @Autowired
-    private val jwtTokenUtil: JwtTokenUtil? = null
-
-    @Autowired
-    private val userDetailsService: UserDetailsService? = null
-
     @ApiOperation(value = "Get profile", response = JwtUser::class)
     @ApiResponses(
             ApiResponse(code = 200, message = "Got profile"),
             ApiResponse(code = 401, message = "Authentication failure")
     )
     @RequestMapping(method = arrayOf(RequestMethod.GET))
-    fun getProfile(request: HttpServletRequest): JwtUser {
-        val token = request.getHeader(tokenHeader)
-        val username = jwtTokenUtil!!.getUsernameFromToken(token)
-        return userDetailsService!!.loadUserByUsername(username) as JwtUser
+    fun getProfile(): ResponseEntity<UserProfile> {
+        return ResponseEntity.ok(UserProfile.fromUser(userService.getActingUser()));
     }
 
     @ApiOperation(value = "Update profile")
@@ -57,7 +46,6 @@ class ProfileRestController
             ApiResponse(code = 200, message = "Got profile"),
             ApiResponse(code = 401, message = "Authentication failure")
     )
-    @PreAuthorize("permitAll()")
     @RequestMapping(method = arrayOf(RequestMethod.PUT))
     fun putProfile(@RequestBody userProfile: UserProfile): ResponseEntity<Any> {
         return try {

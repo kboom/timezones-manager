@@ -81,10 +81,9 @@ export class UserMenuComponent implements OnInit, OnDestroy {
     }
 
     editProfile() {
-        const username = this.securityContext.getAuthentication().getUsername();
-        this.userRepository.getUserByUsername(username).subscribe((userEntity) => {
+        this.authService.getProfile().subscribe((userProfile) => {
             this.dialog.open(ProfileDialog, {
-                data: userEntity
+                data: userProfile
             }).afterClosed()
                 .subscribe(result => {
 

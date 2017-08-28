@@ -25,6 +25,20 @@ class ProfileTests : AbstractFunctionalTest() {
 
     @Test
     @AuthenticatedAsUser(User.ALICE)
+    fun userCanGetProfile() {
+        RestAssured.given()
+                .header("Authorization", authenticationRule.token)
+                .get("/profile")
+                .then()
+                .statusCode(200)
+                .body("username", Matchers.equalTo("alice"))
+                .body("email", Matchers.equalTo("alice@test.com"))
+                .body("firstName", Matchers.equalTo("Alice"))
+                .body("lastName", Matchers.equalTo("Smith"))
+    }
+
+    @Test
+    @AuthenticatedAsUser(User.ALICE)
     fun userCanChangePassword() {
         RestAssured.given()
                 .header("Authorization", authenticationRule.token)

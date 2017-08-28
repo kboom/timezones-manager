@@ -4,6 +4,7 @@ import {Entity, ModelFactory} from "../hateoas/Entity.model";
 import {Injectable} from "@angular/core";
 import {RoleModel} from "../Role.model";
 import {TimezoneModel} from "../Timezone.model";
+import {UserProfile} from "../UserProfile.model";
 
 @Injectable()
 export class UserFactory implements EntityFactory<UserModel>, ModelFactory<UserModel> {
@@ -33,6 +34,31 @@ export class UserFactory implements EntityFactory<UserModel>, ModelFactory<UserM
 
 }
 
+@Injectable()
+export class UserProfileFactory implements EntityFactory<UserProfile>, ModelFactory<UserProfile> {
+
+    constructNewModel(): UserProfile {
+        throw new Error("Should not be called");
+    }
+
+    constructNewEntity(): Entity<UserModel> {
+        throw new Error("Should not be called");
+    }
+
+    constructModel = (obj: any): UserProfile => {
+        return new UserProfile(
+            obj.username,
+            obj.email,
+            obj.firstName,
+            obj.lastName,
+        )
+    };
+
+    constructEntity = (obj: any | null): Entity<UserProfile> => {
+        return Entity.fromJSON(obj, this);
+    };
+
+}
 
 @Injectable()
 export class TimezoneFactory implements EntityFactory<TimezoneModel>, ModelFactory<TimezoneModel> {
