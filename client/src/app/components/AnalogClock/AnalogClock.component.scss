@@ -7,13 +7,14 @@ body {
   background: radial-gradient(#000, #000 0.1em, #fff 0.1em, #fff), #fff;
   position: relative;
   opacity: 0;
+  transform: translateY(15%);
 }
 
 // Put in a no-js alternative so they're not invisible
 
 .clock.show {
   opacity: 1;
-  transform: translateY(-50%);
+  transform: translateY(0);
   transition: all 2.5s 0.5s cubic-bezier(.12, 1.03, .34, 1);
 }
 
