@@ -84,7 +84,7 @@ export class AnalogClockComponent implements OnInit {
     /*
      * Starts any clocks using the user's local time
      */
-    initLocalClocks() {
+    initLocalClocks = () => {
         // Get the local time using JS
         let date = new Date;
         let seconds = date.getSeconds();
@@ -117,12 +117,12 @@ export class AnalogClockComponent implements OnInit {
                 }
             }
         }
-    }
+    };
 
     /*
      * Move the second containers
      */
-    moveSecondHands() {
+    moveSecondHands = () => {
         let containers = document.querySelectorAll('.bounce .seconds-container');
         setInterval(function () {
             for (let i = 0; i < containers.length; i++) {
@@ -140,12 +140,12 @@ export class AnalogClockComponent implements OnInit {
             let randomOffset = Math.floor(Math.random() * (100 - 10 + 1)) + 10;
             containers[i]['style'].transitionDelay = '0.0' + randomOffset + 's';
         }
-    }
+    };
 
     /*
      * Set a timeout for the first minute hand movement (less than 1 minute), then rotate it every minute after that
      */
-    setUpMinuteHands() {
+    setUpMinuteHands = () => {
         // More tricky, this needs to move the minute hand when the second hand hits zero
         let containers = document.querySelectorAll('.minutes-container');
         let secondAngle = Number.parseInt(containers[containers.length - 1].getAttribute('data-second-angle'));
@@ -157,9 +157,9 @@ export class AnalogClockComponent implements OnInit {
                 this.moveMinuteHands(containers);
             }, delay);
         }
-    }
+    };
 
-    moveMinuteHands(containers) {
+    moveMinuteHands = (containers) => {
         for (let i = 0; i < containers.length; i++) {
             containers[i].style.webkitTransform = 'rotateZ(6deg)';
             containers[i].style.transform = 'rotateZ(6deg)';
