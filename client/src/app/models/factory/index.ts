@@ -21,7 +21,9 @@ export class UserFactory implements EntityFactory<UserModel>, ModelFactory<UserM
             obj.username,
             obj.email,
             obj.enabled,
-            (obj.authorities || []).map((authority) => RoleModel[authority.name])
+            (obj.authorities || []).map((authority) => RoleModel[authority.name]),
+            obj.firstName,
+            obj.lastName,
         )
     };
 
@@ -30,7 +32,6 @@ export class UserFactory implements EntityFactory<UserModel>, ModelFactory<UserM
     };
 
 }
-
 
 
 @Injectable()

@@ -6,9 +6,9 @@ export class UserModel implements ModelEntity {
         public email: string,
         public enabled: boolean = false,
         public authorities: RoleModel[] = [],
-        public password: string = null,
         public firstName: string = null,
-        public lastName: string = null
+        public lastName: string = null,
+        public password: string = null
     ) {}
 
     static emptyUser(): UserModel {

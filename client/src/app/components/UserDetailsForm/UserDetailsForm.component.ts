@@ -6,7 +6,10 @@ import {Entity} from "../../models/hateoas/Entity.model";
 import {RoleModel, RoleModelAware} from "../../models/Role.model";
 import {EnumEx, WithEnumEx} from "../../utils/enum.utils";
 import {Observable} from "rxjs/Observable";
-import {EMAIL_REGEX, PASSWORD_REGEX, USERNAME_REGEX} from "../../validators/validation.rules";
+import {
+    EMAIL_REGEX, FIRST_NAME_REGEX, LAST_NAME_REGEX, PASSWORD_REGEX,
+    USERNAME_REGEX
+} from "../../validators/validation.rules";
 import {atLeastOneTrue, validatorFor} from "../../validators/common.validators";
 
 export interface UserEntityManager {
@@ -35,6 +38,17 @@ export interface UserEntityManager {
                 <input mdInput formControlName="email" type="email" placeholder="E-mail">
             </md-input-container>
             <control-messages [control]="userDetailsForm.controls.email"></control-messages>
+
+            <md-input-container>
+                <input mdInput formControlName="firstName" type="text" placeholder="First name">
+            </md-input-container>
+            <control-messages [control]="userDetailsForm.controls.firstName"></control-messages>
+            
+            <md-input-container>
+                <input mdInput formControlName="lastName" type="text" placeholder="Last name">
+            </md-input-container>
+            <control-messages [control]="userDetailsForm.controls.lastName"></control-messages>
+
 
             <md-slide-toggle formControlName="enabled">Enabled</md-slide-toggle>
 
@@ -70,6 +84,8 @@ export class UserDetailsFormComponent implements OnInit {
             username: ["", Validators.required, validatorFor(USERNAME_REGEX)],
             password: ["", Validators.required, validatorFor(PASSWORD_REGEX)],
             email: ["", Validators.required, validatorFor(EMAIL_REGEX)],
+            firstName: ["", Validators.required, validatorFor(FIRST_NAME_REGEX)],
+            lastName: ["", Validators.required, validatorFor(LAST_NAME_REGEX)],
             enabled: [false, Validators.required],
             authorities: this.fb.array([
                 [false],
@@ -85,7 +101,7 @@ export class UserDetailsFormComponent implements OnInit {
 
     setValues = (userEntity: Entity<UserModel>) => {
         this.userDetailsForm.setValue(
-            extend({}, pick(userEntity.entity, ['username', 'password', 'email', 'enabled']), {
+            extend({}, pick(userEntity.entity, ['username', 'password', 'email', 'firstName', 'lastName', 'enabled']), {
                 authorities: EnumEx.getValues(RoleModel).map((role) => {
                     return includes(userEntity.entity.authorities, role);
                 })

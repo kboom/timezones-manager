@@ -12,6 +12,8 @@ enum class User(
         val email: String,
         val enabled: Boolean = true,
         val password: String,
+        val firstName: String? = null,
+        val lastName: String? = null,
         val lastPasswordResetDate: Date = Date()
 ) {
 
@@ -19,19 +21,25 @@ enum class User(
             id = 100L,
             username = "greg",
             password = "qwerty123",
-            email = "greg@test.com"
+            email = "greg@test.com",
+            firstName = "Grzegorz",
+            lastName = "Gurgul"
     ),
     AGATHA(
             id = 101L,
             username = "agatha",
             password = "qwerty321",
-            email = "agatha@test.com"
+            email = "agatha@test.com",
+            firstName = "Agata",
+            lastName = "Nowakiewicz"
     ),
     ALICE(
             id = 102L,
             username = "alice",
             password = "qwerty666",
-            email = "alice@test.com"
+            email = "alice@test.com",
+            firstName = "Alice",
+            lastName = "Smith"
     ),
     KATE(
             id = 103L,
@@ -52,6 +60,8 @@ fun insertUser(insertBuilder: Insert.Builder, user: User) {
             "EMAIL" to user.email,
             "ENABLED" to user.enabled,
             "PASSWORD" to passwordEncoder.encode(user.password),
-            "LAST_PWD_RST_DT" to user.lastPasswordResetDate
+            "LAST_PWD_RST_DT" to user.lastPasswordResetDate,
+            "FIRST_NAME" to user.firstName,
+            "LAST_NAME" to user.lastName
     )
 }

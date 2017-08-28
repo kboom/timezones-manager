@@ -41,6 +41,8 @@ class UsersTests : AbstractFunctionalTest() {
                 .then()
                 .statusCode(200)
                 .body("username", equalTo("alice"))
+                .body("firstName", equalTo("Alice"))
+                .body("lastName", equalTo("Smith"))
     }
 
     @Test
@@ -108,6 +110,8 @@ class UsersTests : AbstractFunctionalTest() {
                     "password": "abc",
                     "email": "qwerty666",
                     "enabled": true,
+                    "firstName": "Alice",
+                    "lastName": "Smith",
                     "authorities": ["/authorities/ROLE_MANAGER"]
                 }""".trimIndent())
                 .post("/users?projection=withDetails")
@@ -117,6 +121,8 @@ class UsersTests : AbstractFunctionalTest() {
                 .body("email", equalTo("qwerty666"))
                 .body("enabled", `is`(true))
                 .body("lastPasswordResetDate", isEmptyOrNullString())
+                .body("firstName", equalTo("Alice"))
+                .body("lastName", equalTo("Smith"))
                 .body("authorities", hasSize<Any>(1))
                 .body("authorities[0].name", equalTo("ROLE_MANAGER"))
     }
