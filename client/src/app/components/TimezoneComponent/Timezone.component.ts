@@ -23,8 +23,8 @@ interface Timezone {
                 </md-card-title-group>
             </md-card-header>
             <md-card-content>
-                <analog-clock></analog-clock>
-                <div class="timezone__time">{{ time$ | async | amDateFormat: 'HH:mm' }}</div>
+                <analog-clock [dateTime]="dateTime.add(timezone.differenceToGMT, 'hours').utc(false)"></analog-clock>
+                <div class="timezone__time">{{ time$ | async | amDateFormat: 'dddd' }}</div>
             </md-card-content>
             <md-card-actions fxLayout='row' fxLayoutAlign='space-between center'>
                 <button md-button (click)="onEdit.emit()">Edit</button>
@@ -39,6 +39,8 @@ export class TimezoneComponent implements OnInit {
     private time$ = Observable.interval(1000)
         .map((minute) => moment().add(this.timezone.differenceToGMT, "hours").utc(false));
 
+    private dateTime = moment();
+
     @Input()
     private timezone: Timezone;
 
@@ -49,8 +51,7 @@ export class TimezoneComponent implements OnInit {
     private onDelete: EventEmitter<any> = new EventEmitter();
 
     ngOnInit(): void {
-        const dateTime = moment();
-
+        // this.dateTime = moment().add(this.timezone.differenceToGMT, "hours");
     }
 
 }
