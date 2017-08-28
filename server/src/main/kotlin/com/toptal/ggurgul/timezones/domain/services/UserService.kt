@@ -1,12 +1,15 @@
 package com.toptal.ggurgul.timezones.domain.services
 
+import com.toptal.ggurgul.timezones.domain.events.PasswordResetCodeIssued
 import com.toptal.ggurgul.timezones.domain.events.RegistrationCodeIssuedEvent
 import com.toptal.ggurgul.timezones.domain.models.security.User
 import com.toptal.ggurgul.timezones.domain.models.security.UserCodeType
 import com.toptal.ggurgul.timezones.domain.repository.UserCodesRepository
 import com.toptal.ggurgul.timezones.domain.repository.UserRepository
 import com.toptal.ggurgul.timezones.exceptions.InvalidPasswordException
+import com.toptal.ggurgul.timezones.exceptions.UserNotFoundException
 import com.toptal.ggurgul.timezones.security.JwtUser
+import com.toptal.ggurgul.timezones.security.SystemRunner
 import com.toptal.ggurgul.timezones.security.models.UserProfile
 import org.springframework.context.ApplicationEventPublisher
 import org.springframework.security.core.context.SecurityContextHolder
@@ -21,7 +24,8 @@ open class UserService(
         private val userCodesRepository: UserCodesRepository,
         private val userCodeFactory: UserCodeFactory,
         private val eventPublisher: ApplicationEventPublisher,
-        private var passwordEncoder: PasswordEncoder
+        private val passwordEncoder: PasswordEncoder,
+        private val systemRunner: SystemRunner
 ) {
 
     fun getActingUser(): User {
@@ -69,6 +73,17 @@ open class UserService(
             firstName = userProfile.firstName
             lastName = userProfile.lastName
         }
+    }
+
+    @Transactional
+    @Throws(UserNotFoundException::class)
+    fun resetPassword(email: String) {
+        val user = systemRunner.runInSystemContext {
+            userRepository.findByEmail(email)
+        }.orElseThrow { UserNotFoundException() }
+        val userCode = userCodeFactory.generateFor(user, UserCodeType.PASSWORD_RESET)
+        userCodesRepository.save(userCode)
+        eventPublisher.publishEvent(PasswordResetCodeIssued(userCode))
     }
 
 }

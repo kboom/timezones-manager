@@ -78,6 +78,7 @@ import {CreateTimezoneDialogComponent} from "./components/CreateTimezoneDialog/C
 import {NavbarComponent} from "./components/Navbar/Navbar.component";
 import {ProfileDialog} from "./components/ProfileDialog/ProfileDialog.component";
 import {PasswordChangeDialog} from "./components/PasswordChangeDialog/PasswordChangeDialog.component";
+import {PasswordResetDialog} from "./components/PasswordResetDialog/PasswordResetDialog.component";
 
 // Application wide providers
 const APP_PROVIDERS = [
@@ -120,6 +121,7 @@ type StoreType = {
         XLargeDirective,
         UserMenuComponent,
         SignInDialogComponent,
+        PasswordResetDialog,
         UserDetailsDialogComponent,
         CreateTimezoneDialogComponent,
         UsersTableComponent,
@@ -181,7 +183,8 @@ type StoreType = {
         CreateTimezoneDialogComponent,
         TimezonesToolbarComponent,
         ProfileDialog,
-        PasswordChangeDialog
+        PasswordChangeDialog,
+        PasswordResetDialog
     ],
 
     /**

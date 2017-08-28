@@ -79,4 +79,26 @@ class ProfileTests : AbstractFunctionalTest() {
                 .statusCode(403)
     }
 
+    @Test
+    fun canRequestPasswordReset() {
+        RestAssured.given()
+                .body("""{
+                    "email": "${User.ALICE.email}"
+                }""".trimIndent())
+                .post("/profile/password/reset")
+                .then()
+                .statusCode(200)
+    }
+
+    @Test
+    fun status200EvenIfEmailDoesNotExist() {
+        RestAssured.given()
+                .body("""{
+                    "email": "blabla@inexistent.com"
+                }""".trimIndent())
+                .post("/profile/password/reset")
+                .then()
+                .statusCode(200)
+    }
+
 }

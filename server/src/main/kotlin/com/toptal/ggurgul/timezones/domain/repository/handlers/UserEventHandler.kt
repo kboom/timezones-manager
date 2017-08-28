@@ -1,14 +1,16 @@
 package com.toptal.ggurgul.timezones.domain.repository.handlers
 
-import com.toptal.ggurgul.timezones.domain.models.security.Authority
 import com.toptal.ggurgul.timezones.domain.models.security.User
-import com.toptal.ggurgul.timezones.domain.repository.UserRepository
 import com.toptal.ggurgul.timezones.domain.repository.AuthorityRepository
 import com.toptal.ggurgul.timezones.domain.repository.TimezoneRepository
 import com.toptal.ggurgul.timezones.domain.repository.UserCodesRepository
+import com.toptal.ggurgul.timezones.domain.repository.UserRepository
 import com.toptal.ggurgul.timezones.security.SystemRunner
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.data.rest.core.annotation.*
+import org.springframework.data.rest.core.annotation.HandleBeforeCreate
+import org.springframework.data.rest.core.annotation.HandleBeforeDelete
+import org.springframework.data.rest.core.annotation.HandleBeforeSave
+import org.springframework.data.rest.core.annotation.RepositoryEventHandler
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.stereotype.Component
 import javax.transaction.Transactional

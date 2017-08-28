@@ -16,6 +16,9 @@ import java.util.*
 @RepositoryRestResource
 interface UserRepository : CrudRepository<User, Long> {
 
+    @RestResource(exported = false)
+    fun findByEmail(email: String): Optional<User>
+
     @PreAuthorize("hasAnyRole('ROLE_SYSTEM', 'ROLE_MANAGER', 'ROLE_ADMIN') or #username == principal.username")
     fun findByUsername(@Param("username") username: String): Optional<User>
 

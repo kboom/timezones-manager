@@ -83,6 +83,10 @@ export class SecurityService {
             .catch((error: any) => Observable.throw(error));
     }
 
+    public resetPassword(email: string): Observable<any> {
+        return this.http.post("http://localhost:8080/api/profile/password/reset", JSON.stringify({email}))
+            .catch((error: any) => Observable.throw(error));
+    }
 }
 
 

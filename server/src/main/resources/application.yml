@@ -44,4 +44,12 @@ registration:
     link: http://localhost:3000/#/register?confirmation=##code##
   email:
     from: noreply@timezones.com
-    subject: Your registration link
+    subject: Your registration link at TimezonesApp
+
+user:
+  password:
+    reset:
+      email:
+        link: http://localhost:3000/#/reset-password?resetcode=##code##
+        from: noreply@timezones.com
+        subject: Reset your password at TimezonesApp

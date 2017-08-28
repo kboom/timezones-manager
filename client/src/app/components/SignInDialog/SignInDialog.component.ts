@@ -29,6 +29,7 @@ import {PASSWORD_REGEX, USERNAME_REGEX} from "../../validators/validation.rules"
 
             <md-dialog-actions fxLayout='row' fxLayoutAlign="space-between">
                 <button md-button md-dialog-close>Cancel</button>
+                <button md-button md-dialog-close="forgot">Forgot password</button>
                 <button type="submit" md-button class="mat-primary" [disabled]="!loginForm.valid">Sign in</button>
             </md-dialog-actions>
 

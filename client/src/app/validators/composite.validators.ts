@@ -1,4 +1,4 @@
-import {AbstractControl} from "@angular/forms";
+import {AbstractControl, ValidationErrors} from "@angular/forms";
 
 export const fieldsAreEqual = (firstField, secondField, invalidCode) => (control: AbstractControl) => {
     let firstValue = control.get(firstField).value;

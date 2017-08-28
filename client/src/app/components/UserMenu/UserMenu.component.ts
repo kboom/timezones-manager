@@ -10,6 +10,7 @@ import {Router} from "@angular/router";
 import {UserRepository} from "../../repository/user.repository";
 import {ProfileDialog} from "../ProfileDialog/ProfileDialog.component";
 import {PasswordChangeDialog} from "../PasswordChangeDialog/PasswordChangeDialog.component";
+import {PasswordResetDialog} from "../PasswordResetDialog/PasswordResetDialog.component";
 
 @Component({
     selector: 'userMenu',
@@ -64,7 +65,11 @@ export class UserMenuComponent implements OnInit, OnDestroy {
     openSignInDialog() {
         this.dialog.open(SignInDialogComponent).afterClosed()
             .subscribe(result => {
-                this.router.navigate(['home']);
+                if(result === "forgot") {
+                    this.dialog.open(PasswordResetDialog)
+                } else {
+                    this.router.navigate(['home']);
+                }
             });
     }
 

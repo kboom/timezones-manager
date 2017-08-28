@@ -5,6 +5,7 @@ import com.toptal.ggurgul.timezones.security.JwtTokenUtil
 import com.toptal.ggurgul.timezones.security.JwtUser
 import com.toptal.ggurgul.timezones.security.models.JwtAuthenticationResponse
 import com.toptal.ggurgul.timezones.security.models.PasswordChangeRequest
+import com.toptal.ggurgul.timezones.security.models.PasswordResetRequest
 import com.toptal.ggurgul.timezones.security.models.UserProfile
 import io.swagger.annotations.Api
 import io.swagger.annotations.ApiOperation
@@ -72,6 +73,23 @@ class ProfileRestController
             ResponseEntity.ok().build();
         } catch (e: Exception) {
             ResponseEntity.status(403).build()
+        }
+    }
+
+    @ApiOperation(value = "Reset password", response = JwtAuthenticationResponse::class)
+    @ApiResponses(
+            ApiResponse(code = 200, message = "Changed password"),
+            ApiResponse(code = 401, message = "Wrong password")
+    )
+    @RequestMapping(value = "/password/reset", method = arrayOf(RequestMethod.POST))
+    @Throws(AuthenticationException::class)
+    fun resetPassword(
+            @RequestBody passwordResetRequest: PasswordResetRequest): ResponseEntity<Any> {
+        return try {
+            userService.resetPassword(passwordResetRequest.email!!)
+            ResponseEntity.ok().build();
+        } catch (e: Exception) {
+            ResponseEntity.status(200).build() // always 200 not to give out email hints
         }
     }
 

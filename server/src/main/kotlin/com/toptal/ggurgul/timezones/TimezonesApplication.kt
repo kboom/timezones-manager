@@ -20,9 +20,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.web.cors.CorsConfiguration
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource
 import org.springframework.web.filter.CorsFilter
-import org.springframework.boot.web.servlet.FilterRegistrationBean
-
-
 
 
 @SpringBootApplication
@@ -79,6 +76,17 @@ open class TimezonesApplication {
     open fun registrationEmailMessage(
             @Value("\${registration.email.subject}") subject: String,
             @Value("\${registration.email.from}") from: String
+    ): SimpleMailMessage {
+        val message = SimpleMailMessage()
+        message.from = from
+        message.subject = subject
+        return message
+    }
+
+    @Bean
+    open fun passwordResetEmailMessage(
+            @Value("\${user.password.reset.email.subject}") subject: String,
+            @Value("\${user.password.reset.email.from}") from: String
     ): SimpleMailMessage {
         val message = SimpleMailMessage()
         message.from = from
