@@ -28,7 +28,7 @@ import {SecurityContextHolder} from "../../+security/security.context";
                     Home
                 </a>
                 <a md-button [routerLink]=" ['./timezones'] "
-                   *ngIf="this.securityContext.getAuthentication().isAuthenticated()"
+                   *ngIf="this.securityContext.getAuthentication().hasAnyRole(RoleModel.ROLE_USER, RoleModel.ROLE_ADMIN)"
                    routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
                     Timezones
                 </a>
