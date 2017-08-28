@@ -66,7 +66,8 @@ import {ValidationMessageProvider} from "./validators/validation.messages";
 import {TimezonesRepository} from "./repository/timezones.repository";
 import {
     CanActivateTimezones,
-    TimezonesPage, TimezonesPageService,
+    TimezonesPage,
+    TimezonesPageService,
     TimezonesResolver,
     TimezonesToolbarComponent
 } from "./pages/timezones/timezones.page";
@@ -78,7 +79,6 @@ import {NavbarComponent} from "./components/Navbar/Navbar.component";
 
 // Application wide providers
 const APP_PROVIDERS = [
-    ...APP_RESOLVER_PROVIDERS,
     SecurityService,
     ResponseMappingService,
     SecurityContextHolder,

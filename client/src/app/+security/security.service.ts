@@ -7,6 +7,7 @@ import "rxjs/add/operator/map";
 import "rxjs/add/operator/mergeMap";
 import "rxjs/add/operator/catch";
 import "rxjs/add/observable/throw";
+import "rxjs/add/observable/of";
 import {HttpClient, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest} from "@angular/common/http";
 import {UserModel} from "src/app/models/User.model";
 import {SecurityContextHolder} from "./security.context";
