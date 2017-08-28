@@ -47,7 +47,7 @@ import {UserProfile} from "../../models/UserProfile.model";
 
             </md-dialog-content>
 
-            <md-dialog-actions fxLayout='row' fxLayoutAlign="space-between">
+            <md-dialog-actions fxLayout='row' fxLayoutAlign='space-between center'>
                 <button md-button md-dialog-close>Cancel</button>
                 <button type="submit" class="mat-primary" form="profileForm" md-button [disabled]="!profileForm.valid">
                     Update

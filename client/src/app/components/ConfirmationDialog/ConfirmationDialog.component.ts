@@ -13,7 +13,7 @@ import {extend, includes, map, pick, transform} from "lodash-es";
             {{ details.message }}
         </md-dialog-content>
         
-        <md-dialog-actions>
+        <md-dialog-actions fxLayout='row' fxLayoutAlign='space-between center'>
             <button md-button md-dialog-close>Cancel</button>
             <button md-button [md-dialog-close]="true">OK</button>
         </md-dialog-actions>

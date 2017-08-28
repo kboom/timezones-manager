@@ -39,7 +39,7 @@ import {fieldsAreEqual} from "../../validators/composite.validators";
 
             </md-dialog-content>
 
-            <md-dialog-actions>
+            <md-dialog-actions fxLayout='row' fxLayoutAlign='space-between center'>
                 <button md-button md-dialog-close>Cancel</button>
                 <button type="submit" class="mat-primary" md-button [disabled]="!registrationForm.valid">Create account</button>
             </md-dialog-actions>
