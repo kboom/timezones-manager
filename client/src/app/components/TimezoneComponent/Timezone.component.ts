@@ -25,7 +25,7 @@ interface Timezone {
             <md-card-content>
                 <div class="timezone__time">{{ time$ | async | amDateFormat: 'HH:mm:ss' }}</div>
             </md-card-content>
-            <md-card-actions>
+            <md-card-actions fxLayout='row' fxLayoutAlign='space-between center'>
                 <button md-button (click)="onEdit.emit()">Edit</button>
                 <button md-button (click)="onDelete.emit()">Delete</button>
             </md-card-actions>
