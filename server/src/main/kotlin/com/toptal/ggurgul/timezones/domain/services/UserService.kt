@@ -7,6 +7,7 @@ import com.toptal.ggurgul.timezones.domain.repository.UserCodesRepository
 import com.toptal.ggurgul.timezones.domain.repository.UserRepository
 import com.toptal.ggurgul.timezones.exceptions.InvalidPasswordException
 import com.toptal.ggurgul.timezones.security.JwtUser
+import com.toptal.ggurgul.timezones.security.models.UserProfile
 import org.springframework.context.ApplicationEventPublisher
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.security.crypto.password.PasswordEncoder
@@ -46,7 +47,7 @@ open class UserService(
 
     @Transactional
     fun changePasswordFor(user: User, oldPassword: String, newPassword: String) {
-        if(passwordEncoder.matches(oldPassword, user.password)) {
+        if (passwordEncoder.matches(oldPassword, user.password)) {
             user.password = passwordEncoder.encode(newPassword);
         } else {
             throw InvalidPasswordException();
@@ -60,6 +61,14 @@ open class UserService(
         val userCode = userCodeFactory.generateFor(user, UserCodeType.REGISTRATION_CONFIRMATION)
         userCodesRepository.save(userCode)
         eventPublisher.publishEvent(RegistrationCodeIssuedEvent(userCode))
+    }
+
+    @Transactional
+    fun updateProfile(userProfile: UserProfile) {
+        getActingUser().apply {
+            firstName = userProfile.firstName
+            lastName = userProfile.lastName
+        }
     }
 
 }

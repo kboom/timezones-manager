@@ -27,6 +27,14 @@ class User {
     @JsonProperty(access = WRITE_ONLY)
     var password: String? = null
 
+    @Column(name = "FIRST_NAME", length = 50)
+    @Size(min = 4, max = 50)
+    var firstName: String? = null
+
+    @Column(name = "LAST_NAME", length = 50)
+    @Size(min = 4, max = 50)
+    var lastName: String? = null
+
     @Column(name = "EMAIL", length = 50)
     @NotNull
     @Size(min = 4, max = 50)

@@ -39,6 +39,20 @@ class ProfileTests : AbstractFunctionalTest() {
 
     @Test
     @AuthenticatedAsUser(User.ALICE)
+    fun userCanUpdateProfile() {
+        RestAssured.given()
+                .header("Authorization", authenticationRule.token)
+                .body("""{
+                    "firstName": "Alice",
+                    "lastName": "Hanks"
+                }""".trimIndent())
+                .put("/profile")
+                .then()
+                .statusCode(200)
+    }
+
+    @Test
+    @AuthenticatedAsUser(User.ALICE)
     fun userCannotChangePasswordIfWrongCurrentProvided() {
         RestAssured.given()
                 .header("Authorization", authenticationRule.token)

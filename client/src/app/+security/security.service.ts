@@ -12,6 +12,8 @@ import {HttpClient, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest} from "
 import {UserModel} from "src/app/models/User.model";
 import {SecurityContextHolder} from "./security.context";
 import {Router} from "@angular/router";
+import {Entity} from "../models/hateoas/Entity.model";
+import {pick} from 'lodash-es';
 
 enum AuthenticationEvent {
     SIGN_IN_FAILED
@@ -56,8 +58,8 @@ export class SecurityService {
             .catch((error: any) => Observable.throw(error));
     }
 
-    public updateAccount(): Observable<any> {
-        return null;
+    public updateProfile(entity: Entity<UserModel>): Observable<any> {
+        return this.http.put("http://localhost:8080/api/profile", pick(entity.entity, ['firstName', 'lastName']));
     }
 
     public signOut() {

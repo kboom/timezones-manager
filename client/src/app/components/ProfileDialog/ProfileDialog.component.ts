@@ -1,22 +1,24 @@
-import {Component, Inject} from "@angular/core";
+import {Component, Inject, OnInit} from "@angular/core";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {MD_DIALOG_DATA, MdDialogRef, MdSnackBar} from "@angular/material";
 import {SecurityService} from "../../+security/security.service";
-import {omit} from "lodash-es";
+import {omit, pick } from "lodash-es";
 import {validatorFor} from "../../validators/common.validators";
-import {EMAIL_REGEX, USERNAME_REGEX, PASSWORD_REGEX} from "../../validators/validation.rules";
-import {fieldsAreEqual} from "../../validators/composite.validators";
+import {
+    EMAIL_REGEX, USERNAME_REGEX, PASSWORD_REGEX, LAST_NAME_REGEX,
+    FIRST_NAME_REGEX
+} from "../../validators/validation.rules";
 import {Entity} from "../../models/hateoas/Entity.model";
 import {UserModel} from "../../models/User.model";
 
 @Component({
-    selector: 'profileDialog',
+    selector: 'profile-dialog',
     template: `
 
         <div>
 
             <h2 md-dialog-title>Edit profile</h2>
-            
+
             <md-dialog-content fxLayout='column'>
 
                 <md-input-container>
@@ -27,32 +29,27 @@ import {UserModel} from "../../models/User.model";
                     <input mdInput disabled type="email" placeholder="E-mail" [value]="userEntity.entity.email">
                 </md-input-container>
 
-                <form [formGroup]="detailsChangeForm" fxLayout='column' (ngSubmit)="this.doRegister($event)">
-                    
-                    <md-input-container>
-                        <input mdInput formControlName="oldPassword" type="password" placeholder="Old password">
-                    </md-input-container>
-                    <control-messages [control]="detailsChangeForm.controls.oldPassword"></control-messages>
+                <form id="profileForm" [formGroup]="profileForm" fxLayout='column'
+                      (ngSubmit)="this.doRegister($event)">
 
                     <md-input-container>
-                        <input mdInput formControlName="newPassword" type="password" placeholder="New password">
+                        <input mdInput formControlName="firstName" type="text" placeholder="First name">
                     </md-input-container>
-                    <control-messages [control]="detailsChangeForm.controls.newPassword"></control-messages>
+                    <control-messages [control]="profileForm.controls.firstName"></control-messages>
 
                     <md-input-container>
-                        <input mdInput formControlName="newPasswordRepeated" type="password"
-                               placeholder="Repeat new password">
+                        <input mdInput formControlName="lastName" type="text" placeholder="Last name">
                     </md-input-container>
-                    <control-messages [control]="detailsChangeForm.controls.newPasswordRepeated"></control-messages>
-
+                    <control-messages [control]="profileForm.controls.lastName"></control-messages>
 
                 </form>
 
             </md-dialog-content>
 
-            <md-dialog-actions>
+            <md-dialog-actions fxLayout='row' fxLayoutAlign="space-between">
                 <button md-button md-dialog-close>Cancel</button>
-                <button type="submit" class="mat-primary" md-button [disabled]="!detailsChangeForm.valid">Update
+                <button type="submit" class="mat-primary" form="profileForm" md-button [disabled]="!profileForm.valid">
+                    Update
                 </button>
             </md-dialog-actions>
 
@@ -62,36 +59,41 @@ import {UserModel} from "../../models/User.model";
     `
 })
 // https://codecraft.tv/courses/angular/forms/model-driven-validation/
-export class ProfileDialog {
+export class ProfileDialog implements OnInit {
 
-    detailsChangeForm: FormGroup;
+    profileForm: FormGroup;
 
     constructor(@Inject(MD_DIALOG_DATA) public userEntity: Entity<UserModel>,
                 private fb: FormBuilder,
                 private dialogRef: MdDialogRef<ProfileDialog>,
                 private authService: SecurityService,
                 private snackBar: MdSnackBar) {
-        this.detailsChangeForm = this.fb.group({
-            oldPassword: ["", Validators.required, validatorFor(PASSWORD_REGEX)],
-            newPassword: ["", Validators.required, validatorFor(PASSWORD_REGEX)],
-            newPasswordRepeated: ["", Validators.required, validatorFor(PASSWORD_REGEX)],
-        }, {
-            validator: fieldsAreEqual("newPassword", "newPasswordRepeated", "password.equality")
+        this.profileForm = this.fb.group({
+            firstName: ["", Validators.required, validatorFor(FIRST_NAME_REGEX)],
+            lastName: ["", Validators.required, validatorFor(LAST_NAME_REGEX)],
         });
     }
 
+    ngOnInit(): void {
+        this.setValues(this.userEntity);
+    }
+
+    setValues = (timezoneEntity: Entity<UserModel>) => {
+        this.profileForm.setValue(pick(timezoneEntity.entity, ['firstName', 'lastName']));
+    };
+
     doRegister(event): void {
-        let formData = this.detailsChangeForm.value;
-        // this.authService.updateAccount(omit(formData, ['passwordRepeated']))
-        //     .subscribe((x) => {
-        //         const snackBarRef = this.snackBar.open("Please check your mailbox", "Close", {
-        //             duration: 5000,
-        //         });
-        //         snackBarRef.onAction().subscribe(() => {
-        //             snackBarRef.dismiss()
-        //         });
-        //         this.dialogRef.close(x)
-        //     })
+        const formData = this.profileForm.value;
+        this.authService.updateProfile(this.userEntity.withUpdatedEntity(formData))
+            .subscribe((x) => {
+                const snackBarRef = this.snackBar.open("Your profile has been updated", "Close", {
+                    duration: 5000,
+                });
+                snackBarRef.onAction().subscribe(() => {
+                    snackBarRef.dismiss()
+                });
+                this.dialogRef.close(x)
+            })
     }
 
 }
