@@ -150,4 +150,20 @@ internal class TimezonesTests : AbstractFunctionalTest() {
                 .statusCode(403)
     }
 
+    @Test
+    @AuthenticatedAsUser(AGATHA)
+    fun deletingUserDeletesHisTimezones() {
+        given()
+                .header("Authorization", authenticationRule.token)
+                .delete("/users/${ALICE.id}")
+                .then()
+                .statusCode(204)
+
+        given()
+                .header("Authorization", authenticationRule.token)
+                .get("/timezones?projection=withDetails")
+                .then()
+                .body("_embedded.timezones.owner", not(contains("alice")))
+    }
+
 }

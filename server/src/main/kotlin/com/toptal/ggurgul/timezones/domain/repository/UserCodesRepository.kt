@@ -14,4 +14,6 @@ interface UserCodesRepository : CrudRepository<UserCode, Long> {
 
     fun findByUserAndType(user: User, type: UserCodeType): Optional<UserCode>
 
+    fun deleteByUser(user: User)
+
 }

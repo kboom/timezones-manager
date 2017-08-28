@@ -1,6 +1,7 @@
 package com.toptal.ggurgul.timezones.domain.repository
 
 import com.toptal.ggurgul.timezones.domain.models.Timezone
+import com.toptal.ggurgul.timezones.domain.models.security.User
 import io.swagger.annotations.Api
 import org.springframework.data.jpa.repository.Query
 import org.springframework.data.repository.CrudRepository
@@ -14,6 +15,9 @@ import org.springframework.security.access.prepost.PreAuthorize
 @RepositoryRestResource
 //@PreAuthorize("hasRole('ROLE_SYSTEM')") // todo fix - something is not secured as this fails!
 interface TimezoneRepository : CrudRepository<Timezone, Long> {
+
+    @RestResource(exported = false)
+    fun deleteByOwner(user: User)
 
     // Methods used by Spring-Data-Rest
 
