@@ -32,40 +32,45 @@ open class SwaggerConfig {
 
     companion object {
         val errorModelRef = ModelRef("Error")
+
+        val defaultResponses = mutableListOf(
+                ResponseMessageBuilder()
+                        .code(500)
+                        .message("Server error")
+                        .responseModel(errorModelRef)
+                        .build(),
+                ResponseMessageBuilder()
+                        .code(400)
+                        .message("Bad request – wrong usage of the API")
+                        .responseModel(errorModelRef)
+                        .build(),
+                ResponseMessageBuilder()
+                        .code(401)
+                        .message("No or invalid authentication")
+                        .responseModel(errorModelRef)
+                        .build(),
+                ResponseMessageBuilder()
+                        .code(403)
+                        .message("Not permitted to access for users role")
+                        .responseModel(errorModelRef)
+                        .build(),
+                ResponseMessageBuilder()
+                        .code(404)
+                        .message("Requested resource not available (anymore)")
+                        .responseModel(errorModelRef)
+                        .build()
+        )
     }
 
     @Bean
     open fun productApi(): Docket {
         return Docket(DocumentationType.SWAGGER_2)
                 .useDefaultResponseMessages(true)
-                .globalResponseMessage(RequestMethod.GET,
-                        mutableListOf(
-                                ResponseMessageBuilder()
-                                        .code(500)
-                                        .message("Server error")
-                                        .responseModel(errorModelRef)
-                                        .build(),
-                                ResponseMessageBuilder()
-                                        .code(400)
-                                        .message("Bad request – wrong usage of the API")
-                                        .responseModel(errorModelRef)
-                                        .build(),
-                                ResponseMessageBuilder()
-                                        .code(401)
-                                        .message("No or invalid authentication")
-                                        .responseModel(errorModelRef)
-                                        .build(),
-                                ResponseMessageBuilder()
-                                        .code(403)
-                                        .message("Not permitted to access for users role")
-                                        .responseModel(errorModelRef)
-                                        .build(),
-                                ResponseMessageBuilder()
-                                        .code(404)
-                                        .message("Requested resource not available (anymore)")
-                                        .responseModel(errorModelRef)
-                                        .build()
-                        ))
+                .globalResponseMessage(RequestMethod.GET, defaultResponses)
+                .globalResponseMessage(RequestMethod.POST, defaultResponses)
+                .globalResponseMessage(RequestMethod.PUT, defaultResponses)
+                .globalResponseMessage(RequestMethod.DELETE, defaultResponses)
+                .globalResponseMessage(RequestMethod.PATCH, defaultResponses)
                 .select()
                 .apis(RequestHandlerSelectors.any())
                 .paths(or(
