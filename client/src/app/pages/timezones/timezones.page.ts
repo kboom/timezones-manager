@@ -19,6 +19,8 @@ import {FormControl} from "@angular/forms";
 import {Observable} from "rxjs/Observable";
 import {Subject} from "rxjs/Subject";
 import {ConfirmationDialogComponent} from "../../components/ConfirmationDialog";
+import {EventBusService} from "../../services/eventBus.service";
+import {TIMEZONE_CHANGED_EVENT, TIMEZONE_CREATED_EVENT, TIMEZONE_REMOVED_EVENT} from "../../app.events";
 
 @Injectable()
 export class TimezonesPageService {
@@ -66,6 +68,7 @@ export class TimezonesPage implements OnInit {
     constructor(private route: ActivatedRoute,
                 private dialog: MdDialog,
                 private snackBar: MdSnackBar,
+                private eventBusService: EventBusService,
                 private timezonesPageService: TimezonesPageService,
                 private timezonesRepository: TimezonesRepository) {
     }
@@ -75,7 +78,17 @@ export class TimezonesPage implements OnInit {
     // this.timezones$.next(timezones.entities);
     ngOnInit(): void {
         this.route.data.map((data) => data.timezones).subscribe((timezones) => {
-            this.dataChange.next(timezones);
+            this.dataChange.next(timezones.entities);
+        });
+
+        this.eventBusService.observeEvents(
+            TIMEZONE_CREATED_EVENT,
+            TIMEZONE_CHANGED_EVENT,
+            TIMEZONE_REMOVED_EVENT
+        ).subscribe(() => {
+            this.timezonesRepository.getAllTimezones().subscribe((timezones) => {
+                this.dataChange.next(timezones.entities);
+            });
         });
 
         this.timezonesPageService.timezoneFilter$.asObservable().subscribe((filterPhrase) => {
@@ -88,11 +101,13 @@ export class TimezonesPage implements OnInit {
         ];
 
         Observable.combineLatest(displayDataChanges, (data, filter) => {
-            return !!filter ? data.entities.filter((entity: Entity<TimezoneModel>) => {
+            return !!filter ? data.filter((entity: Entity<TimezoneModel>) => {
                 const searchStr = entity.entity.name.toLowerCase();
                 return searchStr.indexOf(filter.toLowerCase()) != -1;
-            }) : data.entities;
-        }).subscribe((timezones) => this.timezones$.next(timezones))
+            }) : data;
+        }).subscribe((timezones) => {
+            this.timezones$.next(timezones);
+        })
     }
 
     deleteTimezone(timezoneEntity) {
@@ -111,6 +126,7 @@ export class TimezonesPage implements OnInit {
                     snackBarRef.onAction().subscribe(() => {
                         snackBarRef.dismiss()
                     });
+                    this.eventBusService.publish(TIMEZONE_REMOVED_EVENT);
                 }, () => {
                     const snackBarRef = this.snackBar.open("Could not delete timezone", "Close", {
                         duration: 5000,
@@ -128,7 +144,7 @@ export class TimezonesPage implements OnInit {
             data: timezoneEntity
         }).afterClosed()
             .subscribe(result => {
-
+                this.eventBusService.publish(TIMEZONE_CHANGED_EVENT);
             });
     }
 
@@ -160,6 +176,7 @@ export class TimezonesToolbarComponent implements OnInit {
     filter: FormControl;
 
     constructor(private dialog: MdDialog,
+                private eventBusService: EventBusService,
                 private timezonesPageService: TimezonesPageService) {
 
     }
@@ -167,7 +184,7 @@ export class TimezonesToolbarComponent implements OnInit {
     createTimezone(timezoneEntity) {
         this.dialog.open(CreateTimezoneDialogComponent).afterClosed()
             .subscribe(result => {
-
+                this.eventBusService.publish(TIMEZONE_CREATED_EVENT);
             });
     }
 
