@@ -1,16 +1,15 @@
-package com.toptal.ggurgul.timezones.functional.tests.profile
+package com.toptal.ggurgul.timezones.functional.tests.account
 
 import com.toptal.ggurgul.timezones.functional.database.*
 import com.toptal.ggurgul.timezones.functional.rules.AuthenticatedAsUser
 import com.toptal.ggurgul.timezones.functional.tests.AbstractFunctionalTest
-import com.toptal.ggurgul.timezones.functional.tests.registration.RegistrationTests
 import io.restassured.RestAssured
 import org.hamcrest.Matchers
 import org.junit.Before
 import org.junit.Test
 
 
-class ProfileTests : AbstractFunctionalTest() {
+class AccountTests : AbstractFunctionalTest() {
 
     companion object {
         val CONFIRMATION_CODE_FOR_AGATHA = "YWdhdGhhOjkxODQ0ZmMyYWFjOTQzZTcyMmQwZGNhNGMxZjk1OWNj"
@@ -38,7 +37,7 @@ class ProfileTests : AbstractFunctionalTest() {
     fun userCanGetProfile() {
         RestAssured.given()
                 .header("Authorization", authenticationRule.token)
-                .get("/profile")
+                .get("/account")
                 .then()
                 .statusCode(200)
                 .body("username", Matchers.equalTo("alice"))
@@ -56,7 +55,7 @@ class ProfileTests : AbstractFunctionalTest() {
                     "oldPassword": "${User.ALICE.password}",
                     "newPassword": "abcdef9"
                 }""".trimIndent())
-                .post("/profile/password")
+                .post("/account/password")
                 .then()
                 .statusCode(200)
     }
@@ -70,7 +69,7 @@ class ProfileTests : AbstractFunctionalTest() {
                     "firstName": "Alice",
                     "lastName": "Hanks"
                 }""".trimIndent())
-                .put("/profile")
+                .put("/account")
                 .then()
                 .statusCode(200)
     }
@@ -84,7 +83,7 @@ class ProfileTests : AbstractFunctionalTest() {
                     "oldPassword": "wrong",
                     "newPassword": "abcdef9"
                 }""".trimIndent())
-                .post("/profile/password")
+                .post("/account/password")
                 .then()
                 .statusCode(403)
     }
@@ -95,7 +94,7 @@ class ProfileTests : AbstractFunctionalTest() {
                 .body("""{
                     "email": "${User.ALICE.email}"
                 }""".trimIndent())
-                .post("/profile/password/reset")
+                .post("/account/password/reset")
                 .then()
                 .statusCode(200)
     }
@@ -106,7 +105,7 @@ class ProfileTests : AbstractFunctionalTest() {
                 .body("""{
                     "email": "blabla@inexistent.com"
                 }""".trimIndent())
-                .post("/profile/password/reset")
+                .post("/account/password/reset")
                 .then()
                 .statusCode(200)
     }
@@ -118,7 +117,7 @@ class ProfileTests : AbstractFunctionalTest() {
                     "newPassword": "blaa443",
                     "code": "$CONFIRMATION_CODE_FOR_AGATHA"
                 }""".trimIndent())
-                .post("/profile/password/reset/confirmation")
+                .post("/account/password/reset/confirmation")
                 .then()
                 .statusCode(200)
     }

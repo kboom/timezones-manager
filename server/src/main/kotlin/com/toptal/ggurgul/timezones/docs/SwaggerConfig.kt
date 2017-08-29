@@ -33,7 +33,7 @@ open class SwaggerConfig {
                 .select()
                 .apis(RequestHandlerSelectors.any())
                 .paths(or(
-                        regex("/profile(.*)"),
+                        regex("/account(.*)"),
                         regex("/user(.*)"),
                         regex("/auth"),
                         regex("/auth/(.*)"),

@@ -2,7 +2,6 @@ package com.toptal.ggurgul.timezones.controllers
 
 import com.toptal.ggurgul.timezones.domain.services.UserService
 import com.toptal.ggurgul.timezones.exceptions.WrongConfirmationCodeException
-import com.toptal.ggurgul.timezones.security.JwtUser
 import com.toptal.ggurgul.timezones.security.SystemRunner
 import com.toptal.ggurgul.timezones.security.models.*
 import io.swagger.annotations.Api
@@ -18,33 +17,33 @@ import org.springframework.web.bind.annotation.RequestMethod
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-@Api(value = "profile", description = "Profile operations", tags = arrayOf("profile"))
-@RequestMapping("/profile")
-class ProfileRestController
+@Api(value = "account", description = "Account operations", tags = arrayOf("account"))
+@RequestMapping("/account")
+class AccountRestController
 @Autowired constructor(
         private val userService: UserService,
         private val systemRunner: SystemRunner
 ) {
 
-    @ApiOperation(value = "Get profile", response = UserProfile::class)
+    @ApiOperation(value = "Get profile", response = UserAccount::class)
     @ApiResponses(
-            ApiResponse(code = 200, message = "Got profile"),
+            ApiResponse(code = 200, message = "Got account"),
             ApiResponse(code = 401, message = "Authentication failure")
     )
     @RequestMapping(method = arrayOf(RequestMethod.GET))
-    fun getProfile(): ResponseEntity<UserProfile> {
-        return ResponseEntity.ok(UserProfile.fromUser(userService.getActingUser()));
+    fun getProfile(): ResponseEntity<UserAccount> {
+        return ResponseEntity.ok(UserAccount.fromUser(userService.getActingUser()));
     }
 
-    @ApiOperation(value = "Update profile")
+    @ApiOperation(value = "Update account")
     @ApiResponses(
-            ApiResponse(code = 200, message = "Got profile"),
+            ApiResponse(code = 200, message = "Got account"),
             ApiResponse(code = 401, message = "Authentication failure")
     )
     @RequestMapping(method = arrayOf(RequestMethod.PUT))
-    fun putProfile(@RequestBody userProfile: UserProfile): ResponseEntity<Any> {
+    fun putProfile(@RequestBody userAccount: UserAccount): ResponseEntity<Any> {
         return try {
-            userService.updateProfile(userProfile)
+            userService.updateProfile(userAccount)
             ResponseEntity.ok().build()
         } catch (e: Exception) {
             ResponseEntity.status(403).build()

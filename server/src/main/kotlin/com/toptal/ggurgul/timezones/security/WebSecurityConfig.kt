@@ -82,7 +82,7 @@ open class WebSecurityConfig : WebSecurityConfigurerAdapter() {
                 .authorizeRequests()
                 .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                 .antMatchers("/h2-console/**").permitAll()
-                .antMatchers(HttpMethod.POST, "/profile/password/reset*/**").permitAll()
+                .antMatchers(HttpMethod.POST, "/account/password/reset*/**").permitAll()
                 .antMatchers(
                         HttpMethod.GET,
                         "/",

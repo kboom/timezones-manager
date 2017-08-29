@@ -11,7 +11,7 @@ import com.toptal.ggurgul.timezones.exceptions.UserNotFoundException
 import com.toptal.ggurgul.timezones.exceptions.WrongConfirmationCodeException
 import com.toptal.ggurgul.timezones.security.JwtUser
 import com.toptal.ggurgul.timezones.security.SystemRunner
-import com.toptal.ggurgul.timezones.security.models.UserProfile
+import com.toptal.ggurgul.timezones.security.models.UserAccount
 import org.springframework.context.ApplicationEventPublisher
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.security.crypto.password.PasswordEncoder
@@ -69,10 +69,10 @@ open class UserService(
     }
 
     @Transactional
-    fun updateProfile(userProfile: UserProfile) {
+    fun updateProfile(userAccount: UserAccount) {
         getActingUser().apply {
-            firstName = userProfile.firstName
-            lastName = userProfile.lastName
+            firstName = userAccount.firstName
+            lastName = userAccount.lastName
         }
     }
 
