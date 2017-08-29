@@ -26,7 +26,7 @@ class ProfileRestController
         private val systemRunner: SystemRunner
 ) {
 
-    @ApiOperation(value = "Get profile", response = JwtUser::class)
+    @ApiOperation(value = "Get profile", response = UserProfile::class)
     @ApiResponses(
             ApiResponse(code = 200, message = "Got profile"),
             ApiResponse(code = 401, message = "Authentication failure")
@@ -51,7 +51,7 @@ class ProfileRestController
         }
     }
 
-    @ApiOperation(value = "Change password", response = JwtAuthenticationResponse::class)
+    @ApiOperation(value = "Change password")
     @ApiResponses(
             ApiResponse(code = 200, message = "Changed password"),
             ApiResponse(code = 401, message = "Wrong password")
@@ -70,7 +70,7 @@ class ProfileRestController
         }
     }
 
-    @ApiOperation(value = "Reset password", response = JwtAuthenticationResponse::class)
+    @ApiOperation(value = "Reset password")
     @ApiResponses(
             ApiResponse(code = 200, message = "Changed password"),
             ApiResponse(code = 401, message = "Wrong password")

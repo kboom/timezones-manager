@@ -35,7 +35,8 @@ open class SwaggerConfig {
                 .paths(or(
                         regex("/profile(.*)"),
                         regex("/user(.*)"),
-                        regex("/auth(.*)"),
+                        regex("/auth"),
+                        regex("/auth/(.*)"),
                         regex("/timezones(.*)")
                 ))
                 .build()
