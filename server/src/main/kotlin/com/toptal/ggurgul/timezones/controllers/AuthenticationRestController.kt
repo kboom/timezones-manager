@@ -40,10 +40,6 @@ constructor(
 ) {
 
     @ApiOperation(value = "Obtain token", response = JwtAuthenticationResponse::class)
-    @ApiResponses(
-            ApiResponse(code = 200, message = "Obtained token"),
-            ApiResponse(code = 401, message = "Authentication failure")
-    )
     @RequestMapping(method = arrayOf(RequestMethod.POST))
     @Throws(AuthenticationException::class)
     fun createAuthenticationToken(
@@ -60,10 +56,6 @@ constructor(
     }
 
     @ApiOperation(value = "Refresh token", response = JwtAuthenticationResponse::class)
-    @ApiResponses(
-            ApiResponse(code = 200, message = "Refreshed token"),
-            ApiResponse(code = 401, message = "Authentication failure")
-    )
     @RequestMapping(method = arrayOf(RequestMethod.GET))
     fun refreshAndGetAuthenticationToken(request: HttpServletRequest): ResponseEntity<*> {
         val token = request.getHeader(tokenHeader)

@@ -71,7 +71,33 @@ class AccountTests : AbstractFunctionalTest() {
                 }""".trimIndent())
                 .put("/account")
                 .then()
-                .statusCode(200)
+                .statusCode(204)
+    }
+
+    @Test
+    @AuthenticatedAsUser(User.ALICE)
+    fun cannotUpdateEmail() {
+        RestAssured.given()
+                .header("Authorization", authenticationRule.token)
+                .body("""{
+                    "email": "abc@test.com"
+                }""".trimIndent())
+                .put("/account")
+                .then()
+                .statusCode(400)
+    }
+
+    @Test
+    @AuthenticatedAsUser(User.ALICE)
+    fun cannotUpdateUsername() {
+        RestAssured.given()
+                .header("Authorization", authenticationRule.token)
+                .body("""{
+                    "username": "alice"
+                }""".trimIndent())
+                .put("/account")
+                .then()
+                .statusCode(400)
     }
 
     @Test

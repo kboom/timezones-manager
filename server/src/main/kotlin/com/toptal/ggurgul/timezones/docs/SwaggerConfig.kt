@@ -1,15 +1,17 @@
 package com.toptal.ggurgul.timezones.docs
 
-import com.google.common.base.Predicates.not
 import com.google.common.base.Predicates.or
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.context.annotation.Import
 import org.springframework.context.annotation.Profile
+import org.springframework.web.bind.annotation.RequestMethod
 import springfox.bean.validators.configuration.BeanValidatorPluginsConfiguration
 import springfox.documentation.builders.PathSelectors
 import springfox.documentation.builders.PathSelectors.regex
 import springfox.documentation.builders.RequestHandlerSelectors
+import springfox.documentation.builders.ResponseMessageBuilder
+import springfox.documentation.schema.ModelRef
 import springfox.documentation.service.ApiKey
 import springfox.documentation.service.AuthorizationScope
 import springfox.documentation.service.SecurityReference
@@ -21,15 +23,49 @@ import springfox.documentation.swagger.web.ApiKeyVehicle
 import springfox.documentation.swagger.web.SecurityConfiguration
 import springfox.documentation.swagger2.annotations.EnableSwagger2
 
+//https://jverhoelen.github.io/spring-rest-documentation-swagger-ui/
 @Profile("docs")
 @Configuration
 @EnableSwagger2
 @Import(SpringDataRestConfiguration::class, BeanValidatorPluginsConfiguration::class)
 open class SwaggerConfig {
 
+    companion object {
+        val errorModelRef = ModelRef("Error")
+    }
+
     @Bean
     open fun productApi(): Docket {
         return Docket(DocumentationType.SWAGGER_2)
+                .useDefaultResponseMessages(false)
+                .globalResponseMessage(RequestMethod.GET,
+                        mutableListOf(
+                                ResponseMessageBuilder()
+                                        .code(500)
+                                        .message("Server error")
+                                        .responseModel(errorModelRef)
+                                        .build(),
+                                ResponseMessageBuilder()
+                                        .code(400)
+                                        .message("Bad request – wrong usage of the API")
+                                        .responseModel(errorModelRef)
+                                        .build(),
+                                ResponseMessageBuilder()
+                                        .code(401)
+                                        .message("No or invalid authentication")
+                                        .responseModel(errorModelRef)
+                                        .build(),
+                                ResponseMessageBuilder()
+                                        .code(403)
+                                        .message("Not permitted to access for users role")
+                                        .responseModel(errorModelRef)
+                                        .build(),
+                                ResponseMessageBuilder()
+                                        .code(404)
+                                        .message("Requested resource not available (anymore)")
+                                        .responseModel(errorModelRef)
+                                        .build()
+                        ))
                 .select()
                 .apis(RequestHandlerSelectors.any())
                 .paths(or(
