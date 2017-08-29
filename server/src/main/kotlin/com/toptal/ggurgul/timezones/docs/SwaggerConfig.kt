@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.context.annotation.Import
 import org.springframework.context.annotation.Profile
+import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.RequestMethod
 import springfox.bean.validators.configuration.BeanValidatorPluginsConfiguration
 import springfox.documentation.builders.PathSelectors
@@ -65,7 +66,7 @@ open class SwaggerConfig {
     @Bean
     open fun productApi(): Docket {
         return Docket(DocumentationType.SWAGGER_2)
-                .useDefaultResponseMessages(true)
+                .useDefaultResponseMessages(false)
                 .globalResponseMessage(RequestMethod.GET, defaultResponses)
                 .globalResponseMessage(RequestMethod.POST, defaultResponses)
                 .globalResponseMessage(RequestMethod.PUT, defaultResponses)
@@ -74,13 +75,21 @@ open class SwaggerConfig {
                 .select()
                 .apis(RequestHandlerSelectors.any())
                 .paths(or(
-                        regex("/account(.*)"),
-                        regex("/user(.*)"),
-                        regex("/auth"),
-                        regex("/auth/(.*)"),
-                        regex("/timezones(.*)")
+                        PathSelectors.ant("/health/**"),
+                        PathSelectors.ant("/auth/**"),
+                        PathSelectors.ant("/account/**"),
+                        PathSelectors.ant("/users/**"),
+                        PathSelectors.ant("/timezones/**")
                 ))
+//                .paths(or(
+//                        regex("/account(.*)"),
+//                        regex("/user(.*)"),
+//                        regex("/auth"),
+//                        regex("/auth/(.*)"),
+//                        regex("/timezones(.*)")
+//                ))
                 .build()
+                .genericModelSubstitutes(ResponseEntity::class.java)
                 .securitySchemes(arrayListOf(apiKey()))
                 .securityContexts(arrayListOf(securityContext()))
     }
