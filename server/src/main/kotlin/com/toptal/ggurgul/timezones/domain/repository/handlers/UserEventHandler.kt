@@ -38,10 +38,7 @@ open class UserEventHandler
 
     @HandleBeforeSave
     fun handleUserUpdate(user: User) {
-        if (user.password == null || user.password == "") {
-            val storedUser = systemRunner.runInSystemContext { userRepository.findOne(user.id!!) }
-            user.password = storedUser.password
-        } else {
+        if (user.password != user.oldPassword) {
             user.password = passwordEncoder.encode(user.password)
         }
     }

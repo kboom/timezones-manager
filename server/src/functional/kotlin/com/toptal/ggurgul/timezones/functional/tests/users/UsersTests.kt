@@ -169,6 +169,21 @@ class UsersTests : AbstractFunctionalTest() {
 
     @Test
     @AuthenticatedAsUser(AGATHA)
+    fun managerCanUpdateUserLeavingPasswordIntact() {
+        RestAssured.given()
+                .header("Authorization", authenticationRule.token)
+                .body("""{
+                    "username": "alice2",
+                    "email": "qwerty666@any.com",
+                    "enabled": true
+                }""".trimIndent())
+                .patch("/users/${ALICE.id}?projection=withDetails")
+                .then()
+                .statusCode(200);
+    }
+
+    @Test
+    @AuthenticatedAsUser(AGATHA)
     fun managerCanAssignUserRoles() {
         RestAssured.given()
                 .header("Authorization", authenticationRule.token)

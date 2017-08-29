@@ -48,7 +48,9 @@ export class UserRepository {
 
     public updateUser(userEntity: Entity<UserModel>): Observable<Entity<UserModel>> {
         return Observable.create((observer) => {
-            const userUpdate$ = this.http.put(userEntity.links['self']['href'], omit(userEntity.entity, ['authorities']));
+            const userUpdate$ = this.http.patch(userEntity.links['self']['href'], omit(userEntity.entity, ['authorities']), {
+                headers: new HttpHeaders().set("Content-Type", "application/merge-patch+json")
+            });
 
             const privilegeUpdate$ = this.http.put(userEntity.links['authorities']['href'],
                 this.constructRoleURIsFor(userEntity), {

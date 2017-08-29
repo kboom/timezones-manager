@@ -52,4 +52,12 @@ class User {
     @JoinTable(uniqueConstraints = arrayOf(UniqueConstraint(columnNames = arrayOf("USER_ID", "AUTHORITY_NAME"))), name = "USER_AUTHORITIES", joinColumns = arrayOf(JoinColumn(name = "USER_ID", referencedColumnName = "ID")), inverseJoinColumns = arrayOf(JoinColumn(name = "AUTHORITY_NAME", referencedColumnName = "AUTHORITY_NAME")))
     var authorities: List<Authority>? = null
 
+    @Transient
+    var oldPassword: String? = null
+
+    @PostLoad
+    fun rememberOldUser() {
+        this.oldPassword = this.password;
+    }
+
 }
