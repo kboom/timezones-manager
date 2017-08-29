@@ -3,10 +3,12 @@ package com.toptal.ggurgul.timezones.domain.models
 import com.toptal.ggurgul.timezones.domain.models.security.User
 import io.swagger.annotations.ApiModel
 import io.swagger.annotations.ApiModelProperty
+import org.hibernate.validator.constraints.Length
 import org.springframework.data.annotation.ReadOnlyProperty
 import javax.persistence.*
+import javax.validation.constraints.Max
+import javax.validation.constraints.Min
 import javax.validation.constraints.NotNull
-import javax.validation.constraints.Size
 
 @ApiModel(value = "Timezone", description = "A representation of timezone")
 @Entity
@@ -23,17 +25,18 @@ data class Timezone(
 
         @Column(name = "NAME", length = 50)
         @get:NotNull
-        @get:Size(min = 4, max = 50)
+        @get:Length(min = 4, max = 30)
         var name: String? = null,
 
         @Column(name = "LOCATION_NAME", length = 50)
         @get:NotNull
-        @get:Size(min = 4, max = 50)
+        @get:Length(min = 4, max = 30)
         var locationName: String? = null,
 
         @Column(name = "DIFF_TO_GMT")
         @get:NotNull
-        @get:Size(min = 0, max = 23)
+        @get:Min(-12)
+        @get:Max(12)
         var differenceToGMT: Int? = null,
 
         @ManyToOne

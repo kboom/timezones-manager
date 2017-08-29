@@ -57,7 +57,7 @@ class AccountTests : AbstractFunctionalTest() {
                 }""".trimIndent())
                 .post("/account/password")
                 .then()
-                .statusCode(200)
+                .statusCode(204)
     }
 
     @Test
@@ -102,16 +102,32 @@ class AccountTests : AbstractFunctionalTest() {
 
     @Test
     @AuthenticatedAsUser(User.ALICE)
+    fun validationFailsForTooShortPassword() {
+        RestAssured.given()
+                .header("Authorization", authenticationRule.token)
+                .body("""{
+                    "oldPassword": "${User.ALICE.password}",
+                    "newPassword": "abcd"
+                }""".trimIndent())
+                .post("/account/password")
+                .then()
+                .statusCode(400)
+    }
+
+    @Test
+    @AuthenticatedAsUser(User.ALICE)
     fun userCannotChangePasswordIfWrongCurrentProvided() {
         RestAssured.given()
                 .header("Authorization", authenticationRule.token)
                 .body("""{
-                    "oldPassword": "wrong",
+                    "oldPassword": "wrongff",
                     "newPassword": "abcdef9"
                 }""".trimIndent())
                 .post("/account/password")
                 .then()
-                .statusCode(403)
+                .statusCode(401)
+                .body("code", Matchers.equalTo(401))
+                .body("message", Matchers.equalTo("Invalid password provided"))
     }
 
     @Test
@@ -122,18 +138,18 @@ class AccountTests : AbstractFunctionalTest() {
                 }""".trimIndent())
                 .post("/account/password/reset")
                 .then()
-                .statusCode(200)
+                .statusCode(204)
     }
 
     @Test
-    fun status200EvenIfEmailDoesNotExist() {
+    fun status204EvenIfEmailDoesNotExist() {
         RestAssured.given()
                 .body("""{
                     "email": "blabla@inexistent.com"
                 }""".trimIndent())
                 .post("/account/password/reset")
                 .then()
-                .statusCode(200)
+                .statusCode(204)
     }
 
     @Test
@@ -145,7 +161,7 @@ class AccountTests : AbstractFunctionalTest() {
                 }""".trimIndent())
                 .post("/account/password/reset/confirmation")
                 .then()
-                .statusCode(200)
+                .statusCode(204)
     }
 
 }

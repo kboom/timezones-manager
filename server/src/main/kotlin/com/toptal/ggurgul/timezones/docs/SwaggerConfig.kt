@@ -37,7 +37,7 @@ open class SwaggerConfig {
     @Bean
     open fun productApi(): Docket {
         return Docket(DocumentationType.SWAGGER_2)
-                .useDefaultResponseMessages(false)
+                .useDefaultResponseMessages(true)
                 .globalResponseMessage(RequestMethod.GET,
                         mutableListOf(
                                 ResponseMessageBuilder()

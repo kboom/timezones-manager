@@ -1,6 +1,7 @@
 package com.toptal.ggurgul.timezones.controllers
 
 import com.toptal.ggurgul.timezones.domain.services.UserService
+import com.toptal.ggurgul.timezones.exceptions.UserNotFoundException
 import com.toptal.ggurgul.timezones.exceptions.WrongConfirmationCodeException
 import com.toptal.ggurgul.timezones.security.SystemRunner
 import com.toptal.ggurgul.timezones.security.models.PasswordChangeRequest
@@ -9,11 +10,13 @@ import com.toptal.ggurgul.timezones.security.models.SetNewPasswordRequest
 import com.toptal.ggurgul.timezones.security.models.UserAccount
 import io.swagger.annotations.Api
 import io.swagger.annotations.ApiOperation
+import org.hibernate.validator.internal.engine.ConstraintViolationImpl
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.security.core.AuthenticationException
 import org.springframework.web.bind.annotation.*
+import javax.validation.ConstraintViolationException
 import javax.validation.Valid
 
 @RestController
@@ -41,9 +44,8 @@ class AccountRestController
     @ApiOperation(value = "Change password")
     @RequestMapping(value = "/password", method = arrayOf(RequestMethod.POST))
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    @Throws(AuthenticationException::class)
     fun changePassword(
-            @RequestBody passwordChangeRequest: PasswordChangeRequest) {
+            @RequestBody @Valid passwordChangeRequest: PasswordChangeRequest) {
         val actingUser = userService.getActingUser();
         userService.changePasswordFor(actingUser,
                 passwordChangeRequest.oldPassword!!, passwordChangeRequest.newPassword!!)
@@ -52,20 +54,28 @@ class AccountRestController
     @ApiOperation(value = "Reset password")
     @RequestMapping(value = "/password/reset", method = arrayOf(RequestMethod.POST))
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    @Throws(AuthenticationException::class)
     fun resetPassword(
-            @RequestBody passwordResetRequest: PasswordResetRequest) {
-        userService.resetPassword(passwordResetRequest.email!!)
+            @RequestBody @Valid passwordResetRequest: PasswordResetRequest) {
+        try {
+            userService.resetPassword(passwordResetRequest.email!!)
+        } catch(e: UserNotFoundException) {
+            // we don't want to give hints about other emails
+        }
     }
 
     @ApiOperation(value = "Set new password")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @RequestMapping(value = "/password/reset/confirmation", method = arrayOf(RequestMethod.POST))
     fun confirmPasswordReset(
-            @RequestBody passwordResetRequest: SetNewPasswordRequest) {
+            @RequestBody @Valid passwordResetRequest: SetNewPasswordRequest) {
         systemRunner.runInSystemContext {
             userService.confirmResetPassword(passwordResetRequest.code!!, passwordResetRequest.newPassword!!)
         }
+    }
+
+    @ExceptionHandler(ConstraintViolationException::class)
+    fun handleConstraintViolation(e: ConstraintViolationException) {
+        System.out.println("xyz");
     }
 
 }
