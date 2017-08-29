@@ -83,6 +83,7 @@ import {PasswordResetDialog} from "./components/PasswordResetDialog/PasswordRese
 import {SetNewPasswordForm} from "./components/SetNewPasswordForm/SetNewPassword.form";
 import {PasswordResetPage} from "./pages/password-reset/password-reset.component";
 import {AnalogClockComponent} from "./components/AnalogClock/AnalogClock.component";
+import {EventBusService} from "./services/eventBus.service";
 
 // Application wide providers
 const APP_PROVIDERS = [
@@ -99,6 +100,7 @@ const APP_PROVIDERS = [
     TimezonesResolver,
     TimezonesToolbarComponent,
     TimezonesPageService,
+    EventBusService,
     AppState
 ];
 

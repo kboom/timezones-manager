@@ -16,6 +16,8 @@ import {UserDetailsDialogComponent} from "../UserDetailsDialog/UserDetailsDialog
 import {Entity} from "../../models/hateoas/Entity.model";
 import {ConfirmationDialogComponent} from "../ConfirmationDialog/ConfirmationDialog.component";
 import {CreateUserDialogComponent} from "../CreateUserDialog/CreateUserDialog.component";
+import {EventBusService} from "../../services/eventBus.service";
+import {USER_CREATED_EVENT, USER_CHANGED_EVENT, USER_REMOVED_EVENT} from "../../app.events";
 
 @Component({
     selector: 'usersTable',
@@ -89,6 +91,7 @@ export class UsersTableComponent implements OnInit {
     filter: ElementRef;
 
     constructor(private userRepository: UserRepository,
+                private eventBus: EventBusService,
                 private dialog: MdDialog,
                 private snackBar: MdSnackBar) {
 
@@ -98,6 +101,7 @@ export class UsersTableComponent implements OnInit {
         const dialog = this.dialog.open(CreateUserDialogComponent);
         dialog.afterClosed().subscribe(result => {
             console.log(`Dialog result: ${result}`);
+            this.eventBus.publish(USER_CREATED_EVENT);
         });
     }
 
@@ -107,6 +111,7 @@ export class UsersTableComponent implements OnInit {
         });
         dialog.afterClosed().subscribe(result => {
             console.log(`Dialog result: ${result}`);
+            this.eventBus.publish(USER_CHANGED_EVENT);
         });
     }
 
@@ -126,6 +131,7 @@ export class UsersTableComponent implements OnInit {
                     snackBarRef.onAction().subscribe(() => {
                         snackBarRef.dismiss()
                     });
+                    this.eventBus.publish(USER_REMOVED_EVENT);
                 }, () => {
                     const snackBarRef = this.snackBar.open("Could not delete user", "Close", {
                         duration: 5000,
@@ -143,7 +149,7 @@ export class UsersTableComponent implements OnInit {
     }
 
     ngOnInit() {
-        this.dataSource = new UserTableDataSource(this.userRepository, this.sort);
+        this.dataSource = new UserTableDataSource(this.userRepository, this.eventBus, this.sort);
         Observable.fromEvent(this.filter.nativeElement, 'keyup')
             .debounceTime(150)
             .distinctUntilChanged()
@@ -172,23 +178,30 @@ export class UserTableDataSource extends DataSource<any> {
     }
 
     constructor(private userRepository: UserRepository,
+                private eventBusService: EventBusService,
                 private sort: MdSort) {
         super();
     }
 
-    loadData() {
+    loadData = () => {
         this.userRepository.getAllUsers()
             .map((entityCollection) => entityCollection.entities)
             .subscribe((tab) => {
                 this.dataChange.next(tab);
             });
-    }
+    };
 
     connect(): Observable<Entity<UserModel>[]> {
+        this.eventBusService.observeEvents(
+            USER_CREATED_EVENT,
+            USER_REMOVED_EVENT,
+            USER_CHANGED_EVENT
+        ).subscribe(this.loadData);
+
         const displayDataChanges = [
             this.dataChange,
             this.sort.mdSortChange,
-            this.filterChange,
+            this.filterChange
         ];
 
         return Observable.merge(...displayDataChanges).map(() => {
