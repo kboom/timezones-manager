@@ -18,7 +18,7 @@ import kotlin.streams.toList
 class JwtTokenUtil : Serializable {
 
     @Autowired
-    private val timeService: TimeService? = null
+    private var timeService: TimeService? = null
 
     @Value("\${jwt.secret}")
     private val secret: String? = null

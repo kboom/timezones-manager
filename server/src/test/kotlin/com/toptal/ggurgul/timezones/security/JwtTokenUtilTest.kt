@@ -136,14 +136,6 @@ class JwtTokenUtilTest {
         assertThat(jwtTokenUtil!!.validateToken(token, userDetails)).isTrue()
     }
 
-    private fun createClaims(creationDate: String): Map<String, Any> {
-        val claims = HashMap<String, Any>()
-        claims.put(JwtTokenUtil.CLAIM_KEY_USERNAME, TEST_USERNAME)
-        claims.put(JwtTokenUtil.CLAIM_KEY_AUDIENCE, "testAudience")
-        claims.put(JwtTokenUtil.CLAIM_KEY_CREATED, DateUtil.parseDatetime(creationDate))
-        return claims
-    }
-
     private fun createToken(): String {
         val device = DeviceDummy()
         device.isNormal = true
