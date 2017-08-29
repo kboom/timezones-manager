@@ -11,6 +11,8 @@ import {UserRepository} from "../../repository/user.repository";
 import {ProfileDialog} from "../ProfileDialog/ProfileDialog.component";
 import {PasswordChangeDialog} from "../PasswordChangeDialog/PasswordChangeDialog.component";
 import {PasswordResetDialog} from "../PasswordResetDialog/PasswordResetDialog.component";
+import {EventBusService} from "../../services/eventBus.service";
+import {USER_CHANGED_EVENT} from "../../app.events";
 
 @Component({
     selector: 'userMenu',
@@ -44,6 +46,7 @@ export class UserMenuComponent implements OnInit, OnDestroy {
     constructor(private authService: SecurityService,
                 private userRepository: UserRepository,
                 private securityContext: SecurityContextHolder,
+                private eventBusService: EventBusService,
                 private dialog: MdDialog,
                 private snackBar: MdSnackBar,
                 private router: Router) {
@@ -91,7 +94,7 @@ export class UserMenuComponent implements OnInit, OnDestroy {
                 data: userProfile
             }).afterClosed()
                 .subscribe(result => {
-
+                    this.eventBusService.publish(USER_CHANGED_EVENT);
                 });
         });
     }
