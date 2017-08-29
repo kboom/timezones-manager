@@ -175,11 +175,26 @@ class UsersTests : AbstractFunctionalTest() {
                 .body("""{
                     "username": "alice2",
                     "email": "qwerty666@any.com",
-                    "enabled": true
+                    "enabled": true,
                 }""".trimIndent())
                 .patch("/users/${ALICE.id}?projection=withDetails")
                 .then()
                 .statusCode(200);
+    }
+
+    @Test
+    @AuthenticatedAsUser(AGATHA)
+    fun managerCanUpdateAuthorities() {
+        RestAssured.given()
+                .header("Authorization", authenticationRule.token)
+                .body("""{
+                    "authorities": ["/authorities/ROLE_MANAGER","/authorities/ROLE_USER"]
+                }""".trimIndent())
+                .patch("/users/${ALICE.id}?projection=withDetails")
+                .then()
+                .statusCode(200)
+                .body("authorities", hasSize<Any>(2))
+                .body("authorities.name", containsInAnyOrder("ROLE_MANAGER", "ROLE_USER"))
     }
 
     @Test

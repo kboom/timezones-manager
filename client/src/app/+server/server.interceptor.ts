@@ -36,7 +36,10 @@ export class DefaultContentTypeInterceptor implements HttpInterceptor {
                 if (err.status === 401) {
                     console.log("UNAUTHORIZED");
                     this.securityContext.clearAuthentication();
-                    const snackBarRef = this.snackBar.open("You've been logged out due to inactivity", "Close", {
+                    const snackBarRef = this.snackBar.open(err.url.endsWith("/auth")
+                        ? "Incorrect credentials. Try again."
+                        : "You've been logged out due to inactivity",
+                        "Close", {
                         duration: 5000,
                     });
                     snackBarRef.onAction().subscribe(() => {
