@@ -43,13 +43,6 @@ services:
     cap_add:
     - NET_ADMIN
 
-
-  swaggerui:
-    image: swaggerapi/swagger-ui:v3.0.5
-    ports:
-      - 9999:8080
-
-
 volumes:
   maildata:
     driver: local
