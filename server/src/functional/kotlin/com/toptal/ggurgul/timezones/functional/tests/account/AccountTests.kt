@@ -2,11 +2,15 @@ package com.toptal.ggurgul.timezones.functional.tests.account
 
 import com.toptal.ggurgul.timezones.functional.database.*
 import com.toptal.ggurgul.timezones.functional.rules.AuthenticatedAsUser
+import com.toptal.ggurgul.timezones.functional.rules.AuthenticationRule
+import com.toptal.ggurgul.timezones.functional.rules.DataLoadingRule
 import com.toptal.ggurgul.timezones.functional.tests.AbstractFunctionalTest
 import io.restassured.RestAssured
 import org.hamcrest.Matchers
-import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
+import org.junit.rules.RuleChain
+import org.junit.rules.TestRule
 
 
 class AccountTests : AbstractFunctionalTest() {
@@ -15,22 +19,24 @@ class AccountTests : AbstractFunctionalTest() {
         val CONFIRMATION_CODE_FOR_AGATHA = "YWdhdGhhOjkxODQ0ZmMyYWFjOTQzZTcyMmQwZGNhNGMxZjk1OWNj"
     }
 
-    @Before
-    fun setUpDatabase() {
-        prepareDatabase {
-            insertInto("USERS") {
-                insertUser(this, User.ALICE)
-                insertUser(this, User.AGATHA)
-            }
-            insertInto("USER_AUTHORITIES") {
-                assignAuthorityToUser(this, Authority.USER, User.ALICE)
-                assignAuthorityToUser(this, Authority.USER, User.AGATHA)
-            }
-            insertInto("USER_CODES") {
-                insertPasswordResetConfirmationCode(this, User.AGATHA, CONFIRMATION_CODE_FOR_AGATHA)
-            }
+    private val authenticationRule = AuthenticationRule()
+    private val dataLoadingRule = DataLoadingRule({
+        insertInto("USERS") {
+            insertUser(this, User.ALICE)
+            insertUser(this, User.AGATHA)
         }
-    }
+        insertInto("USER_AUTHORITIES") {
+            assignAuthorityToUser(this, Authority.USER, User.ALICE)
+            assignAuthorityToUser(this, Authority.USER, User.AGATHA)
+        }
+        insertInto("USER_CODES") {
+            insertPasswordResetConfirmationCode(this, User.AGATHA, CONFIRMATION_CODE_FOR_AGATHA)
+        }
+    })
+
+    @get:Rule
+    var chain: TestRule = RuleChain.outerRule(dataLoadingRule)
+            .around(authenticationRule);
 
     @Test
     @AuthenticatedAsUser(User.ALICE)

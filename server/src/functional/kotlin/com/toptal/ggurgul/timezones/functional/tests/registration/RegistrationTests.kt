@@ -1,10 +1,14 @@
 package com.toptal.ggurgul.timezones.functional.tests.registration
 
 import com.toptal.ggurgul.timezones.functional.database.*
+import com.toptal.ggurgul.timezones.functional.rules.AuthenticationRule
+import com.toptal.ggurgul.timezones.functional.rules.DataLoadingRule
 import com.toptal.ggurgul.timezones.functional.tests.AbstractFunctionalTest
 import io.restassured.RestAssured
-import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
+import org.junit.rules.RuleChain
+import org.junit.rules.TestRule
 
 
 class RegistrationTests : AbstractFunctionalTest() {
@@ -13,20 +17,22 @@ class RegistrationTests : AbstractFunctionalTest() {
         val CONFIRMATION_CODE_FOR_KATE = "a2F0ZTo2ZTVmMjJkZTQ5YzMzOTkwMDEyM2IyMjlmYTAwNjAwNQ=="
     }
 
-    @Before
-    fun setUpDatabase() {
-        prepareDatabase {
-            insertInto("USERS") {
-                insertUser(this, User.KATE)
-            }
-            insertInto("USER_AUTHORITIES") {
-                assignAuthorityToUser(this, Authority.USER, User.KATE)
-            }
-            insertInto("USER_CODES") {
-                insertRegistrationConfirmationCode(this, User.KATE, CONFIRMATION_CODE_FOR_KATE)
-            }
+    private val authenticationRule = AuthenticationRule()
+    private val dataLoadingRule = DataLoadingRule({
+        insertInto("USERS") {
+            insertUser(this, User.KATE)
         }
-    }
+        insertInto("USER_AUTHORITIES") {
+            assignAuthorityToUser(this, Authority.USER, User.KATE)
+        }
+        insertInto("USER_CODES") {
+            insertRegistrationConfirmationCode(this, User.KATE, CONFIRMATION_CODE_FOR_KATE)
+        }
+    })
+
+    @get:Rule
+    var chain: TestRule = RuleChain.outerRule(dataLoadingRule)
+            .around(authenticationRule);
 
     @Test
     fun userCanRegister() {

@@ -4,32 +4,37 @@ import com.toptal.ggurgul.timezones.functional.database.Authority
 import com.toptal.ggurgul.timezones.functional.database.User.*
 import com.toptal.ggurgul.timezones.functional.database.assignAuthorityToUser
 import com.toptal.ggurgul.timezones.functional.database.insertUser
-import com.toptal.ggurgul.timezones.functional.database.prepareDatabase
 import com.toptal.ggurgul.timezones.functional.rules.AuthenticatedAsUser
+import com.toptal.ggurgul.timezones.functional.rules.AuthenticationRule
+import com.toptal.ggurgul.timezones.functional.rules.DataLoadingRule
 import com.toptal.ggurgul.timezones.functional.tests.AbstractFunctionalTest
 import io.restassured.RestAssured
 import org.hamcrest.Matchers.*
-import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
+import org.junit.rules.RuleChain
+import org.junit.rules.TestRule
 
 
 class UsersTests : AbstractFunctionalTest() {
 
-    @Before
-    fun setUpDatabase() {
-        prepareDatabase {
-            insertInto("USERS") {
-                insertUser(this, GREG)
-                insertUser(this, AGATHA)
-                insertUser(this, ALICE)
-            }
-            insertInto("USER_AUTHORITIES") {
-                assignAuthorityToUser(this, Authority.ADMIN, GREG)
-                assignAuthorityToUser(this, Authority.MANAGER, AGATHA)
-                assignAuthorityToUser(this, Authority.USER, ALICE)
-            }
+    private val authenticationRule = AuthenticationRule()
+    private val dataLoadingRule = DataLoadingRule({
+        insertInto("USERS") {
+            insertUser(this, GREG)
+            insertUser(this, AGATHA)
+            insertUser(this, ALICE)
         }
-    }
+        insertInto("USER_AUTHORITIES") {
+            assignAuthorityToUser(this, Authority.ADMIN, GREG)
+            assignAuthorityToUser(this, Authority.MANAGER, AGATHA)
+            assignAuthorityToUser(this, Authority.USER, ALICE)
+        }
+    })
+
+    @get:Rule
+    var chain: TestRule = RuleChain.outerRule(dataLoadingRule)
+            .around(authenticationRule);
 
     @Test
     @AuthenticatedAsUser(ALICE)
@@ -57,6 +62,16 @@ class UsersTests : AbstractFunctionalTest() {
     }
 
     @Test
+    @AuthenticatedAsUser(ALICE)
+    fun userCannotListUsers() {
+        RestAssured.given()
+                .header("Authorization", authenticationRule.token)
+                .get("/users")
+                .then()
+                .statusCode(403)
+    }
+
+    @Test
     @AuthenticatedAsUser(GREG)
     fun adminCanGetUserByUsername() {
         RestAssured.given()
@@ -66,16 +81,6 @@ class UsersTests : AbstractFunctionalTest() {
                 .then()
                 .statusCode(200)
                 .body("username", equalTo("alice"))
-    }
-
-    @Test
-    @AuthenticatedAsUser(ALICE)
-    fun userCannotListUsers() {
-        RestAssured.given()
-                .header("Authorization", authenticationRule.token)
-                .get("/users")
-                .then()
-                .statusCode(403)
     }
 
     @Test
@@ -138,6 +143,9 @@ class UsersTests : AbstractFunctionalTest() {
                 .body("username", equalTo("alice"))
     }
 
+    /**
+     * this one deletes the user... does not recreate?
+     */
     @Test
     @AuthenticatedAsUser(AGATHA)
     fun managerCanDeleteUser() {

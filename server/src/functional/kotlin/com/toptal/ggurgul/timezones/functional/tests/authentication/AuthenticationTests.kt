@@ -4,32 +4,37 @@ import com.toptal.ggurgul.timezones.functional.database.Authority
 import com.toptal.ggurgul.timezones.functional.database.User.*
 import com.toptal.ggurgul.timezones.functional.database.assignAuthorityToUser
 import com.toptal.ggurgul.timezones.functional.database.insertUser
-import com.toptal.ggurgul.timezones.functional.database.prepareDatabase
+import com.toptal.ggurgul.timezones.functional.rules.AuthenticationRule
+import com.toptal.ggurgul.timezones.functional.rules.DataLoadingRule
 import com.toptal.ggurgul.timezones.functional.tests.AbstractFunctionalTest
 import io.restassured.RestAssured.given
 import org.hamcrest.Matchers.isA
-import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
+import org.junit.rules.RuleChain
+import org.junit.rules.TestRule
 
 internal class AuthenticationTests : AbstractFunctionalTest() {
 
-    @Before
-    fun setUpDatabase() {
-        prepareDatabase {
-            insertInto("USERS") {
-                insertUser(this, GREG)
-                insertUser(this, AGATHA)
-                insertUser(this, ALICE)
-                insertUser(this, KATE)
-            }
-            insertInto("USER_AUTHORITIES") {
-                assignAuthorityToUser(this, Authority.ADMIN, GREG)
-                assignAuthorityToUser(this, Authority.MANAGER, AGATHA)
-                assignAuthorityToUser(this, Authority.USER, ALICE)
-                assignAuthorityToUser(this, Authority.USER, KATE)
-            }
+    private val authenticationRule = AuthenticationRule()
+    private val dataLoadingRule = DataLoadingRule({
+        insertInto("USERS") {
+            insertUser(this, GREG)
+            insertUser(this, AGATHA)
+            insertUser(this, ALICE)
+            insertUser(this, KATE)
         }
-    }
+        insertInto("USER_AUTHORITIES") {
+            assignAuthorityToUser(this, Authority.ADMIN, GREG)
+            assignAuthorityToUser(this, Authority.MANAGER, AGATHA)
+            assignAuthorityToUser(this, Authority.USER, ALICE)
+            assignAuthorityToUser(this, Authority.USER, KATE)
+        }
+    })
+
+    @get:Rule
+    var chain: TestRule = RuleChain.outerRule(dataLoadingRule)
+            .around(authenticationRule);
 
     @Test
     fun userCannotObtainTokenIfNotEnabled() {

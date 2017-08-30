@@ -3,35 +3,43 @@ package com.toptal.ggurgul.timezones.functional.tests.timezones
 import com.toptal.ggurgul.timezones.functional.database.*
 import com.toptal.ggurgul.timezones.functional.database.User.*
 import com.toptal.ggurgul.timezones.functional.rules.AuthenticatedAsUser
+import com.toptal.ggurgul.timezones.functional.rules.AuthenticationRule
+import com.toptal.ggurgul.timezones.functional.rules.DataLoadingRule
 import com.toptal.ggurgul.timezones.functional.tests.AbstractFunctionalTest
+import com.toptal.ggurgul.timezones.functional.tests.account.AccountTests
 import io.restassured.RestAssured.given
 import org.hamcrest.Matchers.*
 import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
+import org.junit.rules.RuleChain
+import org.junit.rules.TestRule
 
 internal class TimezonesTests : AbstractFunctionalTest() {
 
-    @Before
-    fun setUpDatabase() {
-        prepareDatabase {
-            insertInto("USERS") {
-                insertUser(this, GREG)
-                insertUser(this, AGATHA)
-                insertUser(this, ALICE)
-            }
-            insertInto("USER_AUTHORITIES") {
-                assignAuthorityToUser(this, Authority.ADMIN, GREG)
-                assignAuthorityToUser(this, Authority.MANAGER, AGATHA)
-                assignAuthorityToUser(this, Authority.USER, ALICE)
-            }
-            insertInto("TIMEZONES") {
-                insertTimezone(this, Timezone.KRAKOW, GREG)
-                insertTimezone(this, Timezone.TOKYO, GREG)
-                insertTimezone(this, Timezone.WARSAW, AGATHA)
-                insertTimezone(this, Timezone.SYDNEY, ALICE)
-            }
+    private val authenticationRule = AuthenticationRule()
+    private val dataLoadingRule = DataLoadingRule({
+        insertInto("USERS") {
+            insertUser(this, GREG)
+            insertUser(this, AGATHA)
+            insertUser(this, ALICE)
         }
-    }
+        insertInto("USER_AUTHORITIES") {
+            assignAuthorityToUser(this, Authority.ADMIN, GREG)
+            assignAuthorityToUser(this, Authority.MANAGER, AGATHA)
+            assignAuthorityToUser(this, Authority.USER, ALICE)
+        }
+        insertInto("TIMEZONES") {
+            insertTimezone(this, Timezone.KRAKOW, GREG)
+            insertTimezone(this, Timezone.TOKYO, GREG)
+            insertTimezone(this, Timezone.WARSAW, AGATHA)
+            insertTimezone(this, Timezone.SYDNEY, ALICE)
+        }
+    })
+
+    @get:Rule
+    var chain: TestRule = RuleChain.outerRule(dataLoadingRule)
+            .around(authenticationRule);
 
     @Test
     @AuthenticatedAsUser(ALICE)
