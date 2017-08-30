@@ -73,7 +73,7 @@ open class SwaggerConfig {
                 .globalResponseMessage(RequestMethod.DELETE, defaultResponses)
                 .globalResponseMessage(RequestMethod.PATCH, defaultResponses)
                 .select()
-                .apis(RequestHandlerSelectors.any())
+                .apis(or(RequestHandlerSelectors.any()))
                 .paths(or(
                         PathSelectors.ant("/health/**"),
                         PathSelectors.ant("/auth/**"),

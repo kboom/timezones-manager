@@ -9,6 +9,7 @@ import org.springframework.data.rest.core.annotation.RepositoryRestResource
 import org.springframework.data.rest.core.annotation.RestResource
 import org.springframework.security.access.prepost.PreAuthorize
 import java.util.*
+import javax.validation.Valid
 
 @Primary
 @Api(value = "user", description = "User operations", tags = arrayOf("user"))
@@ -26,10 +27,10 @@ interface UserRepository : CrudRepository<User, Long> {
     override fun findOne(@Param("userId") id: Long): User
 
     @PreAuthorize("hasAnyRole('ROLE_SYSTEM', 'ROLE_MANAGER', 'ROLE_ADMIN') or #user.id == principal.id")
-    override fun delete(@Param("user") user: User?)
+    override fun delete(@Param("user") @Valid user: User?)
 
     @PreAuthorize("hasAnyRole('ROLE_SYSTEM', 'ROLE_MANAGER', 'ROLE_ADMIN') or  #user.id == principal.id")
-    override fun <S : User?> save(@Param("user") user: S): S
+    override fun <S : User?> save(@Param("user") @Valid user: S): S
 
     @PreAuthorize("hasAnyRole('ROLE_SYSTEM', 'ROLE_MANAGER', 'ROLE_ADMIN')")
     override fun findAll(): MutableIterable<User>

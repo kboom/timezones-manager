@@ -40,7 +40,7 @@ enum PasswordResetStatus {
                 <md-spinner></md-spinner>
                 <h3>Changing password...</h3>
             </div>
-            <md-card *ngSwitchCase="PasswordResetStatus.SUCCESSFUL">
+            <md-card *ngSwitchCase="PasswordResetStatus.SUCCESSFUL" fxFlex="nogrow">
                 <md-card-header>
                     <md-card-title>Success</md-card-title>
                     <md-card-subtitle>Your password has been successfully changed. 
@@ -50,7 +50,7 @@ enum PasswordResetStatus {
                     <button class="mat-primary" (click)="openSignInDialog()" md-button>Sign in</button>
                 </md-card-actions>
             </md-card>
-            <md-card *ngSwitchCase="PasswordResetStatus.FAILED">
+            <md-card *ngSwitchCase="PasswordResetStatus.FAILED" fxFlex="nogrow">
                 <md-card-header>
                     <md-card-title>Failure</md-card-title>
                     <md-card-subtitle>The password could not be changed.</md-card-subtitle>

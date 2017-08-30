@@ -9,11 +9,11 @@ import org.springframework.data.repository.query.Param
 import org.springframework.data.rest.core.annotation.RepositoryRestResource
 import org.springframework.data.rest.core.annotation.RestResource
 import org.springframework.security.access.prepost.PreAuthorize
+import javax.validation.Valid
 
 // org.springframework.data.rest.webmvc.RepositoryEntityController
 @Api(value = "timezone", description = "Timezone operations", tags = arrayOf("timezone"))
 @RepositoryRestResource
-//@PreAuthorize("hasRole('ROLE_SYSTEM')") // todo fix - something is not secured as this fails!
 interface TimezoneRepository : CrudRepository<Timezone, Long> {
 
     @RestResource(exported = false)
@@ -25,7 +25,7 @@ interface TimezoneRepository : CrudRepository<Timezone, Long> {
     override fun findAll(): MutableIterable<Timezone>
 
     @PreAuthorize("hasAnyRole('ROLE_SYSTEM', 'ROLE_ADMIN') or hasPermission(#timezoneId, 'Timezone', 'timezone:create') or hasPermission(#timezone, 'Timezone', 'timezone:edit')")
-    override fun <S : Timezone?> save(@Param("timezone") timezone: S?): S
+    override fun <S : Timezone?> save(@Param("timezone") @Valid timezone: S?): S
 
     @PreAuthorize("hasAnyRole('ROLE_SYSTEM', 'ROLE_ADMIN') or hasPermission(#timezoneId, 'Timezone', 'timezone:view')")
     override fun findOne(@Param("timezoneId") timezoneId: Long?): Timezone

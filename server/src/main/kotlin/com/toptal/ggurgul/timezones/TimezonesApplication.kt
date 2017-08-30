@@ -111,7 +111,6 @@ open class TimezonesApplication {
         return CorsFilter(source)
     }
 
-
     internal inner class SecurityEvaluationContextExtension : EvaluationContextExtensionSupport() {
 
         override fun getExtensionId(): String {

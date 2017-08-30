@@ -21,16 +21,17 @@ enum ConfirmationStatus {
 
 @Component({
     selector: 'registrationPage',
+    styleUrls: ['./registration.page.scss'],
     template: `        
 
-        <div [ngSwitch]="confirmationStatus">
+        <div [ngSwitch]="confirmationStatus" class="registration-page" fxLayout="column" fxLayoutAlign="center center">
             <div *ngSwitchCase="ConfirmationStatus.PENDING"
                  fxLayout='column'
                  fxLayoutAlign="center center">
                 <md-spinner></md-spinner>
                 <h3>Registration request is being verified.</h3>
             </div>
-            <md-card *ngSwitchCase="ConfirmationStatus.SUCCESSFUL">
+            <md-card *ngSwitchCase="ConfirmationStatus.SUCCESSFUL" fxFlex="nogrow">
                 <md-card-header>
                     <md-card-title>Success</md-card-title>
                     <md-card-subtitle>Your account has been successfully confirmed!</md-card-subtitle>
