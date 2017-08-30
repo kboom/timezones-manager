@@ -334,7 +334,7 @@
                         </goals>
                         <configuration>
                             <includes>
-                                <include>com.toptal.ggurgul.timezones.functional.**</include>
+                                <include>UsersTests.java</include>
                             </includes>
                             <!--<groups>com.toptal.ggurgul.timezones.functional.FunctionalTest</groups>-->
                             <summaryFile>target/failsafe-reports/functional-tests.xml</summaryFile>

@@ -16,9 +16,9 @@ class DataLoadingRule(
     private val dbSetupTracker = DbSetupTracker()
 
     fun prepareDatabase(configure: DbSetupBuilder.() -> Unit) {
-        val url = System.getProperty("DB_URL", "jdbc:postgresql://localhost:5432/test")
-        val user = System.getProperty("DB_USER", "test")
-        val password = System.getProperty("DB_PASSWORD", "test")
+        val url = System.getProperty("db.url", "jdbc:postgresql://localhost:5432/test")
+        val user = System.getProperty("db.user", "test")
+        val password = System.getProperty("db.password", "test")
 
         dbSetupTracker.launchIfNecessary(dbSetup(to = DriverManagerDestination(url, user, password)) {
             deleteAllFrom("USER_CODES", "TIMEZONES", "USER_AUTHORITIES", "USERS")

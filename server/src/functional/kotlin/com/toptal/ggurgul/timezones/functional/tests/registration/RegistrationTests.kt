@@ -53,7 +53,6 @@ class RegistrationTests : AbstractFunctionalTest() {
     @Test
     @ReadOnly
     fun isUnauthorizedForWrongConfirmationCode() {
-        dbSetupTracker.skipNextLaunch();
         RestAssured.given()
                 .body("""
                     {

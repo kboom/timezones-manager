@@ -34,7 +34,7 @@ logging:
       security: DEBUG
 
 mail:
-  host: localhost
+  host: 0.0.0.0
   account:
     username: noreply@timezones.com
     password: test
