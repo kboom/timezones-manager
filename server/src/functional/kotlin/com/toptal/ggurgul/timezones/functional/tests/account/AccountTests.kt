@@ -4,6 +4,7 @@ import com.toptal.ggurgul.timezones.functional.database.*
 import com.toptal.ggurgul.timezones.functional.rules.AuthenticatedAsUser
 import com.toptal.ggurgul.timezones.functional.rules.AuthenticationRule
 import com.toptal.ggurgul.timezones.functional.rules.DataLoadingRule
+import com.toptal.ggurgul.timezones.functional.rules.ReadOnly
 import com.toptal.ggurgul.timezones.functional.tests.AbstractFunctionalTest
 import io.restassured.RestAssured
 import org.hamcrest.Matchers
@@ -39,6 +40,7 @@ class AccountTests : AbstractFunctionalTest() {
             .around(authenticationRule);
 
     @Test
+    @ReadOnly
     @AuthenticatedAsUser(User.ALICE)
     fun userCanGetProfile() {
         RestAssured.given()
@@ -107,6 +109,7 @@ class AccountTests : AbstractFunctionalTest() {
     }
 
     @Test
+    @ReadOnly
     @AuthenticatedAsUser(User.ALICE)
     fun validationFailsForTooShortPassword() {
         RestAssured.given()
@@ -121,6 +124,7 @@ class AccountTests : AbstractFunctionalTest() {
     }
 
     @Test
+    @ReadOnly
     @AuthenticatedAsUser(User.ALICE)
     fun userCannotChangePasswordIfWrongCurrentProvided() {
         RestAssured.given()
@@ -148,6 +152,7 @@ class AccountTests : AbstractFunctionalTest() {
     }
 
     @Test
+    @ReadOnly
     fun status204EvenIfEmailDoesNotExist() {
         RestAssured.given()
                 .body("""{

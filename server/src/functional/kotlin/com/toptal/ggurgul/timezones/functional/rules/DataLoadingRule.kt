@@ -7,12 +7,13 @@ import com.ninja_squad.dbsetup_kotlin.dbSetup
 import org.junit.rules.TestRule
 import org.junit.runner.Description
 import org.junit.runners.model.Statement
+import java.util.*
 
 class DataLoadingRule(
         private val configure: DbSetupBuilder.() -> Unit
 ) : TestRule {
 
-    val dbSetupTracker = DbSetupTracker()
+    private val dbSetupTracker = DbSetupTracker()
 
     fun prepareDatabase(configure: DbSetupBuilder.() -> Unit) {
         val url = System.getProperty("DB_URL", "jdbc:postgresql://localhost:5432/test")
@@ -29,6 +30,10 @@ class DataLoadingRule(
         @Throws(Throwable::class)
         override fun evaluate() {
             prepareDatabase(configure);
+            val readOnlyAnnotation = Optional.ofNullable(description.getAnnotation(ReadOnly::class.java))
+            if (readOnlyAnnotation.isPresent) {
+                dbSetupTracker.skipNextLaunch();
+            }
             base.evaluate()
         }
     }
