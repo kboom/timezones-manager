@@ -175,7 +175,7 @@ class UsersTests : AbstractFunctionalTest() {
                 .body("""{
                     "username": "alice2",
                     "email": "qwerty666@any.com",
-                    "enabled": true,
+                    "enabled": true
                 }""".trimIndent())
                 .patch("/users/${ALICE.id}?projection=withDetails")
                 .then()
