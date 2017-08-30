@@ -6,6 +6,7 @@ import com.toptal.ggurgul.timezones.functional.database.assignAuthorityToUser
 import com.toptal.ggurgul.timezones.functional.database.insertUser
 import com.toptal.ggurgul.timezones.functional.rules.AuthenticationRule
 import com.toptal.ggurgul.timezones.functional.rules.DataLoadingRule
+import com.toptal.ggurgul.timezones.functional.rules.ReadOnly
 import com.toptal.ggurgul.timezones.functional.tests.AbstractFunctionalTest
 import io.restassured.RestAssured.given
 import org.hamcrest.Matchers.isA
@@ -37,6 +38,7 @@ internal class AuthenticationTests : AbstractFunctionalTest() {
             .around(authenticationRule);
 
     @Test
+    @ReadOnly
     fun userCannotObtainTokenIfNotEnabled() {
         given()
                 .body("""
@@ -51,6 +53,7 @@ internal class AuthenticationTests : AbstractFunctionalTest() {
     }
 
     @Test
+    @ReadOnly
     fun userCannotObtainTokenIfInvalidUsername() {
         given()
                 .body("""
@@ -65,6 +68,7 @@ internal class AuthenticationTests : AbstractFunctionalTest() {
     }
 
     @Test
+    @ReadOnly
     fun userCannotObtainTokenIfInvalidPassword() {
         given()
                 .body("""
@@ -79,6 +83,7 @@ internal class AuthenticationTests : AbstractFunctionalTest() {
     }
 
     @Test
+    @ReadOnly
     fun userCanObtainUserToken() {
         given()
                 .body("""
@@ -95,6 +100,7 @@ internal class AuthenticationTests : AbstractFunctionalTest() {
     }
 
     @Test
+    @ReadOnly
     fun managerCanObtainManagerToken() {
         given()
                 .body("""
@@ -111,6 +117,7 @@ internal class AuthenticationTests : AbstractFunctionalTest() {
     }
 
     @Test
+    @ReadOnly
     fun adminCanObtainAdminToken() {
         given()
                 .body("""

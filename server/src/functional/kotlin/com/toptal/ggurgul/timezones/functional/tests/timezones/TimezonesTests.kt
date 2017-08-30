@@ -5,11 +5,10 @@ import com.toptal.ggurgul.timezones.functional.database.User.*
 import com.toptal.ggurgul.timezones.functional.rules.AuthenticatedAsUser
 import com.toptal.ggurgul.timezones.functional.rules.AuthenticationRule
 import com.toptal.ggurgul.timezones.functional.rules.DataLoadingRule
+import com.toptal.ggurgul.timezones.functional.rules.ReadOnly
 import com.toptal.ggurgul.timezones.functional.tests.AbstractFunctionalTest
-import com.toptal.ggurgul.timezones.functional.tests.account.AccountTests
 import io.restassured.RestAssured.given
 import org.hamcrest.Matchers.*
-import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.RuleChain
@@ -42,6 +41,7 @@ internal class TimezonesTests : AbstractFunctionalTest() {
             .around(authenticationRule);
 
     @Test
+    @ReadOnly
     @AuthenticatedAsUser(ALICE)
     fun userSeesHisOwnTimezones() {
         given()
@@ -54,6 +54,7 @@ internal class TimezonesTests : AbstractFunctionalTest() {
     }
 
     @Test
+    @ReadOnly
     @AuthenticatedAsUser(AGATHA)
     fun managerSeesHisOwnTimezones() {
         given()
@@ -66,6 +67,7 @@ internal class TimezonesTests : AbstractFunctionalTest() {
     }
 
     @Test
+    @ReadOnly
     @AuthenticatedAsUser(GREG)
     fun adminSeesAllTimezones() {
         given()
@@ -118,6 +120,7 @@ internal class TimezonesTests : AbstractFunctionalTest() {
     }
 
     @Test
+    @ReadOnly
     @AuthenticatedAsUser(ALICE)
     fun userCannotSeeAnotherUserTimezone() {
         given()
@@ -129,6 +132,7 @@ internal class TimezonesTests : AbstractFunctionalTest() {
 
 
     @Test
+    @ReadOnly
     @AuthenticatedAsUser(ALICE)
     fun userCannotDeleteAnotherUserTimezone() {
         given()
@@ -139,6 +143,7 @@ internal class TimezonesTests : AbstractFunctionalTest() {
     }
 
     @Test
+    @ReadOnly
     @AuthenticatedAsUser(AGATHA)
     fun managerCannotSeeAnotherUserTimezone() {
         given()
@@ -149,6 +154,7 @@ internal class TimezonesTests : AbstractFunctionalTest() {
     }
 
     @Test
+    @ReadOnly
     @AuthenticatedAsUser(AGATHA)
     fun managerCannotDeleteAnotherUserTimezone() {
         given()

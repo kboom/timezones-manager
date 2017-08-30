@@ -3,6 +3,7 @@ package com.toptal.ggurgul.timezones.functional.tests.registration
 import com.toptal.ggurgul.timezones.functional.database.*
 import com.toptal.ggurgul.timezones.functional.rules.AuthenticationRule
 import com.toptal.ggurgul.timezones.functional.rules.DataLoadingRule
+import com.toptal.ggurgul.timezones.functional.rules.ReadOnly
 import com.toptal.ggurgul.timezones.functional.tests.AbstractFunctionalTest
 import io.restassured.RestAssured
 import org.junit.Rule
@@ -50,6 +51,7 @@ class RegistrationTests : AbstractFunctionalTest() {
     }
 
     @Test
+    @ReadOnly
     fun isUnauthorizedForWrongConfirmationCode() {
         dbSetupTracker.skipNextLaunch();
         RestAssured.given()
@@ -64,6 +66,7 @@ class RegistrationTests : AbstractFunctionalTest() {
     }
 
     @Test
+    @ReadOnly
     fun cannotUseSameConfirmationCodeTwice() {
         val confirmationRequest = RestAssured.given()
                 .body("""
