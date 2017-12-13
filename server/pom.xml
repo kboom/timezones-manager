@@ -300,8 +300,8 @@
                 <version>2.18.1</version>
                 <configuration>
                     <skipTests>${skip.tests.unit}</skipTests>
-                    <excludedGroups>com.toptal.ggurgul.timezones.integration.IntegrationTest</excludedGroups>
-                    <excludedGroups>com.toptal.ggurgul.timezones.functional.FunctionalTest</excludedGroups>
+                    <excludedGroups>com.ggurgul.playground.timezones.integration.IntegrationTest</excludedGroups>
+                    <excludedGroups>com.ggurgul.playground.timezones.functional.FunctionalTest</excludedGroups>
                 </configuration>
                 <executions>
                     <execution>
